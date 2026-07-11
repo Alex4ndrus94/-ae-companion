@@ -1,43 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AE Companion</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="css/style.css">
+<title>AE Companion</title>
+
+<link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-<div class="card">
+<div class="container">
 
+<header>
 <h1>AE Companion</h1>
+<p>Track. Plan. Conquer.</p>
+</header>
 
-<h2>Powered by Alessandro Chindemi</h2>
+<div class="card">
+<h2>👤 Giocatore</h2>
 
-<div class="stat">
-<div class="label">🌍 Parcels</div>
-<div class="value">135</div>
+<p id="player-name"></p>
+
+<p>🌍 Terreni: <span id="parcels"></span></p>
+
+<p>👑 Badge: <span id="badges"></span></p>
+
+<p>⚡ Boost: <span id="boost"></span></p>
+
+<p>🎯 Mayor Target:
+<span id="mayor"></span></p>
+
 </div>
 
-<div class="stat">
-<div class="label">🏆 Badges</div>
-<div class="value">6</div>
+<div class="progress-card">
+
+<h3>Prossimo obiettivo</h3>
+
+<div class="progress">
+
+<div class="progress-fill" id="progress-fill"></div>
+
 </div>
 
-<div class="stat">
-<div class="label">⚡ Current Boost</div>
-<div class="value">x10</div>
-</div>
+<p id="progress-text"></p>
 
-<div class="footer">
-Version 0.1 • Genesis
 </div>
 
 </div>
 
 <script src="js/app.js"></script>
-  
+
 </body>
 </html>
