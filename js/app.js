@@ -22,3 +22,5 @@ document.getElementById("progress-fill").style.width =
 
 document.getElementById("progress-text").textContent =
     `${player.parcels} / ${target} terreni`;
+
+console.log("Income module loaded.");
