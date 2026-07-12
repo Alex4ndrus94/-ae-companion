@@ -73,3 +73,30 @@ header p{
     display:block;
     margin:0 auto 15px;
 }
+.income-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-top:20px;
+}
+
+.income-box{
+    background:#242b33;
+    border-radius:14px;
+    padding:18px;
+    text-align:center;
+}
+
+.label{
+    display:block;
+    color:#9ca3af;
+    font-size:12px;
+    margin-bottom:8px;
+    letter-spacing:1px;
+}
+
+.value{
+    color:#4CAF50;
+    font-size:22px;
+    font-weight:bold;
+}
