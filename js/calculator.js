@@ -1,34 +1,38 @@
 // ======================================
 // AE Core - Calculator
-// Versione 0.1
+// Versione 1.0
 // ======================================
 
 function getCurrentBreakpoint(lands) {
 
-    for (const bp of CONFIG.breakpoints) {
-
-        if (lands >= bp.min && lands <= bp.max) {
-            return bp;
-        }
-
-    }
-
-    return null;
+    return CONFIG.breakpoints.find(bp =>
+        lands >= bp.min && lands <= bp.max
+    );
 
 }
 
 function getNextBreakpoint(lands) {
 
-    for (const bp of CONFIG.breakpoints) {
+    return CONFIG.breakpoints.find(bp =>
+        lands < bp.min
+    );
 
-        if (lands < bp.max) {
+}
 
-            return bp.max + 1;
+function getRemainingLandsToNextBreakpoint(lands) {
 
-        }
+    const next = getNextBreakpoint(lands);
 
-    }
+    if (!next) return 0;
 
-    return null;
+    return next.min - lands;
+
+}
+
+function getCurrentBoost(lands) {
+
+    const current = getCurrentBreakpoint(lands);
+
+    return current ? current.boost : 1;
 
 }
