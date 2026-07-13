@@ -11,6 +11,31 @@ const CONFIG = {
 
     badgeCostAB: 200,
 
+    // Reddito per secondo ($)
+rentPerSecond: {
+
+    common: 0.0000000011,
+
+    rare: 0.0000000016,
+
+    epic: 0.0000000022,
+
+    legendary: 0.0000000044
+
+},
+
+// Probabilità rarità
+rarityOdds: {
+
+    common: 50,
+
+    rare: 30,
+
+    epic: 15,
+
+    legendary: 5
+
+},
     breakpoints: [
 
         { min: 0,   max: 70,  boost: 20 },
