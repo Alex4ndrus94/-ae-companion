@@ -1,55 +1,38 @@
 // ======================================
-// AE Companion - App
-// Versione 1.0
+// AE Companion - Dashboard
 // ======================================
 
-// Dati del giocatore
-const player = {
+// Totale terreni
+const totalLands =
+    player.lands.common +
+    player.lands.rare +
+    player.lands.epic +
+    player.lands.legendary;
 
-    name: "Alexandrus94",
-
-    lands: 135,
-
-    badges: 6,
-
-    mayorTarget: 217,
-
-    dailyAB: 91
-
-};
-
-// Inserimento dati dashboard
+// Inserimento dati
 document.getElementById("player-name").textContent = player.name;
-document.getElementById("parcels").textContent = player.lands;
+document.getElementById("parcels").textContent = totalLands;
 document.getElementById("badges").textContent = player.badges;
 document.getElementById("mayor").textContent = player.mayorTarget;
 
-// =========================
-// AE CORE
-// =========================
+// AE Core
+const current = getCurrentBreakpoint(totalLands);
+const next = getNextBreakpoint(totalLands);
+const remaining = getRemainingLandsToNextBreakpoint(totalLands);
 
-const current = getCurrentBreakpoint(player.lands);
-
-const next = getNextBreakpoint(player.lands);
-
-const remaining = getRemainingLandsToNextBreakpoint(player.lands);
-
+// Boost
 document.getElementById("boost").textContent =
-    "x" + getCurrentBoost(player.lands);
+    "x" + getCurrentBoost(totalLands);
 
-// Calcolo barra progresso
-let percentage = 100;
-
-if (next) {
-
-    percentage =
-        ((player.lands - current.min) /
-        (current.max - current.min)) * 100;
-
-}
+// Barra di avanzamento
+const percentage =
+    ((totalLands - current.min) /
+    (current.max - current.min)) * 100;
 
 document.getElementById("progress-fill").style.width =
     percentage + "%";
 
 document.getElementById("progress-text").textContent =
-    `${player.lands} / ${next ? next.min : current.max} terreni • Mancano ${remaining}`;
+    next
+        ? `${totalLands} / ${next.min} terreni • Ne manca ${remaining}`
+        : `${totalLands} terreni • Ultimo breakpoint`;
