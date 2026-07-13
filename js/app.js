@@ -1,4 +1,5 @@
 alert("app.js caricato!");
+alert("Player: " + player.name);
 // ======================================
 // AE Companion - Dashboard
 // ======================================
