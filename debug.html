@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>AE Companion Debug</title>
+</head>
+
+<body>
+
+<h1>AE Companion - Debug</h1>
+
+<p id="config">❌ CONFIG</p>
+<p id="player">❌ PLAYER</p>
+<p id="calculator">❌ CALCULATOR</p>
+
+<script src="js/config.js"></script>
+<script src="js/data.js"></script>
+<script src="js/calculator.js"></script>
+
+<script>
+
+document.getElementById("config").textContent =
+    typeof CONFIG !== "undefined"
+        ? "✅ CONFIG caricata"
+        : "❌ CONFIG non caricata";
+
+document.getElementById("player").textContent =
+    typeof player !== "undefined"
+        ? "✅ PLAYER caricato"
+        : "❌ PLAYER non caricato";
+
+document.getElementById("calculator").textContent =
+    typeof getCurrentBoost === "function"
+        ? "✅ CALCULATOR caricato"
+        : "❌ CALCULATOR non caricato";
+
+</script>
+
+</body>
+</html>
