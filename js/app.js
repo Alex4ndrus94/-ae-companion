@@ -2,6 +2,8 @@
 // AE Companion - Dashboard
 // ======================================
 
+console.log(player);
+
 // Totale terreni
 const totalLands =
     player.lands.common +
