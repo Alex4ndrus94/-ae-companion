@@ -17,6 +17,12 @@ function getBaseIncomePerSecond() {
 // Reddito al secondo con boost
 function getBoostedIncomePerSecond() {
 
+    const totalLands =
+        player.lands.common +
+        player.lands.rare +
+        player.lands.epic +
+        player.lands.legendary;
+
     return getBaseIncomePerSecond() * getCurrentBoost(totalLands);
 
 }
