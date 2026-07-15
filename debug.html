@@ -34,7 +34,25 @@ document.getElementById("calculator").textContent =
         ? "✅ CALCULATOR caricato"
         : "❌ CALCULATOR non caricato";
 
-</script>
+if (typeof player !== "undefined") {
 
-</body>
-</html>
+    document.body.innerHTML += "<hr>";
+    document.body.innerHTML += "<p>Terreni: " +
+        (player.lands.common +
+        player.lands.rare +
+        player.lands.epic +
+        player.lands.legendary) +
+        "</p>";
+
+    document.body.innerHTML += "<p>Boost: x" +
+        getCurrentBoost(
+            player.lands.common +
+            player.lands.rare +
+            player.lands.epic +
+            player.lands.legendary
+        ) +
+        "</p>";
+
+}
+
+</script>
