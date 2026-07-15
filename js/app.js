@@ -38,3 +38,15 @@ document.getElementById("progress-text").textContent =
     next
         ? `${totalLands} / ${next.min} terreni • Ne manca ${remaining}`
         : `${totalLands} terreni • Ultimo breakpoint`;
+// ======================================
+// Rendita
+// ======================================
+
+document.getElementById("dailyIncome").textContent =
+    "$ " + getDailyIncome().toFixed(6);
+
+document.getElementById("monthlyIncome").textContent =
+    "$ " + getMonthlyIncome().toFixed(4);
+
+document.getElementById("yearlyIncome").textContent =
+    "$ " + getYearlyIncome().toFixed(2);
