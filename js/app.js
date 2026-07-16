@@ -43,10 +43,10 @@ document.getElementById("progress-text").textContent =
 // ======================================
 
 document.getElementById("dailyIncome").textContent =
-    "$ " + getDailyIncome().toFixed(6);
+    "€ " + getDailyIncome().toFixed(6);
 
 document.getElementById("monthlyIncome").textContent =
-    "$ " + getMonthlyIncome().toFixed(4);
+    "€ " + getMonthlyIncome().toFixed(4);
 
 document.getElementById("yearlyIncome").textContent =
-    "$ " + getYearlyIncome().toFixed(2);
+    "€ " + getYearlyIncome().toFixed(2);
