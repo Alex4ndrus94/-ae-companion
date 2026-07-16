@@ -47,3 +47,15 @@ function getYearlyIncome() {
     return getDailyIncome() * 365;
 
 }
+// Conversione in Euro
+function getDailyIncomeEUR() {
+    return getDailyIncome() * CONFIG.exchangeRate;
+}
+
+function getMonthlyIncomeEUR() {
+    return getMonthlyIncome() * CONFIG.exchangeRate;
+}
+
+function getYearlyIncomeEUR() {
+    return getYearlyIncome() * CONFIG.exchangeRate;
+}
