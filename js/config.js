@@ -7,6 +7,12 @@ const CONFIG = {
 
     country: "IT",
 
+    // Valuta
+    currency: "EUR",
+
+    // Tasso di conversione USD -> EUR
+    exchangeRate: 0.86,
+
     landCostAB: 100,
 
     badgeCostAB: 200,
