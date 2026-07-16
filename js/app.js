@@ -50,3 +50,12 @@ document.getElementById("monthlyIncome").textContent =
 
 document.getElementById("yearlyIncome").textContent =
     formatCurrency(getYearlyIncomeEUR());
+// ======================================
+// Informazioni Boost
+// ======================================
+
+const boostMultiplier = getCurrentBoost(totalLands);
+const boostPercent = (boostMultiplier - 1) * 100;
+
+document.getElementById("boost-info").textContent =
+    `⚡ Boost attivo x${boostMultiplier} (+${boostPercent}%)`;
