@@ -59,3 +59,13 @@ function getMonthlyIncomeEUR() {
 function getYearlyIncomeEUR() {
     return getYearlyIncome() * CONFIG.exchangeRate;
 }
+function formatCurrency(value) {
+
+    return new Intl.NumberFormat("it-IT", {
+        style: "currency",
+        currency: CONFIG.currency,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(value);
+
+}
