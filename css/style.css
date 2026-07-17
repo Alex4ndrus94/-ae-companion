@@ -106,3 +106,32 @@ header p{
     color: #4CAF50;
     font-weight: 600;
 }
+.player-card {
+    text-align: center;
+}
+
+.player-total {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 12px 0;
+}
+
+.rarity-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.player-card hr {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,.15);
+    margin: 12px 0;
+}
