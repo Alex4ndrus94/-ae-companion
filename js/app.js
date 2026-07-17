@@ -14,6 +14,17 @@ const totalLands =
 // Inserimento dati
 document.getElementById("player-name").textContent = player.name;
 document.getElementById("parcels").textContent = totalLands;
+document.getElementById("common-count").textContent =
+    player.lands.common;
+
+document.getElementById("rare-count").textContent =
+    player.lands.rare;
+
+document.getElementById("epic-count").textContent =
+    player.lands.epic;
+
+document.getElementById("legendary-count").textContent =
+    player.lands.legendary;
 document.getElementById("badges").textContent = player.badges;
 document.getElementById("mayor").textContent = player.mayorTarget;
 
