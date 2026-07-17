@@ -59,3 +59,21 @@ const boostPercent = (boostMultiplier - 1) * 100;
 
 document.getElementById("boost-info").textContent =
     `⚡ Boost attivo x${boostMultiplier} (+${boostPercent}%)`;
+// ======================================
+// Strategia
+// ======================================
+
+document.getElementById("landsRemaining").textContent =
+    remaining;
+
+document.getElementById("abNeeded").textContent =
+    (remaining * CONFIG.landCostAB) + " AB";
+
+document.getElementById("dailyAB").textContent =
+    player.dailyAB + " AB";
+
+const daysRemaining =
+    Math.ceil((remaining * CONFIG.landCostAB) / player.dailyAB);
+
+document.getElementById("daysRemaining").textContent =
+    daysRemaining + " giorno" + (daysRemaining > 1 ? "i" : "");
