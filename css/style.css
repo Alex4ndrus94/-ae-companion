@@ -229,3 +229,50 @@ header p{
     font-weight:700;
 
 }
+/* ======================================
+   UI 2.2 - STRATEGIA
+====================================== */
+
+.strategy-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:15px;
+
+    margin-top:20px;
+
+}
+
+.strategy-box{
+
+    background:#2a2d34;
+
+    border-radius:14px;
+
+    padding:18px;
+
+    text-align:center;
+
+}
+
+.strategy-title{
+
+    color:#9ca3af;
+
+    font-size:.9rem;
+
+    margin-bottom:10px;
+
+}
+
+.strategy-value{
+
+    color:#53c653;
+
+    font-size:1.4rem;
+
+    font-weight:700;
+
+}
