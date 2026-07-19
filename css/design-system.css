@@ -1,1 +1,84 @@
+/*======================================
+ AE Companion Design System
+ Version 3.0
+======================================*/
 
+:root{
+
+    --bg:#111318;
+    --surface:#1D222B;
+    --surface-light:#252B36;
+
+    --border:#2E3440;
+
+    --green:#45D05B;
+    --blue:#3A86FF;
+    --purple:#8B5CF6;
+    --gold:#F2C94C;
+
+    --text:#F5F7FA;
+    --text-secondary:#A8B3C2;
+
+    --radius:18px;
+
+}
+
+/*==============================
+BACKGROUND
+==============================*/
+
+body{
+
+    background:
+        radial-gradient(circle at top,
+        rgba(69,208,91,.10),
+        transparent 45%),
+        var(--bg);
+
+    color:var(--text);
+
+}
+
+/*==============================
+CARD
+==============================*/
+
+.card{
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius);
+
+    box-shadow:
+        0 8px 30px rgba(0,0,0,.35);
+
+    transition:.25s;
+
+}
+
+.card:hover{
+
+    border-color:var(--green);
+
+    box-shadow:
+        0 0 18px rgba(69,208,91,.18);
+
+}
+
+/*==============================
+HEADINGS
+==============================*/
+
+h1,h2,h3{
+
+    color:var(--text);
+
+}
+
+p{
+
+    color:var(--text-secondary);
+
+}
