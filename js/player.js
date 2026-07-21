@@ -24,7 +24,9 @@ const player = {
 
     },
 
-    badges: 6
+    badges: 6,
+
+    mayorTarget: 217
 
 };
 
