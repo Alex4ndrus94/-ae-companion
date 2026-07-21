@@ -12,8 +12,12 @@ const totalLands =
     player.lands.legendary;
 
 // Inserimento dati
-document.getElementById("player-name").textContent = player.name;
-document.getElementById("parcels").textContent = totalLands;
+document.getElementById("player-name").textContent =
+    player.profile.name;
+
+document.getElementById("parcels").textContent =
+    totalLands;
+
 document.getElementById("common-count").textContent =
     player.lands.common;
 
@@ -25,10 +29,17 @@ document.getElementById("epic-count").textContent =
 
 document.getElementById("legendary-count").textContent =
     player.lands.legendary;
-document.getElementById("badges").textContent = player.badges;
-document.getElementById("mayor").textContent = player.mayorTarget;
 
+document.getElementById("badges").textContent =
+    player.badges;
+
+document.getElementById("mayor").textContent =
+    player.mayorTarget;
+
+// ======================================
 // AE Core
+// ======================================
+
 const current = getCurrentBreakpoint(totalLands);
 const next = getNextBreakpoint(totalLands);
 const remaining = getRemainingLandsToNextBreakpoint(totalLands);
@@ -49,6 +60,7 @@ document.getElementById("progress-text").textContent =
     next
         ? `${totalLands} / ${next.min} terreni • Ne manca ${remaining}`
         : `${totalLands} terreni • Ultimo breakpoint`;
+
 // ======================================
 // Rendita
 // ======================================
@@ -61,15 +73,20 @@ document.getElementById("monthlyIncome").textContent =
 
 document.getElementById("yearlyIncome").textContent =
     formatCurrency(getYearlyIncomeEUR());
+
 // ======================================
 // Informazioni Boost
 // ======================================
 
-const boostMultiplier = getCurrentBoost(totalLands);
-const boostPercent = (boostMultiplier - 1) * 100;
+const boostMultiplier =
+    getCurrentBoost(totalLands);
+
+const boostPercent =
+    (boostMultiplier - 1) * 100;
 
 document.getElementById("boost-info").textContent =
     `⚡ Boost attivo x${boostMultiplier} (+${boostPercent}%)`;
+
 // ======================================
 // Strategia
 // ======================================
@@ -81,10 +98,14 @@ document.getElementById("abNeeded").textContent =
     (remaining * CONFIG.landCostAB) + " AB";
 
 document.getElementById("dailyAB").textContent =
-    player.dailyAB + " AB";
+    settings.dailyLoginAB + " AB";
 
 const daysRemaining =
-    Math.ceil((remaining * CONFIG.landCostAB) / player.dailyAB);
+    Math.ceil(
+        (remaining * CONFIG.landCostAB) /
+        settings.dailyLoginAB
+    );
 
 document.getElementById("daysRemaining").textContent =
-    daysRemaining + " giorno" + (daysRemaining > 1 ? "i" : "");
+    daysRemaining + " giorno" +
+    (daysRemaining > 1 ? "i" : "");
