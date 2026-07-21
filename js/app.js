@@ -4,10 +4,16 @@
 
 console.log(player);
 
+// ======================================
 // Totale terreni
+// ======================================
+
 const totalLands = getTotalLands();
 
-// Inserimento dati
+// ======================================
+// Player
+// ======================================
+
 setText("player-name", player.profile.name);
 
 setText("parcels", totalLands);
@@ -31,14 +37,16 @@ setText("mayor", player.mayorTarget);
 // ======================================
 
 const current = getCurrentBreakpoint(totalLands);
+
 const next = getNextBreakpoint(totalLands);
-const remaining = getRemainingLandsToNextBreakpoint(totalLands);
 
-// Boost
-document.getElementById("boost").textContent =
-    "x" + getCurrentBoost(totalLands);
+const remaining =
+    getRemainingLandsToNextBreakpoint(totalLands);
 
-// Barra di avanzamento
+// ======================================
+// Barra progresso
+// ======================================
+
 const percentage =
     ((totalLands - current.min) /
     (current.max - current.min)) * 100;
@@ -48,56 +56,73 @@ setWidth(
     percentage + "%"
 );
 
-document.getElementById("progress-text").textContent =
+setText(
+    "progress-text",
     next
         ? `${totalLands} / ${next.min} terreni • Ne manca ${remaining}`
-        : `${totalLands} terreni • Ultimo breakpoint`;
+        : `${totalLands} terreni • Ultimo breakpoint`
+);
 
 // ======================================
 // Rendita
 // ======================================
 
-document.getElementById("dailyIncome").textContent =
-    formatCurrency(getDailyIncomeEUR());
+setText(
+    "dailyIncome",
+    formatCurrency(getDailyIncomeEUR())
+);
 
-document.getElementById("monthlyIncome").textContent =
-    formatCurrency(getMonthlyIncomeEUR());
+setText(
+    "monthlyIncome",
+    formatCurrency(getMonthlyIncomeEUR())
+);
 
-document.getElementById("yearlyIncome").textContent =
-    formatCurrency(getYearlyIncomeEUR());
+setText(
+    "yearlyIncome",
+    formatCurrency(getYearlyIncomeEUR())
+);
 
 // ======================================
-// Informazioni Boost
+// Boost
 // ======================================
 
-const boostMultiplier =
-    getBoostMultiplier();
+const boostMultiplier = getBoostMultiplier();
 
-const boostPercent =
-    getBoostPercent();
+const boostPercent = getBoostPercent();
 
-document.getElementById("boost-info").textContent =
-    `⚡ Boost attivo x${boostMultiplier} (+${boostPercent}%)`;
+setText(
+    "boost-info",
+    `⚡ Boost attivo x${boostMultiplier} (+${boostPercent}%)`
+);
 
 // ======================================
 // Strategia
 // ======================================
 
-document.getElementById("landsRemaining").textContent =
-    remaining;
+setText(
+    "landsRemaining",
+    remaining
+);
 
-document.getElementById("abNeeded").textContent =
-    (remaining * CONFIG.landCostAB) + " AB";
+setText(
+    "abNeeded",
+    (remaining * CONFIG.landCostAB) + " AB"
+);
 
-document.getElementById("dailyAB").textContent =
-    settings.dailyLoginAB + " AB";
+setText(
+    "dailyAB",
+    player.settings.dailyLoginAB + " AB"
+);
 
 const daysRemaining =
     Math.ceil(
         (remaining * CONFIG.landCostAB) /
-        settings.dailyLoginAB
+        player.settings.dailyLoginAB
     );
 
-document.getElementById("daysRemaining").textContent =
-    daysRemaining + " giorno" +
-    (daysRemaining > 1 ? "i" : "");
+setText(
+    "daysRemaining",
+    daysRemaining +
+    " giorno" +
+    (daysRemaining > 1 ? "i" : "")
+);
