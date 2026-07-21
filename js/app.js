@@ -5,11 +5,7 @@
 console.log(player);
 
 // Totale terreni
-const totalLands =
-    player.lands.common +
-    player.lands.rare +
-    player.lands.epic +
-    player.lands.legendary;
+const totalLands = getTotalLands();
 
 // Inserimento dati
 document.getElementById("player-name").textContent =
@@ -79,10 +75,10 @@ document.getElementById("yearlyIncome").textContent =
 // ======================================
 
 const boostMultiplier =
-    getCurrentBoost(totalLands);
+    getBoostMultiplier();
 
 const boostPercent =
-    (boostMultiplier - 1) * 100;
+    getBoostPercent();
 
 document.getElementById("boost-info").textContent =
     `⚡ Boost attivo x${boostMultiplier} (+${boostPercent}%)`;
