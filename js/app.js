@@ -8,29 +8,23 @@ console.log(player);
 const totalLands = getTotalLands();
 
 // Inserimento dati
-document.getElementById("player-name").textContent =
-    player.profile.name;
+setText("player-name", player.profile.name);
 
-document.getElementById("parcels").textContent =
-    totalLands;
+setText("parcels", totalLands);
 
-document.getElementById("common-count").textContent =
-    player.lands.common;
+setText("common-count", player.lands.common);
 
-document.getElementById("rare-count").textContent =
-    player.lands.rare;
+setText("rare-count", player.lands.rare);
 
-document.getElementById("epic-count").textContent =
-    player.lands.epic;
+setText("epic-count", player.lands.epic);
 
-document.getElementById("legendary-count").textContent =
-    player.lands.legendary;
+setText("legendary-count", player.lands.legendary);
 
-document.getElementById("badges").textContent =
-    player.badges;
+setText("badges", player.badges);
 
-document.getElementById("mayor").textContent =
-    player.mayorTarget;
+setText("boost", "x" + getBoostMultiplier());
+
+setText("mayor", player.mayorTarget);
 
 // ======================================
 // AE Core
@@ -49,8 +43,10 @@ const percentage =
     ((totalLands - current.min) /
     (current.max - current.min)) * 100;
 
-document.getElementById("progress-fill").style.width =
-    percentage + "%";
+setWidth(
+    "progress-fill",
+    percentage + "%"
+);
 
 document.getElementById("progress-text").textContent =
     next
