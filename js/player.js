@@ -4,40 +4,73 @@
 
 const player = {
 
+    // ==================================
+    // Profilo
+    // ==================================
+
     profile: {
 
         name: "Alexandrus94",
-
         country: "IT"
 
     },
 
+    // ==================================
+    // Terreni
+    // ==================================
+
     lands: {
 
-        common: 73,
-
-        rare: 45,
-
-        epic: 27,
-
+        common: 79,
+        rare: 48,
+        epic: 28,
         legendary: 6
 
     },
 
-    badges: 6,
+    // ==================================
+    // Badge
+    // ==================================
 
-    mayorTarget: 217
+    badges: 9,
 
-};
+    // ==================================
+    // Mayor
+    // ==================================
 
-const settings = {
+    mayorships: [
 
-    explorerPass: true,
+        {
+            city: "San Lorenzo"
+        },
 
-    missionPass: true,
+        {
+            city: "Montebello Ionico"
+        }
 
-    adsEnabled: false,
+    ],
 
-    dailyLoginAB: 91
+    mayorTarget: 217,
+
+    // ==================================
+    // Pass
+    // ==================================
+
+    passes: {
+
+        explorer: true,
+        mission: true
+
+    },
+
+    // ==================================
+    // Impostazioni
+    // ==================================
+
+    settings: {
+
+        dailyLoginAB: 91
+
+    }
 
 };
