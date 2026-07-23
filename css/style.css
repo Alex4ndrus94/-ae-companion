@@ -46,29 +46,38 @@
     gap:12px;
 }
 
-.rarity-grid div{
-    background:var(--card-2);
+.rarity-card{
     border-radius:var(--radius-sm);
     padding:12px;
     text-align:center;
-    font-weight:600;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
+    font-weight:700;
+    font-size:1.1rem;
+    border:2px solid var(--border);
+    transition:.2s;
 }
 
-.rarity-dot{
-    width:10px;
-    height:10px;
-    border-radius:50%;
-    display:inline-block;
+.rarity-card.common{
+    background:var(--card-2);
+    border-color:var(--text-2);
 }
 
-.rarity-dot.common{ background:var(--text-2); }
-.rarity-dot.rare{ background:var(--blue-rare); box-shadow:0 0 8px var(--blue-rare); }
-.rarity-dot.epic{ background:var(--purple-epic); box-shadow:0 0 8px var(--purple-epic); }
-.rarity-dot.legendary{ background:var(--gold-legend); box-shadow:0 0 8px var(--gold-legend); }
+.rarity-card.rare{
+    background:rgba(58,134,255,.14);
+    border-color:var(--blue-rare);
+    box-shadow:0 0 12px rgba(58,134,255,.2);
+}
+
+.rarity-card.epic{
+    background:rgba(155,92,255,.14);
+    border-color:var(--purple-epic);
+    box-shadow:0 0 12px rgba(155,92,255,.2);
+}
+
+.rarity-card.legendary{
+    background:rgba(255,179,34,.14);
+    border-color:var(--gold-legend);
+    box-shadow:0 0 12px rgba(255,179,34,.2);
+}
 
 .stats-grid{
     display:grid;
