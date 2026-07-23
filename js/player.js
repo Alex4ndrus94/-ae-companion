@@ -10,7 +10,7 @@ const player = {
 
     profile: {
 
-        name: "Alexandrus94",
+        name: "",
         country: "IT"
 
     },
@@ -21,10 +21,10 @@ const player = {
 
     lands: {
 
-        common: 79,
-        rare: 48,
-        epic: 28,
-        legendary: 6
+        common: 0,
+        rare: 0,
+        epic: 0,
+        legendary: 0
 
     },
 
@@ -32,25 +32,15 @@ const player = {
     // Badge
     // ==================================
 
-    badges: 9,
+    badges: 0,
 
     // ==================================
     // Mayor
     // ==================================
 
-    mayorships: [
+    mayorships: [],
 
-        {
-            city: "San Lorenzo"
-        },
-
-        {
-            city: "Montebello Ionico"
-        }
-
-    ],
-
-    mayorTarget: 217,
+    mayorTarget: 0,
 
     // ==================================
     // Pass
@@ -58,8 +48,8 @@ const player = {
 
     passes: {
 
-        explorer: true,
-        mission: true
+        explorer: false,
+        mission: false
 
     },
 
@@ -69,7 +59,7 @@ const player = {
 
     settings: {
 
-        dailyLoginAB: 91
+        dailyLoginAB: 50
 
     }
 
