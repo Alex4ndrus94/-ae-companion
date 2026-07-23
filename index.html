@@ -6,10 +6,25 @@
 
 <title>AE Companion</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/style.css">
+
+<!-- PWA / Home Screen -->
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="assets/icons/pwa/apple-touch-icon.png">
+<meta name="theme-color" content="#10141B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AE Companion">
 </head>
 
 <body>
+
+<div class="hex-bg"></div>
 
 <div class="container">
 
@@ -29,10 +44,12 @@
 
 <div class="card player-card">
 
+    <button class="edit-btn" onclick="openSettings(false)">✏️</button>
+
     <h2 id="player-name"></h2>
 
     <div class="player-total">
-        🌍 Terreni
+        <span><img src="assets/icons/lands.svg" class="icon" alt=""> Terreni</span>
         <span id="parcels"></span>
     </div>
 
@@ -40,13 +57,13 @@
 
     <div class="rarity-grid">
 
-        <div>🟢 <span id="common-count"></span></div>
+        <div class="rarity-card common"><span id="common-count"></span></div>
 
-        <div>🔵 <span id="rare-count"></span></div>
+        <div class="rarity-card rare"><span id="rare-count"></span></div>
 
-        <div>🟣 <span id="epic-count"></span></div>
+        <div class="rarity-card epic"><span id="epic-count"></span></div>
 
-        <div>🟡 <span id="legendary-count"></span></div>
+        <div class="rarity-card legendary"><span id="legendary-count"></span></div>
 
     </div>
 
@@ -54,11 +71,11 @@
 
     <div class="stats-grid">
 
-        <div>👑 <span id="badges"></span></div>
+        <div><img src="assets/icons/badge.svg" class="icon" alt=""> <span id="badges"></span></div>
 
-        <div>⚡ <span id="boost"></span></div>
+        <div><img src="assets/icons/boost.svg" class="icon" alt=""> <span id="boost"></span></div>
 
-        <div>🎯 <span id="mayor"></span></div>
+        <div><img src="assets/icons/mayor.svg" class="icon" alt=""> <span id="mayor"></span></div>
 
     </div>
 
@@ -66,7 +83,7 @@
 <div class="progress-card">
 <section class="card">
 
-    <h2>💰 Rendita</h2>
+    <h2><img src="assets/icons/income.svg" class="icon" alt=""> Rendita</h2>
 
     <div class="income-grid">
 
@@ -96,7 +113,7 @@
 
 <div class="card">
 
-<h2>🎯 Strategia</h2>
+<h2><img src="assets/icons/strategy.svg" class="icon" alt=""> Strategia</h2>
 
 <div class="strategy-grid">
 
@@ -136,18 +153,112 @@
 
 </div>
 
+<!-- CARD CONSIGLI -->
+
+<div class="card">
+
+<h2>💡 Consigli</h2>
+
+<ul class="advice-list" id="advice-list"></ul>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ======================================
+     PANNELLO IMPOSTAZIONI
+====================================== -->
+
+<div class="settings-overlay" id="settings-overlay">
+
+    <div class="settings-panel">
+
+        <h2 id="settings-title">✏️ Modifica dati</h2>
+
+        <p id="settings-intro" class="settings-intro">
+            Inserisci il tuo nome e i tuoi dati di partenza. Resteranno salvati su questo dispositivo.
+        </p>
+
+        <label class="settings-field">Nome
+            <input type="text" id="name-input" maxlength="24">
+        </label>
+
+        <div class="settings-section">Terreni</div>
+
+        <div class="settings-grid">
+
+            <label>Common
+                <input type="number" id="common-input" min="0">
+            </label>
+
+            <label>Rare
+                <input type="number" id="rare-input" min="0">
+            </label>
+
+            <label>Epic
+                <input type="number" id="epic-input" min="0">
+            </label>
+
+            <label>Legendary
+                <input type="number" id="legendary-input" min="0">
+            </label>
+
+        </div>
+
+        <div class="settings-section">Altri dati</div>
+
+        <label class="settings-field">Badge
+            <input type="number" id="badges-input" min="0">
+        </label>
+
+        <label class="settings-field">Obiettivo Mayor
+            <input type="number" id="mayorTarget-input" min="0">
+        </label>
+
+        <label class="settings-field">AB guadagnati al giorno
+            <input type="number" id="dailyAB-input" min="0">
+        </label>
+
+        <div class="settings-actions">
+            <button class="btn-cancel" id="settings-cancel" onclick="closeSettings()">Annulla</button>
+            <button class="btn-save" onclick="saveSettings()">Salva</button>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ======================================
+     BANNER AGGIUNGI ALLA HOME
+====================================== -->
+
+<div class="install-banner" id="install-banner">
+
+    <span class="install-banner-icon">📲</span>
+
+    <span id="install-banner-text"></span>
+
+    <button id="install-banner-action" class="install-banner-action">Installa</button>
+
+    <button class="install-banner-close" onclick="dismissInstallBanner()">✕</button>
+
 </div>
 
 <script src="js/config.js"></script>
 <script src="js/player.js"></script>
+<script src="js/storage.js"></script>
 <script src="js/playerEngine.js"></script>
 <script src="js/strategy.js"></script>
 <script src="js/calculator.js"></script>
 <script src="js/income.js"></script>
+<script src="js/advice.js"></script>
 <script src="js/components.js"></script>
 <script src="js/ui.js"></script>
+<script src="js/settings.js"></script>
+<script src="js/install-banner.js"></script>
 <script src="js/app.js"></script>
-    
+
 </body>
 </html>
-<link rel="stylesheet" href="css/design-system.css">
