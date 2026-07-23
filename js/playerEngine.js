@@ -40,7 +40,7 @@ function getEstimatedDays(lands) {
 
     return Math.ceil(
         getABNeeded(lands) /
-        settings.dailyLoginAB
+        player.settings.dailyLoginAB
     );
 
 }
