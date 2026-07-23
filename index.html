@@ -6,10 +6,17 @@
 
 <title>AE Companion</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
+
+<div class="hex-bg"></div>
 
 <div class="container">
 
@@ -32,7 +39,7 @@
     <h2 id="player-name"></h2>
 
     <div class="player-total">
-        🌍 Terreni
+        <span><img src="assets/icons/lands.svg" class="icon" alt=""> Terreni</span>
         <span id="parcels"></span>
     </div>
 
@@ -40,13 +47,13 @@
 
     <div class="rarity-grid">
 
-        <div>🟢 <span id="common-count"></span></div>
+        <div><span class="rarity-dot common"></span> <span id="common-count"></span></div>
 
-        <div>🔵 <span id="rare-count"></span></div>
+        <div><span class="rarity-dot rare"></span> <span id="rare-count"></span></div>
 
-        <div>🟣 <span id="epic-count"></span></div>
+        <div><span class="rarity-dot epic"></span> <span id="epic-count"></span></div>
 
-        <div>🟡 <span id="legendary-count"></span></div>
+        <div><span class="rarity-dot legendary"></span> <span id="legendary-count"></span></div>
 
     </div>
 
@@ -54,11 +61,11 @@
 
     <div class="stats-grid">
 
-        <div>👑 <span id="badges"></span></div>
+        <div><img src="assets/icons/badge.svg" class="icon" alt=""> <span id="badges"></span></div>
 
-        <div>⚡ <span id="boost"></span></div>
+        <div><img src="assets/icons/boost.svg" class="icon" alt=""> <span id="boost"></span></div>
 
-        <div>🎯 <span id="mayor"></span></div>
+        <div><img src="assets/icons/mayor.svg" class="icon" alt=""> <span id="mayor"></span></div>
 
     </div>
 
@@ -66,7 +73,7 @@
 <div class="progress-card">
 <section class="card">
 
-    <h2>💰 Rendita</h2>
+    <h2><img src="assets/icons/income.svg" class="icon" alt=""> Rendita</h2>
 
     <div class="income-grid">
 
@@ -96,7 +103,7 @@
 
 <div class="card">
 
-<h2>🎯 Strategia</h2>
+<h2><img src="assets/icons/strategy.svg" class="icon" alt=""> Strategia</h2>
 
 <div class="strategy-grid">
 
@@ -138,6 +145,8 @@
 
 </div>
 
+</div>
+
 <script src="js/config.js"></script>
 <script src="js/player.js"></script>
 <script src="js/playerEngine.js"></script>
@@ -147,7 +156,6 @@
 <script src="js/components.js"></script>
 <script src="js/ui.js"></script>
 <script src="js/app.js"></script>
-    
+
 </body>
 </html>
-<link rel="stylesheet" href="css/design-system.css">
