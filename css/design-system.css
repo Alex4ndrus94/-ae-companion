@@ -1,132 +1,122 @@
-/*======================================
- AE Companion Design System
- Version 3.0
-======================================*/
+/* ======================================
+   AE Companion — Design System
+   Basato sul kit grafico ufficiale
+====================================== */
 
 :root{
 
-    --bg:#111318;
-    --surface:#1D222B;
-    --surface-light:#252B36;
-
-    --border:#2E3440;
-
-    --green:#45D05B;
-    --blue:#3A86FF;
-    --purple:#8B5CF6;
-    --gold:#F2C94C;
+    --bg:#10141B;
+    --card:#1A202A;
+    --card-2:#262D38;
+    --border:#313846;
 
     --text:#F5F7FA;
-    --text-secondary:#A8B3C2;
+    --text-2:#9AA4B2;
+
+    --green:#45C256;
+    --green-glow:#58E06D;
+    --blue-rare:#3A86FF;
+    --purple-epic:#9B5CFF;
+    --gold-legend:#FFB322;
+    --cyan-info:#00D4FF;
 
     --radius:18px;
+    --radius-sm:12px;
+
+    --font-title:"Orbitron", -apple-system, sans-serif;
+    --font-body:"Inter", -apple-system, sans-serif;
 
 }
 
-/*==============================
-BACKGROUND
-==============================*/
+/* ==============================
+   BACKGROUND — pattern esagonale
+============================== */
 
 body{
 
-    background:
-        radial-gradient(circle at top,
-        rgba(69,208,91,.10),
-        transparent 45%),
-        var(--bg);
-
+    margin:0;
+    background-color:var(--bg);
+    background-image:
+        radial-gradient(circle at 15% 10%, rgba(69,194,86,.10), transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(0,212,255,.06), transparent 40%);
     color:var(--text);
+    font-family:var(--font-body);
 
 }
 
-/*==============================
-CARD
-==============================*/
+.hex-bg{
 
-.card{
-
-    background:var(--surface);
-
-    border:1px solid var(--border);
-
-    border-radius:var(--radius);
-
-    box-shadow:
-        0 8px 30px rgba(0,0,0,.35);
-
-    transition:.25s;
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    opacity:.5;
+    background-image:
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='104' viewBox='0 0 60 104'><polygon points='30,0 60,17 60,52 30,69 0,52 0,17' fill='none' stroke='rgba(88,224,109,0.07)' stroke-width='1'/><polygon points='30,35 60,52 60,87 30,104 0,87 0,52' fill='none' stroke='rgba(88,224,109,0.07)' stroke-width='1'/></svg>");
+    background-size:60px 104px;
 
 }
 
-.card:hover{
-
-    border-color:var(--green);
-
-    box-shadow:
-        0 0 18px rgba(69,208,91,.18);
-
-}
-
-/*==============================
-HEADINGS
-==============================*/
+/* ==============================
+   HEADINGS
+============================== */
 
 h1,h2,h3{
-
+    font-family:var(--font-title);
     color:var(--text);
-
 }
 
-p{
+p{ color:var(--text-2); }
 
-    color:var(--text-secondary);
-
-}
-/*======================================
- HERO
-======================================*/
+/* ==============================
+   HERO
+============================== */
 
 .hero{
-
     text-align:center;
-
-    padding:48px 20px 36px;
-
+    padding:44px 20px 32px;
 }
 
 .hero-logo{
-
-    width:90px;
-
-    margin-bottom:18px;
-
-    filter:
-        drop-shadow(
-        0 0 20px
-        rgba(69,194,86,.30));
-
+    width:84px;
+    margin-bottom:16px;
+    filter:drop-shadow(0 0 18px rgba(88,224,109,.35));
 }
 
 .hero h1{
-
-    font-size:34px;
-
+    font-size:30px;
     margin:0;
-
     font-weight:700;
-
+    letter-spacing:1px;
+    background:linear-gradient(90deg,var(--green-glow),var(--cyan-info));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
 }
 
 .subtitle{
-
     margin-top:8px;
-
-    color:var(--text-secondary);
-
-    letter-spacing:2px;
-
+    color:var(--text-2);
+    letter-spacing:3px;
     text-transform:uppercase;
+    font-size:12px;
+    font-family:var(--font-title);
+}
 
-    font-size:13px;
+/* ==============================
+   CARD
+============================== */
 
+.card,.progress-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:22px;
+    margin-bottom:18px;
+    box-shadow:0 8px 26px rgba(0,0,0,.35);
+    transition:.25s;
+}
+
+.card:hover,.progress-card:hover{
+    border-color:var(--green);
+    box-shadow:0 0 20px rgba(69,194,86,.15);
 }

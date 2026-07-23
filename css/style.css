@@ -1,12 +1,187 @@
-body{margin:0;background:#f8fafc;color:#1f2937;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
-.container{max-width:430px;margin:0 auto;padding:24px;}
-header{text-align:center;margin:8px 0 28px;}
-header h1{margin:0;font-size:34px;color:#21C46B;font-weight:700;}
-header p{margin:8px 0 0;color:#6b7280}
-.card,.progress-card{background:#fff;border-radius:20px;padding:24px;margin-bottom:20px;box-shadow:0 10px 25px rgba(0,0,0,.08);border:1px solid #eef2f7}
-h2,h3{margin-top:0;color:#1f2937}
-.value{font-size:36px;font-weight:700;color:#21C46B}
-.progress{height:12px;background:#e5e7eb;border-radius:999px;overflow:hidden}
-#progress-fill{height:100%;background:#21C46B;border-radius:999px}
-button{background:#21C46B;color:#fff;border:none;border-radius:14px;padding:12px 18px}
-small,.muted{color:#6b7280}
+/* ======================================
+   AE Companion — Componenti UI
+====================================== */
+
+.container{
+    max-width:430px;
+    margin:0 auto;
+    padding:20px;
+}
+
+.icon{
+    width:18px;
+    height:18px;
+    vertical-align:-4px;
+    margin-right:6px;
+}
+
+/* ==============================
+   PLAYER CARD
+============================== */
+
+.player-card{ text-align:center; }
+
+.player-card h2{
+    font-size:1.35rem;
+    margin-bottom:16px;
+}
+
+.player-total{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:1.1rem;
+    font-weight:700;
+}
+
+.player-card hr{
+    border:none;
+    border-top:1px solid var(--border);
+    margin:16px 0;
+}
+
+.rarity-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.rarity-grid div{
+    background:var(--card-2);
+    border-radius:var(--radius-sm);
+    padding:12px;
+    text-align:center;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+}
+
+.rarity-dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    display:inline-block;
+}
+
+.rarity-dot.common{ background:var(--text-2); }
+.rarity-dot.rare{ background:var(--blue-rare); box-shadow:0 0 8px var(--blue-rare); }
+.rarity-dot.epic{ background:var(--purple-epic); box-shadow:0 0 8px var(--purple-epic); }
+.rarity-dot.legendary{ background:var(--gold-legend); box-shadow:0 0 8px var(--gold-legend); }
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.stats-grid div{
+    background:var(--card-2);
+    border-radius:var(--radius-sm);
+    padding:12px;
+    text-align:center;
+    font-weight:700;
+}
+
+/* ==============================
+   RENDITA
+============================== */
+
+.income-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-top:18px;
+}
+
+.income-box{
+    background:var(--card-2);
+    border-radius:14px;
+    padding:16px;
+    text-align:center;
+}
+
+.label{
+    display:block;
+    color:var(--text-2);
+    font-size:11px;
+    margin-bottom:8px;
+    letter-spacing:1px;
+    font-family:var(--font-title);
+}
+
+.value{
+    color:var(--green-glow);
+    font-size:20px;
+    font-weight:700;
+}
+
+#boost-info{
+    text-align:center;
+    margin-top:16px;
+    color:var(--green-glow);
+    font-weight:600;
+}
+
+/* ==============================
+   STRATEGIA
+============================== */
+
+.strategy-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+    margin-top:18px;
+}
+
+.strategy-box{
+    background:var(--card-2);
+    border-radius:14px;
+    padding:16px;
+    text-align:center;
+}
+
+.strategy-title{
+    color:var(--text-2);
+    font-size:.82rem;
+    margin-bottom:8px;
+    font-family:var(--font-title);
+    text-transform:uppercase;
+    letter-spacing:.5px;
+}
+
+.strategy-value{
+    color:var(--green-glow);
+    font-size:1.3rem;
+    font-weight:700;
+}
+
+/* ==============================
+   PROGRESS BAR
+============================== */
+
+.progress{
+    width:100%;
+    height:14px;
+    background:var(--card-2);
+    border-radius:999px;
+    overflow:hidden;
+    border:1px solid var(--border);
+}
+
+.progress-fill{
+    height:100%;
+    width:0%;
+    border-radius:999px;
+    background:linear-gradient(90deg,var(--green),var(--green-glow));
+    box-shadow:0 0 10px rgba(88,224,109,.5);
+    transition:.6s ease;
+}
+
+#progress-text{
+    text-align:center;
+    margin-top:10px;
+    color:var(--text-2);
+    font-size:14px;
+}
