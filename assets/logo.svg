@@ -1,4 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <circle cx="128" cy="128" r="110" fill="#1DB954"/>
-  <text x="128" y="145" font-size="90" text-anchor="middle" fill="white" font-family="Arial">AE</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="aeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#58E06D"/>
+      <stop offset="100%" stop-color="#2FA84A"/>
+    </linearGradient>
+    <filter id="aeGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <polygon points="100,10 175,52.5 175,147.5 100,190 25,147.5 25,52.5"
+           fill="#10141B" stroke="url(#aeGrad)" stroke-width="6"
+           filter="url(#aeGlow)"/>
+
+  <text x="100" y="128" text-anchor="middle"
+        font-family="Arial, sans-serif" font-weight="700"
+        font-size="88" fill="url(#aeGrad)">AE</text>
 </svg>
