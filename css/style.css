@@ -413,3 +413,63 @@
     padding:4px;
     flex-shrink:0;
 }
+
+/* ==============================
+   FOOTER
+============================== */
+
+.app-footer{
+    max-width:430px;
+    margin:8px auto 100px;
+    padding:0 20px;
+    text-align:center;
+    font-size:.78rem;
+    color:var(--text-2);
+}
+
+.app-footer strong{
+    color:var(--green-glow);
+    font-weight:600;
+}
+
+.footer-ig{
+    display:inline-block;
+    margin-top:10px;
+    color:var(--cyan-info);
+    text-decoration:none;
+    font-size:.82rem;
+    font-weight:600;
+    border:1px solid var(--border);
+    background:var(--card-2);
+    padding:8px 14px;
+    border-radius:999px;
+}
+
+.footer-ig:active{
+    background:var(--border);
+}
+
+.footer-update{
+    font-size:.72rem;
+    color:var(--text-2);
+    opacity:.8;
+}
+
+.footer-meta{
+    margin-top:6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+}
+
+.version-badge{
+    background:var(--card-2);
+    border:1px solid var(--border);
+    color:var(--green-glow);
+    font-size:.68rem;
+    font-weight:700;
+    font-family:var(--font-title);
+    padding:2px 8px;
+    border-radius:999px;
+}
