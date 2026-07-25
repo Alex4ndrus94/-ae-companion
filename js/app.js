@@ -110,6 +110,13 @@ function renderDashboard() {
         t("boostActive", { mult: boostMultiplier, percent: boostPercent })
     );
 
+    const badgeBonusPercent = getBadgeBoostPercent(player.badges);
+
+    setText(
+        "badge-bonus-info",
+        t("badgeBonusInfo", { percent: badgeBonusPercent, badges: player.badges })
+    );
+
     // ======================================
     // Strategia
     // ======================================

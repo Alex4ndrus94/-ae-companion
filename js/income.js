@@ -2,15 +2,19 @@
 // AE Companion - Income Calculator
 // ======================================
 
-// Reddito al secondo (senza boost)
+// Reddito al secondo (senza boost pubblicità, ma con bonus passaporto badge)
 function getBaseIncomePerSecond() {
 
-    return (
+    const rawIncome = (
         player.lands.common * CONFIG.rentPerSecond.common +
         player.lands.rare * CONFIG.rentPerSecond.rare +
         player.lands.epic * CONFIG.rentPerSecond.epic +
         player.lands.legendary * CONFIG.rentPerSecond.legendary
     );
+
+    const badgeBonus = 1 + (getBadgeBoostPercent(player.badges) / 100);
+
+    return rawIncome * badgeBonus;
 
 }
 

@@ -36,3 +36,21 @@ function getCurrentBoost(lands) {
     return current ? current.boost : 1;
 
 }
+
+// Bonus passaporto (%) in base al numero di badge posseduti
+function getBadgeBoostPercent(badges) {
+
+    const tier = CONFIG.badgeBoostTiers.find(t =>
+        badges >= t.min && badges <= t.max
+    );
+
+    return tier ? tier.percent : 0;
+
+}
+
+// Prossima soglia badge (per i consigli)
+function getNextBadgeTier(badges) {
+
+    return CONFIG.badgeBoostTiers.find(t => badges < t.min);
+
+}

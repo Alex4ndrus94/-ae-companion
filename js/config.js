@@ -41,6 +41,16 @@ const CONFIG = {
 
         legendary: 5
 
-    }
+    },
+
+    // Bonus passaporto in base al numero di badge (percentuale permanente)
+    badgeBoostTiers: [
+        { min: 0,   max: 0,        percent: 0 },
+        { min: 1,   max: 10,       percent: 5 },
+        { min: 11,  max: 30,       percent: 10 },
+        { min: 31,  max: 60,       percent: 15 },
+        { min: 61,  max: 100,      percent: 20 },
+        { min: 101, max: Infinity, percent: 25 }
+    ]
 
 };
