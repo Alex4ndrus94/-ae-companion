@@ -126,6 +126,14 @@
     font-weight:700;
 }
 
+.value-base{
+    display:block;
+    color:var(--text-2);
+    font-size:11px;
+    font-weight:500;
+    margin-top:4px;
+}
+
 #boost-info{
     text-align:center;
     margin-top:16px;
@@ -447,6 +455,38 @@
 
 .footer-ig:active{
     background:var(--border);
+}
+
+/* ==============================
+   REFERRAL / SUPPORT BOX
+============================== */
+
+.footer-support{
+    margin-top:14px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.support-box{
+    display:block;
+    text-decoration:none;
+    font-size:.8rem;
+    font-weight:600;
+    line-height:1.4;
+    padding:12px 14px;
+    border-radius:14px;
+    border:1px solid var(--border);
+}
+
+.support-box.coffee{
+    color:var(--gold-legend);
+    background:rgba(255,179,34,.08);
+    border-color:rgba(255,179,34,.3);
+}
+
+.support-box:active{
+    filter:brightness(1.15);
 }
 
 .footer-update{
