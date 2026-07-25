@@ -193,6 +193,10 @@
             <input type="text" id="name-input" maxlength="24">
         </label>
 
+        <label class="settings-field"><span data-i18n="countryLabel">Paese</span>
+            <select id="country-input" onchange="setCountryGroup(this.value)"></select>
+        </label>
+
         <div class="settings-section" data-i18n="sectionLands">Terreni</div>
 
         <div class="settings-grid">
@@ -277,6 +281,7 @@
 
 <script src="js/config.js"></script>
 <script src="js/i18n.js"></script>
+<script src="js/countries.js"></script>
 <script src="js/player.js"></script>
 <script src="js/storage.js"></script>
 <script src="js/playerEngine.js"></script>
