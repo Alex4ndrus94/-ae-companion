@@ -141,6 +141,14 @@
     font-weight:600;
 }
 
+#badge-bonus-info{
+    text-align:center;
+    margin-top:6px;
+    color:var(--gold-legend);
+    font-weight:600;
+    font-size:.85rem;
+}
+
 /* ==============================
    STRATEGIA
 ============================== */
