@@ -19,7 +19,7 @@ function generateAdvice() {
     // Nessun dato ancora inserito
     if (totalLands === 0) {
 
-        tips.push("Inserisci i tuoi terreni dal pannello ✏️ per ricevere consigli personalizzati.");
+        tips.push(t("tipNoData"));
 
         return tips;
 
@@ -29,22 +29,28 @@ function generateAdvice() {
     if (next) {
 
         tips.push(
-            `Ti mancano ${remaining} terreni per il prossimo obiettivo (${next.min} terreni). ` +
-            `Al tuo ritmo attuale (${player.settings.dailyLoginAB} AB/giorno) ci arrivi in circa ${days} giorno${days === 1 ? "" : "i"}.`
+            t("tipCountdown", {
+                remaining: remaining,
+                next: next.min,
+                daily: player.settings.dailyLoginAB,
+                daysText: formatDays(days)
+            })
         );
 
         if (current && next.boost < current.boost) {
 
             tips.push(
-                `Attenzione: superata questa soglia il tuo boost scenderà da x${current.boost} a x${next.boost}. ` +
-                `Se puoi, conviene accelerare gli acquisti ora mentre il boost è più alto.`
+                t("tipBoostDrop", {
+                    current: current.boost,
+                    next: next.boost
+                })
             );
 
         }
 
     } else {
 
-        tips.push("Hai raggiunto l'ultimo breakpoint disponibile: il tuo boost è ormai fisso.");
+        tips.push(t("tipLastBreakpoint"));
 
     }
 
@@ -54,13 +60,15 @@ function generateAdvice() {
     const multiplier = Math.round(legendaryYield / commonYield);
 
     tips.push(
-        `A parità di costo (${CONFIG.landCostAB} AB a terreno), un Legendary rende circa ${multiplier}x un Common. ` +
-        `Se puoi scegliere la rarità, punta sempre al livello più alto disponibile.`
+        t("tipRarity", {
+            cost: CONFIG.landCostAB,
+            mult: multiplier
+        })
     );
 
     // Costo badge
     tips.push(
-        `Ogni badge costa ${CONFIG.badgeCostAB} AB, il doppio di un terreno: valuta se ti conviene ora in base ai tuoi obiettivi.`
+        t("tipBadge", { cost: CONFIG.badgeCostAB })
     );
 
     return tips;

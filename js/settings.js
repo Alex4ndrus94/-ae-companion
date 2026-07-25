@@ -18,11 +18,11 @@ function openSettings(isOnboarding) {
     const intro = document.getElementById("settings-intro");
 
     if (isOnboarding) {
-        title.textContent = "👋 Benvenuto!";
+        title.textContent = t("settingsTitleOnboarding");
         intro.style.display = "block";
         cancelBtn.style.display = "none";
     } else {
-        title.textContent = "✏️ Modifica dati";
+        title.textContent = t("settingsTitleEdit");
         intro.style.display = "none";
         cancelBtn.style.display = "block";
     }

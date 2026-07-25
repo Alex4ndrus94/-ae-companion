@@ -47,23 +47,66 @@ function getYearlyIncome() {
     return getDailyIncome() * 365;
 
 }
-// Conversione in Euro
-function getDailyIncomeEUR() {
-    return getDailyIncome() * CONFIG.exchangeRate;
+// Reddito giornaliero SENZA boost
+function getBaseDailyIncome() {
+    return getBaseIncomePerSecond() * 86400;
 }
 
-function getMonthlyIncomeEUR() {
-    return getMonthlyIncome() * CONFIG.exchangeRate;
+function getBaseMonthlyIncome() {
+    return getBaseDailyIncome() * 30;
 }
 
-function getYearlyIncomeEUR() {
-    return getYearlyIncome() * CONFIG.exchangeRate;
+function getBaseYearlyIncome() {
+    return getBaseDailyIncome() * 365;
 }
+
+// Conversione nella valuta corretta in base alla lingua
+// EN -> USD (valuta nativa del gioco) | IT -> EUR (convertita)
+function getDailyIncomeConverted() {
+    return getCurrentLanguage() === "it"
+        ? getDailyIncome() * CONFIG.exchangeRate
+        : getDailyIncome();
+}
+
+function getMonthlyIncomeConverted() {
+    return getCurrentLanguage() === "it"
+        ? getMonthlyIncome() * CONFIG.exchangeRate
+        : getMonthlyIncome();
+}
+
+function getYearlyIncomeConverted() {
+    return getCurrentLanguage() === "it"
+        ? getYearlyIncome() * CONFIG.exchangeRate
+        : getYearlyIncome();
+}
+
+function getBaseDailyIncomeConverted() {
+    return getCurrentLanguage() === "it"
+        ? getBaseDailyIncome() * CONFIG.exchangeRate
+        : getBaseDailyIncome();
+}
+
+function getBaseMonthlyIncomeConverted() {
+    return getCurrentLanguage() === "it"
+        ? getBaseMonthlyIncome() * CONFIG.exchangeRate
+        : getBaseMonthlyIncome();
+}
+
+function getBaseYearlyIncomeConverted() {
+    return getCurrentLanguage() === "it"
+        ? getBaseYearlyIncome() * CONFIG.exchangeRate
+        : getBaseYearlyIncome();
+}
+
 function formatCurrency(value) {
 
-    return new Intl.NumberFormat("it-IT", {
+    const lang = getCurrentLanguage();
+    const currency = lang === "it" ? "EUR" : "USD";
+    const locale = lang === "it" ? "it-IT" : "en-US";
+
+    return new Intl.NumberFormat(locale, {
         style: "currency",
-        currency: CONFIG.currency,
+        currency: currency,
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     }).format(value);

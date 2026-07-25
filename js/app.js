@@ -59,31 +59,46 @@ function renderDashboard() {
     setText(
         "progress-text",
         next
-            ? `${totalLands} / ${next.min} terreni • Ne manca ${remaining}`
-            : `${totalLands} terreni • Ultimo breakpoint`
+            ? t("progressText", { total: totalLands, next: next.min, remaining: remaining })
+            : t("progressTextLast", { total: totalLands })
     );
 
     // ======================================
-    // Rendita
+    // Rendita (con boost + senza boost)
     // ======================================
 
     setText(
         "dailyIncome",
-        formatCurrency(getDailyIncomeEUR())
+        formatCurrency(getDailyIncomeConverted())
+    );
+
+    setText(
+        "dailyIncomeBase",
+        t("withoutBoost") + ": " + formatCurrency(getBaseDailyIncomeConverted())
     );
 
     setText(
         "monthlyIncome",
-        formatCurrency(getMonthlyIncomeEUR())
+        formatCurrency(getMonthlyIncomeConverted())
+    );
+
+    setText(
+        "monthlyIncomeBase",
+        t("withoutBoost") + ": " + formatCurrency(getBaseMonthlyIncomeConverted())
     );
 
     setText(
         "yearlyIncome",
-        formatCurrency(getYearlyIncomeEUR())
+        formatCurrency(getYearlyIncomeConverted())
+    );
+
+    setText(
+        "yearlyIncomeBase",
+        t("withoutBoost") + ": " + formatCurrency(getBaseYearlyIncomeConverted())
     );
 
     // ======================================
-    // Boost
+    // Boost (etichetta sintetica)
     // ======================================
 
     const boostMultiplier = getBoostMultiplier();
@@ -92,7 +107,7 @@ function renderDashboard() {
 
     setText(
         "boost-info",
-        `⚡ Boost attivo x${boostMultiplier} (+${boostPercent}%)`
+        t("boostActive", { mult: boostMultiplier, percent: boostPercent })
     );
 
     // ======================================
@@ -122,9 +137,7 @@ function renderDashboard() {
 
     setText(
         "daysRemaining",
-        daysRemaining +
-        " giorno" +
-        (daysRemaining > 1 ? "i" : "")
+        formatDays(daysRemaining)
     );
 
     // ======================================
@@ -148,5 +161,7 @@ function renderDashboard() {
     }
 
 }
+
+applyTranslations();
 
 renderDashboard();

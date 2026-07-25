@@ -41,12 +41,13 @@ function showInstallBanner(mode) {
 
     if (mode === "ios") {
 
-        text.textContent = "Aggiungi AE Companion alla Home: tocca Condividi (□↑) e poi \"Aggiungi a Home\"";
+        text.textContent = t("installIOS");
         actionBtn.style.display = "none";
 
     } else {
 
-        text.textContent = "Installa AE Companion sul tuo dispositivo per un accesso più rapido";
+        text.textContent = t("installAndroid");
+        actionBtn.textContent = t("installAction");
         actionBtn.style.display = "block";
 
         actionBtn.onclick = function () {
