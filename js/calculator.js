@@ -1,11 +1,11 @@
 // ======================================
 // AE Core - Calculator
-// Versione 1.0
+// Versione 2.0 - Multi-paese
 // ======================================
 
 function getCurrentBreakpoint(lands) {
 
-    return CONFIG.breakpoints.find(bp =>
+    return getActiveBreakpoints().find(bp =>
         lands >= bp.min && lands <= bp.max
     );
 
@@ -13,7 +13,7 @@ function getCurrentBreakpoint(lands) {
 
 function getNextBreakpoint(lands) {
 
-    return CONFIG.breakpoints.find(bp =>
+    return getActiveBreakpoints().find(bp =>
         lands < bp.min
     );
 

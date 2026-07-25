@@ -45,6 +45,7 @@ const translations = {
         settingsTitleOnboarding: "👋 Benvenuto!",
         settingsIntro: "Inserisci il tuo nome e i tuoi dati di partenza. Resteranno salvati su questo dispositivo.",
         nameLabel: "Nome",
+        countryLabel: "Paese",
         sectionLands: "Terreni",
         sectionOther: "Altri dati",
         badgeLabel: "Badge",
@@ -104,6 +105,7 @@ const translations = {
         settingsTitleOnboarding: "👋 Welcome!",
         settingsIntro: "Enter your name and starting data. It will be saved on this device.",
         nameLabel: "Name",
+        countryLabel: "Country",
         sectionLands: "Lands",
         sectionOther: "Other data",
         badgeLabel: "Badges",
@@ -200,6 +202,8 @@ function setLanguage(lang) {
     localStorage.setItem(I18N_KEY, lang);
 
     applyTranslations();
+
+    if (typeof populateCountrySelect === "function") populateCountrySelect();
 
     if (typeof renderDashboard === "function") renderDashboard();
 

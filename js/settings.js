@@ -13,6 +13,8 @@ function openSettings(isOnboarding) {
     document.getElementById("mayorTarget-input").value = player.mayorTarget;
     document.getElementById("dailyAB-input").value = player.settings.dailyLoginAB;
 
+    populateCountrySelect();
+
     const title = document.getElementById("settings-title");
     const cancelBtn = document.getElementById("settings-cancel");
     const intro = document.getElementById("settings-intro");

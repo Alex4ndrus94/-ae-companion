@@ -36,7 +36,7 @@ function renderDashboard() {
     // AE Core
     // ======================================
 
-    const current = getCurrentBreakpoint(totalLands);
+    const current = getCurrentBreakpoint(totalLands) || { min: 0, max: totalLands || 1, boost: 1 };
 
     const next = getNextBreakpoint(totalLands);
 
