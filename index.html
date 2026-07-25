@@ -30,13 +30,18 @@
 
 <header class="hero">
 
+    <div class="lang-switch">
+        <button class="lang-btn" data-lang="it" onclick="setLanguage('it')">IT</button>
+        <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">EN</button>
+    </div>
+
     <img src="assets/logo.svg"
          alt="AE Companion"
          class="hero-logo">
 
-    <h1>AE Companion</h1>
+    <h1 data-i18n="appName">AE Companion</h1>
 
-    <p class="subtitle">
+    <p class="subtitle" data-i18n="tagline">
         Track • Plan • Conquer
     </p>
 
@@ -49,7 +54,7 @@
     <h2 id="player-name"></h2>
 
     <div class="player-total">
-        <span><img src="assets/icons/lands.svg" class="icon" alt=""> Terreni</span>
+        <span><img src="assets/icons/lands.svg" class="icon" alt=""> <span data-i18n="lands">Terreni</span></span>
         <span id="parcels"></span>
     </div>
 
@@ -83,23 +88,26 @@
 <div class="progress-card">
 <section class="card">
 
-    <h2><img src="assets/icons/income.svg" class="icon" alt=""> Rendita</h2>
+    <h2><img src="assets/icons/income.svg" class="icon" alt=""> <span data-i18n="income">Rendita</span></h2>
 
     <div class="income-grid">
 
         <div class="income-box">
-            <span class="label">OGGI</span>
+            <span class="label" data-i18n="today">OGGI</span>
             <span class="value" id="dailyIncome"></span>
+            <span class="value-base" id="dailyIncomeBase"></span>
         </div>
 
         <div class="income-box">
-            <span class="label">MESE</span>
+            <span class="label" data-i18n="month">MESE</span>
             <span class="value" id="monthlyIncome"></span>
+            <span class="value-base" id="monthlyIncomeBase"></span>
         </div>
 
         <div class="income-box">
-            <span class="label">ANNO</span>
+            <span class="label" data-i18n="year">ANNO</span>
             <span class="value" id="yearlyIncome"></span>
+            <span class="value-base" id="yearlyIncomeBase"></span>
         </div>
 
     </div>
@@ -113,27 +121,27 @@
 
 <div class="card">
 
-<h2><img src="assets/icons/strategy.svg" class="icon" alt=""> Strategia</h2>
+<h2><img src="assets/icons/strategy.svg" class="icon" alt=""> <span data-i18n="strategy">Strategia</span></h2>
 
 <div class="strategy-grid">
 
     <div class="strategy-box">
-        <div class="strategy-title">Terreni</div>
+        <div class="strategy-title" data-i18n="landsLabel">Terreni</div>
         <div class="strategy-value" id="landsRemaining"></div>
     </div>
 
     <div class="strategy-box">
-        <div class="strategy-title">Costo</div>
+        <div class="strategy-title" data-i18n="costLabel">Costo</div>
         <div class="strategy-value" id="abNeeded"></div>
     </div>
 
     <div class="strategy-box">
-        <div class="strategy-title">AB/giorno</div>
+        <div class="strategy-title" data-i18n="abPerDay">AB/giorno</div>
         <div class="strategy-value" id="dailyAB"></div>
     </div>
 
     <div class="strategy-box">
-        <div class="strategy-title">Tempo</div>
+        <div class="strategy-title" data-i18n="timeLabel">Tempo</div>
         <div class="strategy-value" id="daysRemaining"></div>
     </div>
 
@@ -141,7 +149,7 @@
 
 <!-- FINE NUOVA CARD -->
 
-<h3>Prossimo obiettivo</h3>
+<h3 data-i18n="nextGoal">Prossimo obiettivo</h3>
 
 <div class="progress">
 
@@ -157,7 +165,7 @@
 
 <div class="card">
 
-<h2>💡 Consigli</h2>
+<h2>💡 <span data-i18n="tips">Consigli</span></h2>
 
 <ul class="advice-list" id="advice-list"></ul>
 
@@ -177,15 +185,15 @@
 
         <h2 id="settings-title">✏️ Modifica dati</h2>
 
-        <p id="settings-intro" class="settings-intro">
+        <p id="settings-intro" class="settings-intro" data-i18n="settingsIntro">
             Inserisci il tuo nome e i tuoi dati di partenza. Resteranno salvati su questo dispositivo.
         </p>
 
-        <label class="settings-field">Nome
+        <label class="settings-field"><span data-i18n="nameLabel">Nome</span>
             <input type="text" id="name-input" maxlength="24">
         </label>
 
-        <div class="settings-section">Terreni</div>
+        <div class="settings-section" data-i18n="sectionLands">Terreni</div>
 
         <div class="settings-grid">
 
@@ -207,23 +215,23 @@
 
         </div>
 
-        <div class="settings-section">Altri dati</div>
+        <div class="settings-section" data-i18n="sectionOther">Altri dati</div>
 
-        <label class="settings-field">Badge
+        <label class="settings-field"><span data-i18n="badgeLabel">Badge</span>
             <input type="number" id="badges-input" min="0">
         </label>
 
-        <label class="settings-field">Obiettivo Mayor
+        <label class="settings-field"><span data-i18n="mayorTargetLabel">Obiettivo Mayor</span>
             <input type="number" id="mayorTarget-input" min="0">
         </label>
 
-        <label class="settings-field">AB guadagnati al giorno
+        <label class="settings-field"><span data-i18n="dailyABLabel">AB guadagnati al giorno</span>
             <input type="number" id="dailyAB-input" min="0">
         </label>
 
         <div class="settings-actions">
-            <button class="btn-cancel" id="settings-cancel" onclick="closeSettings()">Annulla</button>
-            <button class="btn-save" onclick="saveSettings()">Salva</button>
+            <button class="btn-cancel" id="settings-cancel" onclick="closeSettings()" data-i18n="cancel">Annulla</button>
+            <button class="btn-save" onclick="saveSettings()" data-i18n="save">Salva</button>
         </div>
 
     </div>
@@ -231,23 +239,23 @@
 </div>
 
 <footer class="app-footer">
-    Creato da <strong>Alessandro Chindemi</strong>
+    <span data-i18n="createdBy">Creato da</span> <strong>Alessandro Chindemi</strong>
 
-    <a class="footer-ig" href="https://www.instagram.com/alexandrus_94/" target="_blank" rel="noopener">
+    <a class="footer-ig" href="https://www.instagram.com/alexandrus_94/" target="_blank" rel="noopener" data-i18n="igCta">
         📩 Richieste o consigli? Scrivimi su Instagram
     </a>
 
     <div class="footer-support">
 
-        <a class="support-box coffee" href="https://buymeacoffee.com/alessandrok5" target="_blank" rel="noopener">
-            ☕ Ti è utile AE Companion?<br>Offrimi un caffè
+        <a class="support-box coffee" href="https://buymeacoffee.com/alessandrok5" target="_blank" rel="noopener" data-i18n="coffeeCta">
+            ☕ Ti è utile? Offrimi un caffè
         </a>
 
     </div>
 
     <div class="footer-meta">
         <span class="version-badge">v0.1</span>
-        <span class="footer-update">Ultimo aggiornamento: 24 luglio 2026</span>
+        <span class="footer-update"><span data-i18n="lastUpdate">Ultimo aggiornamento</span>: 24 luglio 2026</span>
     </div>
 </footer>
 
@@ -261,13 +269,14 @@
 
     <span id="install-banner-text"></span>
 
-    <button id="install-banner-action" class="install-banner-action">Installa</button>
+    <button id="install-banner-action" class="install-banner-action" data-i18n="installAction">Installa</button>
 
     <button class="install-banner-close" onclick="dismissInstallBanner()">✕</button>
 
 </div>
 
 <script src="js/config.js"></script>
+<script src="js/i18n.js"></script>
 <script src="js/player.js"></script>
 <script src="js/storage.js"></script>
 <script src="js/playerEngine.js"></script>
