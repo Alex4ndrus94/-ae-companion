@@ -49,7 +49,7 @@
 
 <div class="card player-card">
 
-    <button class="edit-btn" onclick="openSettings(false)">✏️</button>
+    <button class="edit-btn" onclick="openSettings(false)"><img src="assets/icons/pencil.svg" class="icon-inline" alt=""></button>
 
     <h2 id="player-name"></h2>
 
@@ -113,12 +113,12 @@
     </div>
 
 
-<p id="boost-info"></p>
+<p class="icon-text-line"><img src="assets/icons/boost.svg" class="icon-inline" alt=""> <span id="boost-info"></span></p>
 
-<p id="badge-bonus-info"></p>
+<p class="icon-text-line"><img src="assets/icons/badge.svg" class="icon-inline" alt=""> <span id="badge-bonus-info"></span></p>
 
 <div class="srb-info-box">
-    <div class="srb-info-title" data-i18n="srbBoxTitle">🚀 Con il Super Potenziamento attivo (x50)</div>
+    <div class="srb-info-title"><img src="assets/icons/rocket.svg" class="icon-inline" alt=""> <span data-i18n="srbBoxTitle">Con il Super Potenziamento attivo (x50)</span></div>
     <div class="srb-info-value" id="srb-estimate"></div>
     <div class="srb-info-note" data-i18n="srbBoxNote">
         Stima supplementare, non inclusa nella rendita ufficiale sopra: attiva solo durante l'evento (~2,5 giorni/mese) e per la durata in cui riesci a mantenerlo attivo.
@@ -175,7 +175,7 @@
 
 <div class="card">
 
-<h2>💡 <span data-i18n="tips">Consigli</span></h2>
+<h2><img src="assets/icons/idea.svg" class="icon" alt=""> <span data-i18n="tips">Consigli</span></h2>
 
 <ul class="advice-list" id="advice-list"></ul>
 
@@ -185,7 +185,7 @@
 
 <div class="card">
 
-<h2>⚡ <span data-i18n="abTipsTitle">Come guadagnare più AB</span></h2>
+<h2><img src="assets/icons/boost.svg" class="icon" alt=""> <span data-i18n="abTipsTitle">Come guadagnare più AB</span></h2>
 
 <p class="ab-tips-disclaimer" data-i18n="abTipsDisclaimer">
     Valori indicativi basati sull'esperienza della community, non dati ufficiali: possono variare.
@@ -207,7 +207,7 @@
 
     <div class="settings-panel">
 
-        <h2 id="settings-title">✏️ Modifica dati</h2>
+        <h2 id="settings-title">Modifica dati</h2>
 
         <p id="settings-intro" class="settings-intro" data-i18n="settingsIntro">
             Inserisci il tuo nome e i tuoi dati di partenza. Resteranno salvati su questo dispositivo.
@@ -301,14 +301,16 @@
 <footer class="app-footer">
     <span data-i18n="createdBy">Creato da</span> <strong>Alessandro Chindemi</strong>
 
-    <a class="footer-ig" href="https://www.instagram.com/alexandrus_94/" target="_blank" rel="noopener" data-i18n="igCta">
-        📩 Richieste o consigli? Scrivimi su Instagram
+    <a class="footer-ig" href="https://www.instagram.com/alexandrus_94/" target="_blank" rel="noopener">
+        <img src="assets/icons/instagram.svg" class="icon-inline" alt="">
+        <span data-i18n="igCta">Richieste o consigli? Scrivimi su Instagram</span>
     </a>
 
     <div class="footer-support">
 
-        <a class="support-box coffee" href="https://buymeacoffee.com/alessandrok5" target="_blank" rel="noopener" data-i18n="coffeeCta">
-            ☕ Ti è utile? Offrimi un caffè
+        <a class="support-box coffee" href="https://buymeacoffee.com/alessandrok5" target="_blank" rel="noopener">
+            <img src="assets/icons/coffee.svg" class="icon-inline" alt="">
+            <span data-i18n="coffeeCta">Ti è utile? Offrimi un caffè</span>
         </a>
 
     </div>
@@ -325,13 +327,13 @@
 
 <div class="install-banner" id="install-banner">
 
-    <span class="install-banner-icon">📲</span>
+    <img src="assets/icons/download.svg" class="icon-inline" alt="">
 
     <span id="install-banner-text"></span>
 
     <button id="install-banner-action" class="install-banner-action" data-i18n="installAction">Installa</button>
 
-    <button class="install-banner-close" onclick="dismissInstallBanner()">✕</button>
+    <button class="install-banner-close" onclick="dismissInstallBanner()">&times;</button>
 
 </div>
 
