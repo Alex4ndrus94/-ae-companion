@@ -150,6 +150,40 @@
 }
 
 /* ==============================
+   BOX SUPPLEMENTARE SRB
+============================== */
+
+.srb-info-box{
+    margin-top:16px;
+    padding:14px;
+    border:1px dashed var(--cyan-info);
+    border-radius:14px;
+    background:rgba(0,212,255,.06);
+    text-align:center;
+}
+
+.srb-info-title{
+    color:var(--cyan-info);
+    font-weight:700;
+    font-size:.85rem;
+    margin-bottom:6px;
+}
+
+.srb-info-value{
+    color:var(--cyan-info);
+    font-size:1.3rem;
+    font-weight:700;
+    margin-bottom:6px;
+}
+
+.srb-info-note{
+    color:var(--text-2);
+    font-size:.7rem;
+    line-height:1.4;
+    font-style:italic;
+}
+
+/* ==============================
    STRATEGIA
 ============================== */
 
@@ -314,6 +348,38 @@
     border-color:var(--green);
 }
 
+/* ==============================
+   OBIETTIVO (GOAL)
+============================== */
+
+.goal-conditional-fields{
+    display:none;
+    flex-direction:column;
+    gap:12px;
+    margin-top:12px;
+    padding:12px;
+    background:var(--card-2);
+    border-radius:12px;
+    border:1px solid var(--border);
+}
+
+.goal-conditional-fields.visible{
+    display:flex;
+}
+
+.goal-checkbox-field{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:.85rem;
+    color:var(--text-2);
+}
+
+.goal-checkbox-field input{
+    width:auto;
+    accent-color:var(--green);
+}
+
 .settings-actions{
     display:flex;
     gap:12px;
@@ -362,6 +428,14 @@
     line-height:1.4;
     color:var(--text);
     text-align:left;
+}
+
+.ab-tips-disclaimer{
+    font-size:.75rem;
+    color:var(--text-2);
+    font-style:italic;
+    margin:-4px 0 14px;
+    line-height:1.4;
 }
 
 /* ==============================
