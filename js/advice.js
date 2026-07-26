@@ -259,7 +259,7 @@ function generateAdvice() {
     }
 
     // ======================================
-    // 3. Scelta della rarità sulla mappa
+    // 3. Rarità: informativa (assegnata casualmente, non scelta dal player)
     // ======================================
 
     const legendaryMultiplier = Math.round(
@@ -269,7 +269,8 @@ function generateAdvice() {
     tips.push(
         t("tipRarity", {
             cost: CONFIG.landCostAB,
-            mult: legendaryMultiplier
+            mult: legendaryMultiplier,
+            legendaryOdds: CONFIG.rarityOdds.legendary
         })
     );
 
