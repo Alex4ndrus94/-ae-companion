@@ -72,7 +72,8 @@ const player = {
 
     settings: {
 
-        dailyLoginAB: 50
+        dailyLoginAB: 50,
+        abBalance: 0      // AB attualmente disponibili (gruzzolo accumulato)
 
     }
 

@@ -74,6 +74,30 @@ function convertToDisplay(usdValue) {
 
 }
 
+// Tempo stimato per raggiungere un certo costo in AB,
+// considerando PRIMA il gruzzolo già disponibile, poi il ritmo giornaliero
+function getAcquisitionTimeText(abNeeded) {
+
+    const abBalance = player.settings.abBalance || 0;
+
+    if (abBalance >= abNeeded) {
+
+        return t("abAvailableNow");
+
+    }
+
+    const remaining = abNeeded - abBalance;
+
+    const dailyAB = player.settings.dailyLoginAB;
+
+    if (dailyAB <= 0) return "—";
+
+    const days = Math.ceil(remaining / dailyAB);
+
+    return formatDays(days);
+
+}
+
 function getEfficiencyTip(totalLands) {
 
     const c = getEfficiencyComparison(totalLands);
@@ -89,14 +113,16 @@ function getEfficiencyTip(totalLands) {
         return t("tipRecommendBadge", {
             abNeeded: c.abToNextBadgeTier,
             percent: c.nextBadgeTier.percent,
-            gainFormatted: formatCurrency(convertToDisplay(c.badgeDailyGain))
+            gainFormatted: formatCurrency(convertToDisplay(c.badgeDailyGain)),
+            timeText: getAcquisitionTimeText(c.abToNextBadgeTier)
         });
 
     }
 
     return t("tipRecommendLand", {
         abCost: CONFIG.landCostAB,
-        gainFormatted: formatCurrency(convertToDisplay(c.landDailyGain))
+        gainFormatted: formatCurrency(convertToDisplay(c.landDailyGain)),
+        timeText: getAcquisitionTimeText(CONFIG.landCostAB)
     });
 
 }
@@ -132,15 +158,11 @@ function getIncomeGoalTip(totalLands) {
 
     const abNeeded = Math.ceil(gapUSD / bestDailyGainPerAB);
 
-    const daysNeeded = player.settings.dailyLoginAB > 0
-        ? Math.ceil(abNeeded / player.settings.dailyLoginAB)
-        : null;
-
     return t("tipGoalIncomeGap", {
         targetFormatted: formatCurrency(convertToDisplay(targetUSD)),
         gapFormatted: formatCurrency(convertToDisplay(gapUSD)),
         abNeeded: abNeeded,
-        daysText: daysNeeded !== null ? formatDays(daysNeeded) : "—"
+        daysText: getAcquisitionTimeText(abNeeded)
     });
 
 }
@@ -163,15 +185,11 @@ function getLandsGoalTip(totalLands) {
 
     const abNeeded = remaining * CONFIG.landCostAB;
 
-    const daysNeeded = player.settings.dailyLoginAB > 0
-        ? Math.ceil(abNeeded / player.settings.dailyLoginAB)
-        : null;
-
     return t("tipGoalLandsGap", {
         target: target,
         remaining: remaining,
         abNeeded: abNeeded,
-        daysText: daysNeeded !== null ? formatDays(daysNeeded) : "—"
+        daysText: getAcquisitionTimeText(abNeeded)
     });
 
 }
@@ -238,7 +256,8 @@ function generateAdvice() {
                 text: t("tipBoostUrgent", {
                     remaining: remaining,
                     current: current.boost,
-                    next: next.boost
+                    next: next.boost,
+                    timeText: getAcquisitionTimeText(remaining * CONFIG.landCostAB)
                 })
             });
 
