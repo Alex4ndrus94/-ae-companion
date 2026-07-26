@@ -26,6 +26,8 @@ function loadPlayerData() {
 
         if (typeof saved.mayorTarget === "number") player.mayorTarget = saved.mayorTarget;
 
+        if (saved.goal) Object.assign(player.goal, saved.goal);
+
         if (saved.settings) Object.assign(player.settings, saved.settings);
 
         isFirstRun = false;
@@ -46,6 +48,7 @@ function savePlayerData() {
         lands: player.lands,
         badges: player.badges,
         mayorTarget: player.mayorTarget,
+        goal: player.goal,
         settings: player.settings
     };
 

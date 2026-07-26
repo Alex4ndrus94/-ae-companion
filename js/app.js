@@ -117,6 +117,11 @@ function renderDashboard() {
         t("badgeBonusInfo", { percent: badgeBonusPercent, badges: player.badges })
     );
 
+    setText(
+        "srb-estimate",
+        formatCurrency(getSRBDailyIncomeEstimateConverted()) + " / " + (getCurrentLanguage() === "it" ? "giorno" : "day")
+    );
+
     // ======================================
     // Strategia
     // ======================================
@@ -162,6 +167,22 @@ function renderDashboard() {
             const li = document.createElement("li");
             li.textContent = tip;
             adviceList.appendChild(li);
+
+        });
+
+    }
+
+    const abTipsList = document.getElementById("ab-tips-list");
+
+    if (abTipsList) {
+
+        abTipsList.innerHTML = "";
+
+        getABSourceTips().forEach(function (tip) {
+
+            const li = document.createElement("li");
+            li.textContent = tip;
+            abTipsList.appendChild(li);
 
         });
 

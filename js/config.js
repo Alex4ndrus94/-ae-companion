@@ -17,6 +17,9 @@ const CONFIG = {
 
     badgeCostAB: 200,
 
+    // Moltiplicatore del Super Rent Boost (evento ~2,5 giorni/mese)
+    srbMultiplier: 50,
+
     // Reddito per secondo ($) - costante globale del gioco
     rentPerSecond: {
 

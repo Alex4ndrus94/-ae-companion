@@ -54,6 +54,19 @@ const player = {
     },
 
     // ==================================
+    // Obiettivo principale
+    // ==================================
+
+    goal: {
+
+        type: "efficiency",       // "efficiency" | "income" | "lands" | "mayor"
+        incomeTargetUSD: 1,       // target rendita, sempre salvato in USD internamente
+        incomeTargetBoosted: true, // true = obiettivo con boost, false = senza boost
+        landsTarget: 0            // target numero totale di terreni
+
+    },
+
+    // ==================================
     // Impostazioni
     // ==================================
 

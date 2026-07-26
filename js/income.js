@@ -2,19 +2,24 @@
 // AE Companion - Income Calculator
 // ======================================
 
-// Reddito al secondo (senza boost pubblicità, ma con bonus passaporto badge)
-function getBaseIncomePerSecond() {
+// Reddito grezzo al secondo (nessun bonus badge, nessun boost terreni)
+function getRawIncomePerSecond() {
 
-    const rawIncome = (
+    return (
         player.lands.common * CONFIG.rentPerSecond.common +
         player.lands.rare * CONFIG.rentPerSecond.rare +
         player.lands.epic * CONFIG.rentPerSecond.epic +
         player.lands.legendary * CONFIG.rentPerSecond.legendary
     );
 
+}
+
+// Reddito al secondo (senza boost pubblicità, ma con bonus passaporto badge)
+function getBaseIncomePerSecond() {
+
     const badgeBonus = 1 + (getBadgeBoostPercent(player.badges) / 100);
 
-    return rawIncome * badgeBonus;
+    return getRawIncomePerSecond() * badgeBonus;
 
 }
 
@@ -62,6 +67,28 @@ function getBaseMonthlyIncome() {
 
 function getBaseYearlyIncome() {
     return getBaseDailyIncome() * 365;
+}
+
+// ======================================
+// Stima SUPPLEMENTARE per il Super Rent Boost (x50)
+// Non fa parte del calcolo ufficiale di rendita:
+// si applica solo durante l'evento (~2,5 giorni/mese) e
+// dipende da quanto l'utente riesce a tenerlo attivo.
+// Basata sulla rendita base (con bonus badge, SENZA boost
+// pubblicità terreni, perché non è confermato se i due
+// moltiplicatori si sommino insieme in gioco).
+// ======================================
+
+function getSRBDailyIncomeEstimate() {
+
+    return getBaseIncomePerSecond() * CONFIG.srbMultiplier * 86400;
+
+}
+
+function getSRBDailyIncomeEstimateConverted() {
+    return getCurrentLanguage() === "it"
+        ? getSRBDailyIncomeEstimate() * CONFIG.exchangeRate
+        : getSRBDailyIncomeEstimate();
 }
 
 // Conversione nella valuta corretta in base alla lingua

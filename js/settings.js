@@ -2,6 +2,15 @@
 // AE Companion - Pannello Impostazioni / Onboarding
 // ======================================
 
+function onGoalTypeChange() {
+
+    const type = document.getElementById("goal-input").value;
+
+    document.getElementById("goal-income-fields").classList.toggle("visible", type === "income");
+    document.getElementById("goal-lands-fields").classList.toggle("visible", type === "lands");
+
+}
+
 function openSettings(isOnboarding) {
 
     document.getElementById("name-input").value = player.profile.name;
@@ -12,6 +21,20 @@ function openSettings(isOnboarding) {
     document.getElementById("badges-input").value = player.badges;
     document.getElementById("mayorTarget-input").value = player.mayorTarget;
     document.getElementById("dailyAB-input").value = player.settings.dailyLoginAB;
+
+    // Obiettivo
+    document.getElementById("goal-input").value = player.goal.type;
+
+    const lang = getCurrentLanguage();
+    const displayedTarget = lang === "it"
+        ? (player.goal.incomeTargetUSD * CONFIG.exchangeRate)
+        : player.goal.incomeTargetUSD;
+
+    document.getElementById("goal-income-target-input").value = displayedTarget.toFixed(2);
+    document.getElementById("goal-income-boosted-input").checked = player.goal.incomeTargetBoosted;
+    document.getElementById("goal-lands-target-input").value = player.goal.landsTarget;
+
+    onGoalTypeChange();
 
     populateCountrySelect();
 
@@ -51,6 +74,19 @@ function saveSettings() {
     player.badges = Number(document.getElementById("badges-input").value) || 0;
     player.mayorTarget = Number(document.getElementById("mayorTarget-input").value) || 0;
     player.settings.dailyLoginAB = Number(document.getElementById("dailyAB-input").value) || 0;
+
+    // Obiettivo
+    player.goal.type = document.getElementById("goal-input").value;
+
+    const enteredTarget = Number(document.getElementById("goal-income-target-input").value) || 0;
+    const lang = getCurrentLanguage();
+
+    player.goal.incomeTargetUSD = lang === "it"
+        ? enteredTarget / CONFIG.exchangeRate
+        : enteredTarget;
+
+    player.goal.incomeTargetBoosted = document.getElementById("goal-income-boosted-input").checked;
+    player.goal.landsTarget = Number(document.getElementById("goal-lands-target-input").value) || 0;
 
     savePlayerData();
     renderDashboard();
