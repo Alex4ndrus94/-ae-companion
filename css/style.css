@@ -15,6 +15,14 @@
     margin-right:6px;
 }
 
+.icon-inline{
+    width:16px;
+    height:16px;
+    vertical-align:-3px;
+    margin-right:4px;
+    flex-shrink:0;
+}
+
 /* ==============================
    PLAYER CARD
 ============================== */
@@ -134,16 +142,21 @@
     margin-top:4px;
 }
 
-#boost-info{
+.icon-text-line{
     text-align:center;
     margin-top:16px;
+}
+
+#boost-info{
     color:var(--green-glow);
     font-weight:600;
 }
 
-#badge-bonus-info{
-    text-align:center;
+.icon-text-line + .icon-text-line{
     margin-top:6px;
+}
+
+#badge-bonus-info{
     color:var(--gold-legend);
     font-weight:600;
     font-size:.85rem;
@@ -428,6 +441,15 @@
     line-height:1.4;
     color:var(--text);
     text-align:left;
+    display:flex;
+    align-items:flex-start;
+    gap:8px;
+}
+
+.advice-list li .tip-icon{
+    margin:3px 0 0;
+    width:16px;
+    height:16px;
 }
 
 .ab-tips-disclaimer{
