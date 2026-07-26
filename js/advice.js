@@ -188,7 +188,7 @@ function generateAdvice() {
 
     if (totalLands === 0) {
 
-        tips.push(t("tipNoData"));
+        tips.push({ icon: "warning", text: t("tipNoData") });
 
         return tips;
 
@@ -202,19 +202,19 @@ function generateAdvice() {
 
     if (goalType === "income") {
 
-        tips.push(getIncomeGoalTip(totalLands));
+        tips.push({ icon: "income", text: getIncomeGoalTip(totalLands) });
 
     } else if (goalType === "lands") {
 
-        tips.push(getLandsGoalTip(totalLands));
+        tips.push({ icon: "lands", text: getLandsGoalTip(totalLands) });
 
     } else if (goalType === "mayor") {
 
-        tips.push(t("tipMayorStrategy"));
+        tips.push({ icon: "city", text: t("tipMayorStrategy") });
 
     } else {
 
-        tips.push(getEfficiencyTip(totalLands));
+        tips.push({ icon: "idea", text: getEfficiencyTip(totalLands) });
 
     }
 
@@ -233,28 +233,30 @@ function generateAdvice() {
 
         if (remaining <= urgentThreshold) {
 
-            tips.push(
-                t("tipBoostUrgent", {
+            tips.push({
+                icon: "boost",
+                text: t("tipBoostUrgent", {
                     remaining: remaining,
                     current: current.boost,
                     next: next.boost
                 })
-            );
+            });
 
         } else {
 
-            tips.push(
-                t("tipBoostRelaxed", {
+            tips.push({
+                icon: "boost",
+                text: t("tipBoostRelaxed", {
                     remaining: remaining,
                     next: next.boost
                 })
-            );
+            });
 
         }
 
     } else {
 
-        tips.push(t("tipLastBreakpoint"));
+        tips.push({ icon: "boost", text: t("tipLastBreakpoint") });
 
     }
 
@@ -266,13 +268,14 @@ function generateAdvice() {
         CONFIG.rentPerSecond.legendary / CONFIG.rentPerSecond.common
     );
 
-    tips.push(
-        t("tipRarity", {
+    tips.push({
+        icon: "dice",
+        text: t("tipRarity", {
             cost: CONFIG.landCostAB,
             mult: legendaryMultiplier,
             legendaryOdds: CONFIG.rarityOdds.legendary
         })
-    );
+    });
 
     // ======================================
     // 4. Mayor: consiglio educativo, solo se non è già l'obiettivo primario
@@ -280,7 +283,7 @@ function generateAdvice() {
 
     if (goalType !== "mayor") {
 
-        tips.push(t("tipMayorStrategy"));
+        tips.push({ icon: "city", text: t("tipMayorStrategy") });
 
     }
 

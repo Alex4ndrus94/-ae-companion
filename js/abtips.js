@@ -7,11 +7,11 @@
 function getABSourceTips() {
 
     return [
-        t("abTipArcade"),
-        t("abTipMinigames"),
-        t("abTipRentConversion"),
-        t("abTipSurveyBoost"),
-        t("abTipSuperRentBoost")
+        { icon: "controller", text: t("abTipArcade") },
+        { icon: "dice", text: t("abTipMinigames") },
+        { icon: "exchange", text: t("abTipRentConversion") },
+        { icon: "clipboard", text: t("abTipSurveyBoost") },
+        { icon: "rocket", text: t("abTipSuperRentBoost") }
     ];
 
 }

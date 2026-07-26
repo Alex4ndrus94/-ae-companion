@@ -165,7 +165,9 @@ function renderDashboard() {
         generateAdvice().forEach(function (tip) {
 
             const li = document.createElement("li");
-            li.textContent = tip;
+            li.innerHTML =
+                '<img src="assets/icons/' + tip.icon + '.svg" class="icon-inline tip-icon" alt="">' +
+                '<span>' + tip.text + '</span>';
             adviceList.appendChild(li);
 
         });
@@ -181,7 +183,9 @@ function renderDashboard() {
         getABSourceTips().forEach(function (tip) {
 
             const li = document.createElement("li");
-            li.textContent = tip;
+            li.innerHTML =
+                '<img src="assets/icons/' + tip.icon + '.svg" class="icon-inline tip-icon" alt="">' +
+                '<span>' + tip.text + '</span>';
             abTipsList.appendChild(li);
 
         });
