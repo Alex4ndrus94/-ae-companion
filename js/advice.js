@@ -297,6 +297,42 @@ function generateAdvice() {
     });
 
     // ======================================
+    // 3b. Pass a pagamento: suggerimento o promemoria spesa
+    // ======================================
+
+    if (player.passes.explorer && player.passes.mission) {
+
+        tips.push({ icon: "star", text: t("tipPassesActive") });
+
+    } else {
+
+        if (!player.passes.explorer) {
+
+            tips.push({
+                icon: "star",
+                text: t("tipExplorerPassSuggest", {
+                    cost: convertToDisplay(CONFIG.passCosts.explorerUSD).toFixed(2) +
+                        (getCurrentLanguage() === "it" ? "€" : "$")
+                })
+            });
+
+        }
+
+        if (!player.passes.mission) {
+
+            tips.push({
+                icon: "star",
+                text: t("tipMissionPassSuggest", {
+                    cost: convertToDisplay(CONFIG.passCosts.missionUSD).toFixed(2) +
+                        (getCurrentLanguage() === "it" ? "€" : "$")
+                })
+            });
+
+        }
+
+    }
+
+    // ======================================
     // 4. Mayor: consiglio educativo, solo se non è già l'obiettivo primario
     // ======================================
 

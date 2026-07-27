@@ -28,6 +28,8 @@ function loadPlayerData() {
 
         if (saved.goal) Object.assign(player.goal, saved.goal);
 
+        if (saved.passes) Object.assign(player.passes, saved.passes);
+
         if (saved.settings) Object.assign(player.settings, saved.settings);
 
         isFirstRun = false;
@@ -49,6 +51,7 @@ function savePlayerData() {
         badges: player.badges,
         mayorTarget: player.mayorTarget,
         goal: player.goal,
+        passes: player.passes,
         settings: player.settings
     };
 

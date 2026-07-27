@@ -23,6 +23,9 @@ function openSettings(isOnboarding) {
     document.getElementById("dailyAB-input").value = player.settings.dailyLoginAB;
     document.getElementById("ab-balance-input").value = player.settings.abBalance;
 
+    document.getElementById("explorer-pass-input").checked = player.passes.explorer;
+    document.getElementById("mission-pass-input").checked = player.passes.mission;
+
     // Obiettivo
     document.getElementById("goal-input").value = player.goal.type;
 
@@ -76,6 +79,9 @@ function saveSettings() {
     player.mayorTarget = Number(document.getElementById("mayorTarget-input").value) || 0;
     player.settings.dailyLoginAB = Number(document.getElementById("dailyAB-input").value) || 0;
     player.settings.abBalance = Number(document.getElementById("ab-balance-input").value) || 0;
+
+    player.passes.explorer = document.getElementById("explorer-pass-input").checked;
+    player.passes.mission = document.getElementById("mission-pass-input").checked;
 
     // Obiettivo
     player.goal.type = document.getElementById("goal-input").value;

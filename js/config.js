@@ -20,6 +20,12 @@ const CONFIG = {
     // Moltiplicatore del Super Rent Boost (evento ~2,5 giorni/mese)
     srbMultiplier: 50,
 
+    // Costi indicativi dei pass a pagamento (fonte: Atlas Earth Help Center)
+    passCosts: {
+        explorerUSD: 49.99,   // Atlas Explorer Club, al mese
+        missionUSD: 9.99      // Mission Pass (Season Pass sfide), al mese
+    },
+
     // Reddito per secondo ($) - costante globale del gioco
     rentPerSecond: {
 
