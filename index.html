@@ -51,10 +51,13 @@
 
     <button class="edit-btn" onclick="openSettings(false)"><img src="assets/icons/pencil.svg" class="icon-inline" alt=""></button>
 
-    <h2 id="player-name"></h2>
+    <div class="player-name-row">
+        <h2 id="player-name"></h2>
+        <img id="pass-badge" class="pass-badge" src="" alt="" style="display:none;">
+    </div>
 
     <div class="player-total">
-        <span><img src="assets/icons/lands.svg" class="icon" alt=""> <span data-i18n="lands">Terreni</span></span>
+        <span><span class="hex-icon-wrap sm"><img src="assets/icons/lands.svg" alt=""></span> <span data-i18n="lands">Terreni</span></span>
         <span id="parcels"></span>
     </div>
 
@@ -76,11 +79,11 @@
 
     <div class="stats-grid">
 
-        <div><img src="assets/icons/badge.svg" class="icon" alt=""> <span id="badges"></span></div>
+        <div class="stat-tile"><span class="hex-icon-wrap"><img src="assets/icons/badge.svg" alt=""></span><span id="badges"></span></div>
 
-        <div><img src="assets/icons/boost.svg" class="icon" alt=""> <span id="boost"></span></div>
+        <div class="stat-tile"><span class="hex-icon-wrap"><img src="assets/icons/boost.svg" alt=""></span><span id="boost"></span></div>
 
-        <div><img src="assets/icons/mayor.svg" class="icon" alt=""> <span id="mayor"></span></div>
+        <div class="stat-tile"><span class="hex-icon-wrap"><img src="assets/icons/mayor.svg" alt=""></span><span id="mayor"></span></div>
 
     </div>
 
@@ -88,7 +91,7 @@
 <div class="progress-card">
 <section class="card">
 
-    <h2><img src="assets/icons/income.svg" class="icon" alt=""> <span data-i18n="income">Rendita</span></h2>
+    <h2><span class="hex-icon-wrap"><img src="assets/icons/income.svg" alt=""></span> <span data-i18n="income">Rendita</span></h2>
 
     <div class="income-grid">
 
@@ -131,7 +134,7 @@
 
 <div class="card">
 
-<h2><img src="assets/icons/strategy.svg" class="icon" alt=""> <span data-i18n="strategy">Strategia</span></h2>
+<h2><span class="hex-icon-wrap"><img src="assets/icons/strategy.svg" alt=""></span> <span data-i18n="strategy">Strategia</span></h2>
 
 <div class="strategy-grid">
 
@@ -180,7 +183,7 @@
 
 <div class="card">
 
-<h2><img src="assets/icons/idea.svg" class="icon" alt=""> <span data-i18n="tips">Consigli</span></h2>
+<h2><span class="hex-icon-wrap"><img src="assets/icons/idea.svg" alt=""></span> <span data-i18n="tips">Consigli</span></h2>
 
 <ul class="advice-list" id="advice-list"></ul>
 
@@ -190,7 +193,7 @@
 
 <div class="card">
 
-<h2><img src="assets/icons/boost.svg" class="icon" alt=""> <span data-i18n="abTipsTitle">Come guadagnare più AB</span></h2>
+<h2><span class="hex-icon-wrap"><img src="assets/icons/boost.svg" alt=""></span> <span data-i18n="abTipsTitle">Come guadagnare più AB</span></h2>
 
 <p class="ab-tips-disclaimer" data-i18n="abTipsDisclaimer">
     Valori indicativi basati sull'esperienza della community, non dati ufficiali: possono variare.
