@@ -169,6 +169,11 @@
 
 <p id="progress-text"></p>
 
+<p class="icon-text-line breakpoint-warning" id="breakpoint-warning-line">
+    <img src="assets/icons/warning.svg" class="icon-inline" alt="">
+    <span id="breakpoint-warning"></span>
+</p>
+
 </div>
 
 <!-- CARD CONSIGLI -->
@@ -213,15 +218,15 @@
             Inserisci il tuo nome e i tuoi dati di partenza. Resteranno salvati su questo dispositivo.
         </p>
 
-        <label class="settings-field"><span data-i18n="nameLabel">Nome</span>
+        <label class="settings-field"><span class="field-label-row"><img src="assets/icons/player.svg" class="icon-inline" alt=""><span data-i18n="nameLabel">Nome</span></span>
             <input type="text" id="name-input" maxlength="24">
         </label>
 
-        <label class="settings-field"><span data-i18n="countryLabel">Paese</span>
+        <label class="settings-field"><span class="field-label-row"><img src="assets/icons/lands.svg" class="icon-inline" alt=""><span data-i18n="countryLabel">Paese</span></span>
             <select id="country-input" onchange="setCountryGroup(this.value)"></select>
         </label>
 
-        <div class="settings-section" data-i18n="sectionGoal">Il tuo obiettivo</div>
+        <div class="settings-section"><img src="assets/icons/idea.svg" class="icon-inline" alt=""><span data-i18n="sectionGoal">Il tuo obiettivo</span></div>
 
         <label class="settings-field goal-select-field">
             <select id="goal-input" onchange="onGoalTypeChange()">
@@ -234,7 +239,7 @@
 
         <div id="goal-income-fields" class="goal-conditional-fields">
 
-            <label class="settings-field"><span data-i18n="goalIncomeTargetLabel">Rendita giornaliera obiettivo</span>
+            <label class="settings-field"><span class="field-label-row"><img src="assets/icons/income.svg" class="icon-inline" alt=""><span data-i18n="goalIncomeTargetLabel">Rendita giornaliera obiettivo</span></span>
                 <input type="number" id="goal-income-target-input" min="0" step="0.01">
             </label>
 
@@ -247,62 +252,62 @@
 
         <div id="goal-lands-fields" class="goal-conditional-fields">
 
-            <label class="settings-field"><span data-i18n="goalLandsTargetLabel">Numero di terreni obiettivo</span>
+            <label class="settings-field"><span class="field-label-row"><img src="assets/icons/lands.svg" class="icon-inline" alt=""><span data-i18n="goalLandsTargetLabel">Numero di terreni obiettivo</span></span>
                 <input type="number" id="goal-lands-target-input" min="0">
             </label>
 
         </div>
 
-        <div class="settings-section" data-i18n="sectionLands">Terreni</div>
+        <div class="settings-section"><img src="assets/icons/lands.svg" class="icon-inline" alt=""><span data-i18n="sectionLands">Terreni</span></div>
 
         <div class="settings-grid">
 
-            <label>Common
+            <label class="rarity-input-field common">Common
                 <input type="number" id="common-input" min="0">
             </label>
 
-            <label>Rare
+            <label class="rarity-input-field rare">Rare
                 <input type="number" id="rare-input" min="0">
             </label>
 
-            <label>Epic
+            <label class="rarity-input-field epic">Epic
                 <input type="number" id="epic-input" min="0">
             </label>
 
-            <label>Legendary
+            <label class="rarity-input-field legendary">Legendary
                 <input type="number" id="legendary-input" min="0">
             </label>
 
         </div>
 
-        <div class="settings-section" data-i18n="sectionOther">Altri dati</div>
+        <div class="settings-section"><img src="assets/icons/badge.svg" class="icon-inline" alt=""><span data-i18n="sectionOther">Altri dati</span></div>
 
-        <label class="settings-field"><span data-i18n="badgeLabel">Badge</span>
+        <label class="settings-field"><span class="field-label-row"><img src="assets/icons/badge.svg" class="icon-inline" alt=""><span data-i18n="badgeLabel">Badge</span></span>
             <input type="number" id="badges-input" min="0">
         </label>
 
-        <label class="settings-field"><span data-i18n="mayorTargetLabel">Obiettivo Mayor</span>
+        <label class="settings-field"><span class="field-label-row"><img src="assets/icons/mayor.svg" class="icon-inline" alt=""><span data-i18n="mayorTargetLabel">Obiettivo Mayor</span></span>
             <input type="number" id="mayorTarget-input" min="0">
         </label>
 
-        <label class="settings-field"><span data-i18n="dailyABLabel">AB guadagnati al giorno</span>
+        <label class="settings-field"><span class="field-label-row"><img src="assets/icons/income.svg" class="icon-inline" alt=""><span data-i18n="dailyABLabel">AB guadagnati al giorno</span></span>
             <input type="number" id="dailyAB-input" min="0">
         </label>
 
-        <label class="settings-field"><span data-i18n="abBalanceLabel">AB disponibili ora (gruzzolo)</span>
+        <label class="settings-field"><span class="field-label-row"><img src="assets/icons/exchange.svg" class="icon-inline" alt=""><span data-i18n="abBalanceLabel">AB disponibili ora (gruzzolo)</span></span>
             <input type="number" id="ab-balance-input" min="0">
         </label>
 
-        <div class="settings-section" data-i18n="sectionPasses">I tuoi pass attivi</div>
+        <div class="settings-section"><img src="assets/icons/star.svg" class="icon-inline" alt=""><span data-i18n="sectionPasses">I tuoi pass attivi</span></div>
 
         <label class="goal-checkbox-field">
             <input type="checkbox" id="explorer-pass-input">
-            <span data-i18n="explorerPassLabel">Pass Esploratore (Atlas Explorer Club)</span>
+            <img src="assets/icons/star.svg" class="icon-inline" alt=""><span data-i18n="explorerPassLabel">Pass Esploratore (Atlas Explorer Club)</span>
         </label>
 
         <label class="goal-checkbox-field">
             <input type="checkbox" id="mission-pass-input">
-            <span data-i18n="missionPassLabel">Mission Pass (sfide mensili)</span>
+            <img src="assets/icons/star.svg" class="icon-inline" alt=""><span data-i18n="missionPassLabel">Mission Pass (sfide mensili)</span>
         </label>
 
         <div class="settings-actions">
@@ -332,8 +337,8 @@
     </div>
 
     <div class="footer-meta">
-        <span class="version-badge">v0.3</span>
-        <span class="footer-update"><span data-i18n="lastUpdate">Ultimo aggiornamento</span>: 26 luglio 2026</span>
+        <span class="version-badge">v0.4</span>
+        <span class="footer-update"><span data-i18n="lastUpdate">Ultimo aggiornamento</span>: 30 luglio 2026</span>
     </div>
 </footer>
 
