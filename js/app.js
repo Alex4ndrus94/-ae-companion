@@ -16,6 +16,35 @@ function renderDashboard() {
 
     setText("player-name", player.profile.name);
 
+    const passBadge = document.getElementById("pass-badge");
+
+    if (passBadge) {
+
+        const bothPasses = player.passes.explorer && player.passes.mission;
+        const onePass = player.passes.explorer || player.passes.mission;
+
+        if (bothPasses) {
+
+            passBadge.src = "assets/icons/premium-badge.svg";
+            passBadge.className = "pass-badge premium";
+            passBadge.alt = t("passBadgePremiumAlt");
+            passBadge.style.display = "block";
+
+        } else if (onePass) {
+
+            passBadge.src = "assets/icons/single-pass-badge.svg";
+            passBadge.className = "pass-badge single";
+            passBadge.alt = t("passBadgeSingleAlt");
+            passBadge.style.display = "block";
+
+        } else {
+
+            passBadge.style.display = "none";
+
+        }
+
+    }
+
     setText("parcels", totalLands);
 
     setText("common-count", player.lands.common);
