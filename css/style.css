@@ -24,6 +24,46 @@
 }
 
 /* ==============================
+   CORNICE ESAGONALE (icone prominenti)
+============================== */
+
+.hex-icon-wrap{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:32px;
+    height:32px;
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    background:var(--card-2);
+    border:2px solid var(--green-glow);
+    vertical-align:middle;
+    flex-shrink:0;
+}
+
+.hex-icon-wrap img{
+    width:60%;
+    height:60%;
+}
+
+.hex-icon-wrap.sm{
+    width:22px;
+    height:22px;
+    border-width:1.5px;
+}
+
+.stat-tile{
+    background:var(--card-2);
+    border-radius:var(--radius-sm);
+    padding:14px 8px;
+    text-align:center;
+    font-weight:700;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+}
+
+/* ==============================
    PLAYER CARD
 ============================== */
 
@@ -32,6 +72,34 @@
 .player-card h2{
     font-size:1.35rem;
     margin-bottom:16px;
+}
+
+.player-name-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:16px;
+}
+
+.player-name-row h2{
+    margin-bottom:0;
+}
+
+.pass-badge{
+    width:30px;
+    height:auto;
+    flex-shrink:0;
+}
+
+.pass-badge.single{
+    width:26px;
+    filter: drop-shadow(0 0 4px rgba(88,224,109,.5));
+}
+
+.pass-badge.premium{
+    width:34px;
+    filter: drop-shadow(0 0 6px rgba(255,179,34,.5));
 }
 
 .player-total{
