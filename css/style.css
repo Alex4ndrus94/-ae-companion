@@ -147,6 +147,21 @@
     margin-top:16px;
 }
 
+.breakpoint-warning{
+    display:none;
+    color:var(--gold-legend);
+    font-size:.78rem;
+    font-weight:600;
+    line-height:1.4;
+    padding:10px 12px;
+    background:rgba(255,179,34,.08);
+    border-radius:10px;
+}
+
+.breakpoint-warning.visible{
+    display:block;
+}
+
 #boost-info{
     color:var(--green-glow);
     font-weight:600;
@@ -304,6 +319,7 @@
 .settings-panel{
     background:var(--card);
     border:1px solid var(--border);
+    border-top:3px solid var(--cyan-info);
     border-radius:22px 22px 0 0;
     padding:24px 20px 32px;
     width:100%;
@@ -315,15 +331,26 @@
 .settings-panel h2{
     text-align:center;
     margin-bottom:8px;
+    color:var(--cyan-info);
 }
 
 .settings-section{
-    color:var(--text-2);
+    display:flex;
+    align-items:center;
+    gap:6px;
+    color:var(--cyan-info);
     font-family:var(--font-title);
     font-size:.75rem;
     text-transform:uppercase;
     letter-spacing:1px;
     margin:18px 0 10px;
+}
+
+/* Le icone dentro il pannello vengono ricolorate in ciano
+   (invece del verde standard del sito) per segnalare che
+   si è in modalità "modifica" */
+.settings-panel img.icon-inline{
+    filter: hue-rotate(70deg) saturate(1.6) brightness(1.15);
 }
 
 .settings-grid{
@@ -342,6 +369,11 @@
     margin-bottom:12px;
 }
 
+.field-label-row{
+    display:flex;
+    align-items:center;
+}
+
 .settings-panel input,
 .settings-panel select{
     background:var(--card-2);
@@ -358,7 +390,32 @@
 .settings-panel input:focus,
 .settings-panel select:focus{
     outline:none;
-    border-color:var(--green);
+    border-color:var(--cyan-info);
+}
+
+/* ==============================
+   CAMPI RARITÀ (stessa logica delle card nella dashboard)
+============================== */
+
+.rarity-input-field input{
+    border-width:2px !important;
+}
+
+.rarity-input-field.common input{ border-color:var(--text-2) !important; }
+
+.rarity-input-field.rare input{
+    border-color:var(--blue-rare) !important;
+    box-shadow:0 0 8px rgba(58,134,255,.2);
+}
+
+.rarity-input-field.epic input{
+    border-color:var(--purple-epic) !important;
+    box-shadow:0 0 8px rgba(155,92,255,.2);
+}
+
+.rarity-input-field.legendary input{
+    border-color:var(--gold-legend) !important;
+    box-shadow:0 0 8px rgba(255,179,34,.2);
 }
 
 /* ==============================
