@@ -251,15 +251,36 @@ function generateAdvice() {
 
         if (remaining <= urgentThreshold) {
 
-            tips.push({
-                icon: "boost",
-                text: t("tipBoostUrgent", {
-                    remaining: remaining,
-                    current: current.boost,
-                    next: next.boost,
-                    timeText: getAcquisitionTimeText(remaining * CONFIG.landCostAB)
-                })
-            });
+            const recovery = getBracketTransitionRecovery(totalLands);
+
+            if (recovery && recovery.hasDeadZone) {
+
+                const landsToRecovery = recovery.recoveryLands - totalLands;
+
+                tips.push({
+                    icon: "warning",
+                    text: t("tipDeadZoneWarning", {
+                        cap: current.max,
+                        next: next.boost,
+                        current: current.boost,
+                        recoveryLands: recovery.recoveryLands,
+                        timeText: getAcquisitionTimeText(landsToRecovery * CONFIG.landCostAB)
+                    })
+                });
+
+            } else {
+
+                tips.push({
+                    icon: "boost",
+                    text: t("tipBoostUrgent", {
+                        remaining: remaining,
+                        current: current.boost,
+                        next: next.boost,
+                        timeText: getAcquisitionTimeText(remaining * CONFIG.landCostAB)
+                    })
+                });
+
+            }
 
         } else {
 

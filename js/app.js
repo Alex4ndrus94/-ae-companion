@@ -63,6 +63,29 @@ function renderDashboard() {
             : t("progressTextLast", { total: totalLands })
     );
 
+    const warningLine = document.getElementById("breakpoint-warning-line");
+    const recovery = getBracketTransitionRecovery(totalLands);
+
+    if (recovery && recovery.hasDeadZone) {
+
+        setText(
+            "breakpoint-warning",
+            t("breakpointWarningInline", {
+                cap: recovery.current.max,
+                current: recovery.current.boost,
+                next: recovery.next.boost,
+                recoveryLands: recovery.recoveryLands
+            })
+        );
+
+        warningLine.classList.add("visible");
+
+    } else {
+
+        warningLine.classList.remove("visible");
+
+    }
+
     // ======================================
     // Rendita (con boost + senza boost)
     // ======================================
