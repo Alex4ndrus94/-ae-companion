@@ -1,31 +1,31 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
 
   <defs>
-    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#6FC3FF"/>
-      <stop offset="100%" stop-color="#3A86FF"/>
+    <linearGradient id="epicGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C09BFF"/>
+      <stop offset="100%" stop-color="#9B5CFF"/>
     </linearGradient>
   </defs>
 
   <!-- Cornice esagonale -->
   <polygon points="50,8 86,29 86,71 50,92 14,71 14,29"
-           fill="#1A202A" stroke="url(#blueGrad)" stroke-width="4"/>
+           fill="#1A202A" stroke="url(#epicGrad)" stroke-width="4"/>
 
   <!-- Cerchio esterno bussola -->
-  <circle cx="50" cy="50" r="24" fill="none" stroke="url(#blueGrad)" stroke-width="2"/>
+  <circle cx="50" cy="50" r="24" fill="none" stroke="url(#epicGrad)" stroke-width="2"/>
 
   <!-- Tacche cardinali -->
-  <g stroke="url(#blueGrad)" stroke-width="2" stroke-linecap="round">
+  <g stroke="url(#epicGrad)" stroke-width="2" stroke-linecap="round">
     <line x1="50" y1="22" x2="50" y2="27"/>
     <line x1="50" y1="73" x2="50" y2="78"/>
     <line x1="22" y1="50" x2="27" y2="50"/>
     <line x1="73" y1="50" x2="78" y2="50"/>
   </g>
 
-  <!-- Ago bussola (stella a 4 punte, stilizzata e originale) -->
+  <!-- Ago bussola -->
   <path d="M50 30l6 18 18 2-18 2-6 18-6-18-18-2 18-2z"
-        fill="url(#blueGrad)"/>
+        fill="url(#epicGrad)"/>
 
-  <circle cx="50" cy="50" r="3" fill="#1A202A" stroke="url(#blueGrad)" stroke-width="1.5"/>
+  <circle cx="50" cy="50" r="3" fill="#1A202A" stroke="url(#epicGrad)" stroke-width="1.5"/>
 
 </svg>
