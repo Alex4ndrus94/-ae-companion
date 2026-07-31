@@ -233,7 +233,7 @@ function t(key, vars) {
     if (vars) {
 
         Object.keys(vars).forEach(function (k) {
-            str = str.replace("{" + k + "}", vars[k]);
+            str = str.split("{" + k + "}").join(vars[k]);
         });
 
     }
