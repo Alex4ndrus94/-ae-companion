@@ -28,19 +28,29 @@
 ============================== */
 
 .hex-icon-wrap{
+    position:relative;
     display:inline-flex;
     align-items:center;
     justify-content:center;
     width:32px;
     height:32px;
     clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-    background:var(--card-2);
-    border:2px solid var(--green-glow);
+    background:var(--green-glow);
     vertical-align:middle;
     flex-shrink:0;
 }
 
+.hex-icon-wrap::before{
+    content:"";
+    position:absolute;
+    inset:2px;
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    background:var(--card-2);
+}
+
 .hex-icon-wrap img{
+    position:relative;
+    z-index:1;
     width:60%;
     height:60%;
 }
@@ -48,7 +58,10 @@
 .hex-icon-wrap.sm{
     width:22px;
     height:22px;
-    border-width:1.5px;
+}
+
+.hex-icon-wrap.sm::before{
+    inset:1.5px;
 }
 
 .stat-tile{
