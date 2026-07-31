@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+
+  <defs>
+    <linearGradient id="rareGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6FB2FF"/>
+      <stop offset="100%" stop-color="#3A86FF"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Cornice esagonale -->
+  <polygon points="50,8 86,29 86,71 50,92 14,71 14,29"
+           fill="#1A202A" stroke="url(#rareGrad2)" stroke-width="4"/>
+
+  <!-- Blocco note -->
+  <rect x="34" y="28" width="32" height="42" rx="4"
+        fill="none" stroke="url(#rareGrad2)" stroke-width="3"/>
+
+  <!-- Clip superiore -->
+  <rect x="43" y="24" width="14" height="7" rx="2"
+        fill="#1A202A" stroke="url(#rareGrad2)" stroke-width="2.5"/>
+
+  <!-- Righe con spunta (missioni completate) -->
+  <g stroke="url(#rareGrad2)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M39 42l2.4 2.6 4.6-5"/>
+    <line x1="50" y1="42.5" x2="61" y2="42.5"/>
+
+    <path d="M39 53l2.4 2.6 4.6-5"/>
+    <line x1="50" y1="53.5" x2="61" y2="53.5"/>
+
+    <path d="M39 64l2.4 2.6 4.6-5"/>
+    <line x1="50" y1="64.5" x2="61" y2="64.5"/>
+  </g>
+
+</svg>
