@@ -16,32 +16,20 @@ function renderDashboard() {
 
     setText("player-name", player.profile.name);
 
-    const passBadge = document.getElementById("pass-badge");
+    const explorerBadge = document.getElementById("badge-explorer");
+    const missionBadge = document.getElementById("badge-mission");
 
-    if (passBadge) {
+    if (explorerBadge) {
 
-        const bothPasses = player.passes.explorer && player.passes.mission;
-        const onePass = player.passes.explorer || player.passes.mission;
+        explorerBadge.style.display = player.passes.explorer ? "block" : "none";
+        explorerBadge.alt = t("passBadgeExplorerAlt");
 
-        if (bothPasses) {
+    }
 
-            passBadge.src = "assets/icons/premium-badge.svg";
-            passBadge.className = "pass-badge premium";
-            passBadge.alt = t("passBadgePremiumAlt");
-            passBadge.style.display = "block";
+    if (missionBadge) {
 
-        } else if (onePass) {
-
-            passBadge.src = "assets/icons/single-pass-badge.svg";
-            passBadge.className = "pass-badge single";
-            passBadge.alt = t("passBadgeSingleAlt");
-            passBadge.style.display = "block";
-
-        } else {
-
-            passBadge.style.display = "none";
-
-        }
+        missionBadge.style.display = player.passes.mission ? "block" : "none";
+        missionBadge.alt = t("passBadgeMissionAlt");
 
     }
 
