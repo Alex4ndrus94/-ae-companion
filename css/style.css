@@ -99,20 +99,24 @@
     margin-bottom:0;
 }
 
+.pass-badges-row{
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+
 .pass-badge{
-    width:30px;
+    width:28px;
     height:auto;
     flex-shrink:0;
 }
 
-.pass-badge.single{
-    width:26px;
-    filter: drop-shadow(0 0 4px rgba(88,224,109,.5));
+.pass-badge.explorer{
+    filter: drop-shadow(0 0 4px rgba(58,134,255,.5));
 }
 
-.pass-badge.premium{
-    width:34px;
-    filter: drop-shadow(0 0 6px rgba(255,179,34,.5));
+.pass-badge.mission{
+    filter: drop-shadow(0 0 4px rgba(255,179,34,.5));
 }
 
 .player-total{
