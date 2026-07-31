@@ -33,7 +33,7 @@
     align-items:center;
     justify-content:center;
     width:32px;
-    height:32px;
+    height:28px;
     clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
     background:var(--green-glow);
     vertical-align:middle;
@@ -51,13 +51,13 @@
 .hex-icon-wrap img{
     position:relative;
     z-index:1;
-    width:60%;
-    height:60%;
+    width:55%;
+    height:55%;
 }
 
 .hex-icon-wrap.sm{
     width:22px;
-    height:22px;
+    height:19px;
 }
 
 .hex-icon-wrap.sm::before{
