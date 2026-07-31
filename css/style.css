@@ -112,11 +112,11 @@
 }
 
 .pass-badge.explorer{
-    filter: drop-shadow(0 0 4px rgba(58,134,255,.5));
+    filter: drop-shadow(0 0 4px rgba(155,92,255,.5));
 }
 
 .pass-badge.mission{
-    filter: drop-shadow(0 0 4px rgba(255,179,34,.5));
+    filter: drop-shadow(0 0 4px rgba(58,134,255,.5));
 }
 
 .player-total{
