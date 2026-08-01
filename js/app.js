@@ -61,7 +61,50 @@ function renderDashboard() {
         getRemainingLandsToNextBreakpoint(totalLands);
 
     // ======================================
-    // Barra progresso
+    // Target "intelligente" per Strategia e barra di progresso
+    // Deve essere coerente con quello che dicono i Consigli:
+    // - se sei in zona morta ed è urgente, punta al recupero (non al breakpoint immediato)
+    // - se l'obiettivo scelto è "terreni", punta a quello
+    // - altrimenti, punta al prossimo breakpoint boost normale
+    // ======================================
+
+    const recovery = getBracketTransitionRecovery(totalLands);
+
+    let nearBoostThreshold = false;
+
+    if (next) {
+
+        const bracketSize = next.min - current.min;
+        const urgentThreshold = Math.max(5, Math.round(bracketSize * 0.2));
+
+        nearBoostThreshold = remaining <= urgentThreshold;
+
+    }
+
+    const deadZoneUrgent = !!(recovery && recovery.hasDeadZone && nearBoostThreshold);
+
+    let strategyTargetLands = null;
+
+    if (player.goal.type === "lands" && player.goal.landsTarget > totalLands) {
+
+        strategyTargetLands = player.goal.landsTarget;
+
+    } else if (deadZoneUrgent) {
+
+        strategyTargetLands = recovery.recoveryLands;
+
+    } else if (next) {
+
+        strategyTargetLands = next.min;
+
+    }
+
+    const remainingToTarget = strategyTargetLands
+        ? Math.max(0, strategyTargetLands - totalLands)
+        : 0;
+
+    // ======================================
+    // Barra progresso (riempimento della fascia boost attuale)
     // ======================================
 
     const percentage =
@@ -73,15 +116,17 @@ function renderDashboard() {
         percentage + "%"
     );
 
+    document.getElementById("progress-fill")
+        .classList.toggle("warning", nearBoostThreshold);
+
     setText(
         "progress-text",
-        next
-            ? t("progressText", { total: totalLands, next: next.min, remaining: remaining })
+        strategyTargetLands
+            ? t("progressText", { total: totalLands, next: strategyTargetLands, remaining: remainingToTarget })
             : t("progressTextLast", { total: totalLands })
     );
 
     const warningLine = document.getElementById("breakpoint-warning-line");
-    const recovery = getBracketTransitionRecovery(totalLands);
 
     if (recovery && recovery.hasDeadZone) {
 
@@ -168,12 +213,12 @@ function renderDashboard() {
 
     setText(
         "landsRemaining",
-        remaining
+        remainingToTarget
     );
 
     setText(
         "abNeeded",
-        (remaining * CONFIG.landCostAB) + " AB"
+        (remainingToTarget * CONFIG.landCostAB) + " AB"
     );
 
     setText(
@@ -181,15 +226,9 @@ function renderDashboard() {
         player.settings.dailyLoginAB + " AB"
     );
 
-    const daysRemaining =
-        Math.ceil(
-            (remaining * CONFIG.landCostAB) /
-            player.settings.dailyLoginAB
-        );
-
     setText(
         "daysRemaining",
-        formatDays(daysRemaining)
+        getAcquisitionTimeText(remainingToTarget * CONFIG.landCostAB)
     );
 
     // ======================================
