@@ -33,23 +33,23 @@ function renderDashboard() {
 
     }
 
-    setText("parcels", totalLands);
+    setText("parcels", formatK(totalLands));
 
-    setText("common-count", player.lands.common);
+    setText("common-count", formatK(player.lands.common));
 
-    setText("rare-count", player.lands.rare);
+    setText("rare-count", formatK(player.lands.rare));
 
-    setText("epic-count", player.lands.epic);
+    setText("epic-count", formatK(player.lands.epic));
 
-    setText("legendary-count", player.lands.legendary);
+    setText("legendary-count", formatK(player.lands.legendary));
 
-    setText("badges", player.badges);
+    setText("badges", formatK(player.badges));
 
     setText("boost", "x" + getBoostMultiplier());
 
-    setText("mayor", player.mayorTarget);
+    setText("mayor", formatK(player.mayorTarget));
 
-    setText("ab-balance-display", player.settings.abBalance + " AB");
+    setText("ab-balance-display", formatK(player.settings.abBalance) + " AB");
 
     // ======================================
     // AE Core
@@ -215,17 +215,17 @@ function renderDashboard() {
 
     setText(
         "landsRemaining",
-        remainingToTarget
+        formatK(remainingToTarget)
     );
 
     setText(
         "abNeeded",
-        (remainingToTarget * CONFIG.landCostAB) + " AB"
+        formatK(remainingToTarget * CONFIG.landCostAB) + " AB"
     );
 
     setText(
         "dailyAB",
-        player.settings.dailyLoginAB + " AB"
+        formatK(player.settings.dailyLoginAB) + " AB"
     );
 
     setText(
