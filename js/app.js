@@ -49,6 +49,8 @@ function renderDashboard() {
 
     setText("mayor", player.mayorTarget);
 
+    setText("ab-balance-display", player.settings.abBalance + " AB");
+
     // ======================================
     // AE Core
     // ======================================
