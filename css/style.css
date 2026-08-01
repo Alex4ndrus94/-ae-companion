@@ -348,7 +348,12 @@
     border-radius:999px;
     background:linear-gradient(90deg,var(--green),var(--green-glow));
     box-shadow:0 0 10px rgba(88,224,109,.5);
-    transition:.6s ease;
+    transition:.6s ease, background .3s ease, box-shadow .3s ease;
+}
+
+.progress-fill.warning{
+    background:linear-gradient(90deg,var(--gold-legend),#FFCF5C);
+    box-shadow:0 0 10px rgba(255,179,34,.6);
 }
 
 #progress-text{
