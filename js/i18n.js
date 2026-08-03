@@ -100,7 +100,10 @@ const translations = {
         igCta: "Richieste o consigli? Scrivimi su Instagram",
         coffeeCta: "Ti è utile? Offrimi un caffè",
         lastUpdate: "Ultimo aggiornamento",
-        withoutBoost: "senza boost"
+        withoutBoost: "senza boost",
+        navHome: "Home",
+        navStrategy: "Strategia",
+        navTips: "Consigli"
 
     },
 
@@ -198,7 +201,10 @@ const translations = {
         igCta: "Requests or feedback? Message me on Instagram",
         coffeeCta: "Find this useful? Buy me a coffee",
         lastUpdate: "Last update",
-        withoutBoost: "without boost"
+        withoutBoost: "without boost",
+        navHome: "Home",
+        navStrategy: "Strategy",
+        navTips: "Tips"
 
     }
 
