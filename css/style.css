@@ -400,7 +400,7 @@
     display:none;
     align-items:flex-end;
     justify-content:center;
-    z-index:100;
+    z-index:300;
 }
 
 .settings-overlay.open{
