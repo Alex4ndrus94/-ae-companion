@@ -210,17 +210,25 @@ function renderDashboard() {
     );
 
     // ======================================
-    // Strategia
+    // Strategia (si adatta: terreni o badge, in base
+    // a cosa conviene davvero in questo momento)
     // ======================================
+
+    const plan = getStrategyPlan(totalLands);
+
+    setText(
+        "strategy-metric-label",
+        plan.metric === "badge" ? t("badgeLabel") : t("landsLabel")
+    );
 
     setText(
         "landsRemaining",
-        formatK(remainingToTarget)
+        formatK(plan.remaining)
     );
 
     setText(
         "abNeeded",
-        formatK(remainingToTarget * CONFIG.landCostAB) + " AB"
+        formatK(plan.remaining * plan.unitCostAB) + " AB"
     );
 
     setText(
@@ -230,7 +238,7 @@ function renderDashboard() {
 
     setText(
         "daysRemaining",
-        getAcquisitionTimeText(remainingToTarget * CONFIG.landCostAB)
+        getAcquisitionTimeText(plan.remaining * plan.unitCostAB)
     );
 
     // ======================================

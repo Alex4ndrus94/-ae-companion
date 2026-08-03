@@ -98,6 +98,69 @@ function getAcquisitionTimeText(abNeeded) {
 
 }
 
+// ======================================
+// Piano adattivo per la card Strategia.
+// Decide COSA mostrare nei 4 box in base all'obiettivo
+// scelto e a cosa conviene davvero in questo momento
+// (terreni o badge), non solo ai terreni come prima.
+// ======================================
+
+function getStrategyPlan(totalLands) {
+
+    // 1. Obiettivo esplicito "numero di terreni": ha sempre priorità
+    if (player.goal.type === "lands" && player.goal.landsTarget > totalLands) {
+
+        return {
+            metric: "lands",
+            remaining: player.goal.landsTarget - totalLands,
+            unitCostAB: CONFIG.landCostAB
+        };
+
+    }
+
+    // 2. Confronto reale terreni vs badge: se i badge sono più
+    //    efficienti in questo momento, la Strategia punta a quelli
+    const c = getEfficiencyComparison(totalLands);
+
+    if (c.nextBadgeTier && c.badgeEfficiency > c.landEfficiency) {
+
+        return {
+            metric: "badge",
+            remaining: c.nextBadgeTier.min - player.badges,
+            unitCostAB: CONFIG.badgeCostAB
+        };
+
+    }
+
+    // 3. Altrimenti, terreni: rispetta la zona morta già calcolata altrove
+    const current = getCurrentBreakpoint(totalLands);
+    const next = getNextBreakpoint(totalLands);
+    const remaining = getRemainingLandsToNextBreakpoint(totalLands);
+    const recovery = getBracketTransitionRecovery(totalLands);
+
+    let deadZoneUrgent = false;
+
+    if (recovery && recovery.hasDeadZone && next) {
+
+        const bracketSize = next.min - current.min;
+        const urgentThreshold = Math.max(5, Math.round(bracketSize * 0.2));
+
+        deadZoneUrgent = remaining <= urgentThreshold;
+
+    }
+
+    const targetLands = deadZoneUrgent
+        ? recovery.recoveryLands
+        : (next ? next.min : totalLands);
+
+    return {
+        metric: "lands",
+        remaining: Math.max(0, targetLands - totalLands),
+        unitCostAB: CONFIG.landCostAB
+    };
+
+}
+
 function getEfficiencyTip(totalLands) {
 
     const c = getEfficiencyComparison(totalLands);
