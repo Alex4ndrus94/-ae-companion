@@ -28,6 +28,8 @@
 
 <div class="container">
 
+<div class="tab-view active" id="tab-home">
+
 <header class="hero">
 
     <div class="lang-switch">
@@ -134,7 +136,13 @@
 
 </div>
 
+</div>
+
+<!-- FINE HOME -->
+
 <!-- NUOVA CARD -->
+
+<div class="tab-view" id="tab-strategy">
 
 <div class="card">
 
@@ -183,7 +191,13 @@
 
 </div>
 
+</div>
+
+<!-- FINE STRATEGIA -->
+
 <!-- CARD CONSIGLI -->
+
+<div class="tab-view" id="tab-tips">
 
 <div class="card">
 
@@ -208,6 +222,33 @@
 </div>
 
 </div>
+
+<!-- FINE CONSIGLI -->
+
+</div>
+
+<!-- ======================================
+     NAVIGAZIONE IN BASSO
+====================================== -->
+
+<nav class="bottom-nav" id="bottom-nav">
+
+    <button class="nav-btn active" data-tab="home" onclick="switchTab('home')">
+        <span class="hex-icon-wrap sm"><img src="assets/icons/home.svg" alt=""></span>
+        <span data-i18n="navHome">Home</span>
+    </button>
+
+    <button class="nav-btn" data-tab="strategy" onclick="switchTab('strategy')">
+        <span class="hex-icon-wrap sm"><img src="assets/icons/strategy.svg" alt=""></span>
+        <span data-i18n="navStrategy">Strategia</span>
+    </button>
+
+    <button class="nav-btn" data-tab="tips" onclick="switchTab('tips')">
+        <span class="hex-icon-wrap sm"><img src="assets/icons/idea.svg" alt=""></span>
+        <span data-i18n="navTips">Consigli</span>
+    </button>
+
+</nav>
 
 <!-- ======================================
      PANNELLO IMPOSTAZIONI
@@ -342,8 +383,8 @@
     </div>
 
     <div class="footer-meta">
-        <span class="version-badge">v0.4</span>
-        <span class="footer-update"><span data-i18n="lastUpdate">Ultimo aggiornamento</span>: 30 luglio 2026</span>
+        <span class="version-badge">v0.5</span>
+        <span class="footer-update"><span data-i18n="lastUpdate">Ultimo aggiornamento</span>: 3 agosto 2026</span>
     </div>
 </footer>
 
@@ -378,6 +419,7 @@
 <script src="js/ui.js"></script>
 <script src="js/settings.js"></script>
 <script src="js/install-banner.js"></script>
+<script src="js/navigation.js"></script>
 <script src="js/app.js"></script>
 
 <!-- Analytics (GoatCounter) -->
