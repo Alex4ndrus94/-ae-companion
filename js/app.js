@@ -205,6 +205,11 @@ function renderDashboard() {
     );
 
     setText(
+        "per-second-income",
+        t("perSecondIncome", { value: formatCurrencyPrecise(getIncomePerSecondConverted()) })
+    );
+
+    setText(
         "srb-estimate",
         formatCurrency(getSRBDailyIncomeEstimateConverted()) + " / " + (getCurrentLanguage() === "it" ? "giorno" : "day")
     );

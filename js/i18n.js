@@ -50,6 +50,7 @@ const translations = {
         tipRarity: "La rarità di ogni terreno che acquisti è assegnata casualmente: hai circa il {legendaryOdds}% di probabilità di ottenere un Legendary, che rende {mult}x un Common allo stesso costo ({cost} AB). Non puoi scegliere la rarità, ma più terreni compri, più occasioni hai di ottenerne uno di pregio.",
         tipMayorStrategy: "Diventare mayor richiede più terreni di chiunque altro in quella specifica città: prima di accumulare terreni ovunque, valuta se conviene concentrarti su una città con pochi giocatori attivi, dove superare l'attuale mayor costa meno.",
         badgeBonusInfo: "Bonus passaporto: +{percent}% ({badges} badge)",
+        perSecondIncome: "Rendita al secondo: {value}",
         srbBoxTitle: "Con il Super Potenziamento attivo (x50)",
         srbBoxNote: "Stima supplementare, non inclusa nella rendita ufficiale sopra: attiva solo durante l'evento (~2,5 giorni/mese) e per la durata in cui riesci a mantenerlo attivo.",
 
@@ -151,6 +152,7 @@ const translations = {
         tipRarity: "The rarity of each land you buy is assigned randomly: you have about a {legendaryOdds}% chance of getting a Legendary, which earns {mult}x a Common one at the same cost ({cost} AB). You can't choose the rarity, but the more lands you buy, the more chances you get a valuable one.",
         tipMayorStrategy: "Becoming mayor requires owning more lands than anyone else in that specific city: before buying lands everywhere, consider focusing on a city with few active players, where overtaking the current mayor costs less.",
         badgeBonusInfo: "Passport bonus: +{percent}% ({badges} badges)",
+        perSecondIncome: "Income per second: {value}",
         srbBoxTitle: "With Super Rent Boost active (x50)",
         srbBoxNote: "Supplementary estimate, not included in the official income above: only active during the event (~2.5 days/month) and for as long as you can keep it active.",
 

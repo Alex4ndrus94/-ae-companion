@@ -143,3 +143,28 @@ function formatCurrency(value) {
     }).format(value);
 
 }
+
+// Stessa formattazione, ma con più decimali: la rendita al
+// secondo è un numero minuscolo, con 2 decimali sparirebbe
+// sempre come "0,00€"
+function formatCurrencyPrecise(value) {
+
+    const lang = getCurrentLanguage();
+    const currency = lang === "it" ? "EUR" : "USD";
+    const locale = lang === "it" ? "it-IT" : "en-US";
+
+    return new Intl.NumberFormat(locale, {
+        style: "currency",
+        currency: currency,
+        minimumFractionDigits: 8,
+        maximumFractionDigits: 8
+    }).format(value);
+
+}
+
+// Rendita al secondo (con boost pubblicità + bonus badge inclusi):
+// è semplicemente la somma dei terreni posseduti, mostrata
+// come dato informativo a parte, non nel calcolo ufficiale sopra
+function getIncomePerSecondConverted() {
+    return getDailyIncomeConverted() / 86400;
+}
