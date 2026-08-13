@@ -263,6 +263,17 @@
     font-size:.85rem;
 }
 
+.per-second-line{
+    color:var(--text-2);
+    font-size:.72rem;
+    font-style:italic;
+    opacity:.85;
+}
+
+.per-second-line .icon-inline{
+    opacity:.85;
+}
+
 /* ==============================
    BOX SUPPLEMENTARE SRB
 ============================== */
