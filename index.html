@@ -193,6 +193,31 @@
 
 </div>
 
+<!-- CARD ASSISTENTE -->
+
+<div class="card assistant-card">
+
+    <h2><span class="hex-icon-wrap"><img src="assets/icons/chat.svg" alt=""></span> <span data-i18n="assistantTitle">Assistente</span></h2>
+
+    <p class="assistant-disclaimer" data-i18n="assistantDisclaimer">
+        Riconosce il tipo di domanda e risponde con calcoli reali sui tuoi dati — non è un'AI generica.
+    </p>
+
+    <div class="chat-messages" id="assistant-messages"></div>
+
+    <div class="assistant-suggestions">
+        <button onclick="askAssistantSuggestion(t('suggestionBuy'))" data-i18n="suggestionBuy">Cosa conviene comprare?</button>
+        <button onclick="askAssistantSuggestion(t('suggestionGoal'))" data-i18n="suggestionGoal">Quanto manca al mio obiettivo?</button>
+        <button onclick="askAssistantSuggestion(t('suggestionIncome'))" data-i18n="suggestionIncome">Quanto guadagno?</button>
+    </div>
+
+    <div class="chat-input-row">
+        <input type="text" id="assistant-input" onkeydown="handleAssistantKeydown(event)" data-i18n-placeholder="assistantPlaceholder" placeholder="Scrivi una domanda...">
+        <button class="chat-send-btn" onclick="sendAssistantMessage()" data-i18n="send">Invia</button>
+    </div>
+
+</div>
+
 </div>
 
 <!-- FINE STRATEGIA -->
@@ -416,6 +441,7 @@
 <script src="js/calculator.js"></script>
 <script src="js/income.js"></script>
 <script src="js/advice.js"></script>
+<script src="js/assistant.js"></script>
 <script src="js/abtips.js"></script>
 <script src="js/components.js"></script>
 <script src="js/ui.js"></script>
