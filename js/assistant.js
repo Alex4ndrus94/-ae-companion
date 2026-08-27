@@ -23,6 +23,54 @@ function matchesAny(text, keywords) {
 }
 
 // ======================================
+// Scenari ipotetici ("e se avessi X badge/terreni?")
+// Diversi dai consigli fissi: qui l'utente specifica un
+// numero, e il calcolo usa quel numero al posto del dato reale.
+// ======================================
+
+// Badge ipotetici: calcolo ESATTO, perché i terreni restano
+// gli stessi (nessuna stima sulla rarità di nuovi terreni)
+function computeBadgeWhatIf(targetBadges) {
+
+    const totalLands = getTotalLands();
+
+    const raw = getRawIncomePerSecond();
+    const badgeBonus = 1 + (getBadgeBoostPercent(targetBadges) / 100);
+    const boost = getCurrentBoost(totalLands);
+
+    return raw * badgeBonus * boost * 86400; // USD al giorno
+
+}
+
+// Terreni ipotetici: qui invece è una STIMA, perché la rarità
+// dei terreni non ancora posseduti è assegnata a caso
+function computeLandsWhatIf(targetLands) {
+
+    const currentTotal = getTotalLands();
+    const currentRaw = getRawIncomePerSecond();
+
+    let projectedRaw;
+
+    if (targetLands <= currentTotal || currentTotal === 0) {
+
+        projectedRaw = getExpectedRentPerSecondPerLand() * targetLands;
+
+    } else {
+
+        const additionalLands = targetLands - currentTotal;
+
+        projectedRaw = currentRaw + (additionalLands * getExpectedRentPerSecondPerLand());
+
+    }
+
+    const badgeBonus = 1 + (getBadgeBoostPercent(player.badges) / 100);
+    const boost = getCurrentBoost(targetLands);
+
+    return projectedRaw * badgeBonus * boost * 86400; // USD al giorno
+
+}
+
+// ======================================
 // Intenti riconosciuti
 // ======================================
 
@@ -31,6 +79,60 @@ function getAssistantIntents() {
     const totalLands = getTotalLands();
 
     return [
+
+        {
+            test: function (text) {
+                return text.match(/(\d+)\s*badge/);
+            },
+            handler: function (match) {
+
+                const targetBadges = parseInt(match[1], 10);
+
+                if (totalLands === 0) return t("tipNoData");
+
+                const dailyUSD = computeBadgeWhatIf(targetBadges);
+                const percent = getBadgeBoostPercent(targetBadges);
+
+                const convert = function (usd) {
+                    return getCurrentLanguage() === "it" ? usd * CONFIG.exchangeRate : usd;
+                };
+
+                return t("assistantWhatIfBadge", {
+                    badges: targetBadges,
+                    percent: percent,
+                    daily: formatCurrency(convert(dailyUSD)),
+                    monthly: formatCurrency(convert(dailyUSD * 30)),
+                    yearly: formatCurrency(convert(dailyUSD * 365)),
+                    currentDaily: formatCurrency(getDailyIncomeConverted())
+                });
+
+            }
+        },
+
+        {
+            test: function (text) {
+                return text.match(/(\d+)\s*(terreni|lands|parcels|parcelle)/);
+            },
+            handler: function (match) {
+
+                const targetLands = parseInt(match[1], 10);
+
+                const dailyUSD = computeLandsWhatIf(targetLands);
+                const boost = getCurrentBoost(targetLands);
+
+                const convert = function (usd) {
+                    return getCurrentLanguage() === "it" ? usd * CONFIG.exchangeRate : usd;
+                };
+
+                return t("assistantWhatIfLands", {
+                    lands: targetLands,
+                    boost: boost,
+                    daily: formatCurrency(convert(dailyUSD)),
+                    currentDaily: formatCurrency(getDailyIncomeConverted())
+                });
+
+            }
+        },
 
         {
             keywords: ["ciao", "salve", "hey", "hello", "hi "],
@@ -179,9 +281,17 @@ function getAssistantReply(userText) {
 
     for (let i = 0; i < intents.length; i++) {
 
-        if (matchesAny(normalized, intents[i].keywords)) {
+        const intent = intents[i];
 
-            return intents[i].handler();
+        if (intent.test) {
+
+            const match = intent.test(normalized);
+
+            if (match) return intent.handler(match);
+
+        } else if (matchesAny(normalized, intent.keywords)) {
+
+            return intent.handler();
 
         }
 
