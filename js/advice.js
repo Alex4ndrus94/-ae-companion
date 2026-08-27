@@ -261,6 +261,106 @@ function getLandsGoalTip(totalLands) {
 // Motore principale
 // ======================================
 
+// ======================================
+// Consiglio sul margine boost (soglia/zona morta).
+// Estratto come funzione a sé per essere riutilizzato
+// sia dai Consigli sia dall'Assistente.
+// ======================================
+
+function getBoostAdviceText(totalLands) {
+
+    const current = getCurrentBreakpoint(totalLands);
+    const next = getNextBreakpoint(totalLands);
+    const remaining = getRemainingLandsToNextBreakpoint(totalLands);
+
+    if (!next || !current) {
+
+        return { icon: "boost", text: t("tipLastBreakpoint") };
+
+    }
+
+    const bracketSize = next.min - current.min;
+    const urgentThreshold = Math.max(5, Math.round(bracketSize * 0.2));
+
+    if (remaining <= urgentThreshold) {
+
+        const recovery = getBracketTransitionRecovery(totalLands);
+
+        if (recovery && recovery.hasDeadZone) {
+
+            const landsToRecovery = recovery.recoveryLands - totalLands;
+
+            return {
+                icon: "warning",
+                text: t("tipDeadZoneWarning", {
+                    cap: current.max,
+                    next: next.boost,
+                    current: current.boost,
+                    recoveryLands: recovery.recoveryLands,
+                    timeText: getAcquisitionTimeText(landsToRecovery * CONFIG.landCostAB)
+                })
+            };
+
+        }
+
+        return {
+            icon: "boost",
+            text: t("tipBoostUrgent", {
+                remaining: remaining,
+                current: current.boost,
+                next: next.boost,
+                timeText: getAcquisitionTimeText(remaining * CONFIG.landCostAB)
+            })
+        };
+
+    }
+
+    return {
+        icon: "boost",
+        text: t("tipBoostRelaxed", {
+            remaining: remaining,
+            next: next.boost
+        })
+    };
+
+}
+
+// ======================================
+// Consiglio principale in base all'obiettivo scelto.
+// Estratto come funzione a sé per essere riutilizzato
+// sia dai Consigli sia dall'Assistente.
+// ======================================
+
+function getPrimaryGoalTip(totalLands) {
+
+    const goalType = player.goal.type;
+
+    if (goalType === "income") {
+
+        return { icon: "income", text: getIncomeGoalTip(totalLands) };
+
+    }
+
+    if (goalType === "lands") {
+
+        return { icon: "lands", text: getLandsGoalTip(totalLands) };
+
+    }
+
+    if (goalType === "mayor") {
+
+        return { icon: "city", text: t("tipMayorStrategy") };
+
+    }
+
+    return { icon: "idea", text: getEfficiencyTip(totalLands) };
+
+}
+
+// ======================================
+// Motore principale
+// ======================================
+
 function generateAdvice() {
 
     const tips = [];
@@ -281,87 +381,13 @@ function generateAdvice() {
     // 1. Consiglio principale, in base all'obiettivo
     // ======================================
 
-    if (goalType === "income") {
-
-        tips.push({ icon: "income", text: getIncomeGoalTip(totalLands) });
-
-    } else if (goalType === "lands") {
-
-        tips.push({ icon: "lands", text: getLandsGoalTip(totalLands) });
-
-    } else if (goalType === "mayor") {
-
-        tips.push({ icon: "city", text: t("tipMayorStrategy") });
-
-    } else {
-
-        tips.push({ icon: "idea", text: getEfficiencyTip(totalLands) });
-
-    }
+    tips.push(getPrimaryGoalTip(totalLands));
 
     // ======================================
     // 2. Margine boost (sempre utile, qualsiasi obiettivo)
     // ======================================
 
-    const current = getCurrentBreakpoint(totalLands);
-    const next = getNextBreakpoint(totalLands);
-    const remaining = getRemainingLandsToNextBreakpoint(totalLands);
-
-    if (next && current) {
-
-        const bracketSize = next.min - current.min;
-        const urgentThreshold = Math.max(5, Math.round(bracketSize * 0.2));
-
-        if (remaining <= urgentThreshold) {
-
-            const recovery = getBracketTransitionRecovery(totalLands);
-
-            if (recovery && recovery.hasDeadZone) {
-
-                const landsToRecovery = recovery.recoveryLands - totalLands;
-
-                tips.push({
-                    icon: "warning",
-                    text: t("tipDeadZoneWarning", {
-                        cap: current.max,
-                        next: next.boost,
-                        current: current.boost,
-                        recoveryLands: recovery.recoveryLands,
-                        timeText: getAcquisitionTimeText(landsToRecovery * CONFIG.landCostAB)
-                    })
-                });
-
-            } else {
-
-                tips.push({
-                    icon: "boost",
-                    text: t("tipBoostUrgent", {
-                        remaining: remaining,
-                        current: current.boost,
-                        next: next.boost,
-                        timeText: getAcquisitionTimeText(remaining * CONFIG.landCostAB)
-                    })
-                });
-
-            }
-
-        } else {
-
-            tips.push({
-                icon: "boost",
-                text: t("tipBoostRelaxed", {
-                    remaining: remaining,
-                    next: next.boost
-                })
-            });
-
-        }
-
-    } else {
-
-        tips.push({ icon: "boost", text: t("tipLastBreakpoint") });
-
-    }
+    tips.push(getBoostAdviceText(totalLands));
 
     // ======================================
     // 3. Rarità: informativa (assegnata casualmente, non scelta dal player)

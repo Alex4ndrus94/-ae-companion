@@ -51,6 +51,24 @@ const translations = {
         tipMayorStrategy: "Diventare mayor richiede più terreni di chiunque altro in quella specifica città: prima di accumulare terreni ovunque, valuta se conviene concentrarti su una città con pochi giocatori attivi, dove superare l'attuale mayor costa meno.",
         badgeBonusInfo: "Bonus passaporto: +{percent}% ({badges} badge)",
         perSecondIncome: "Rendita al secondo: {value}",
+
+        assistantGreeting: "Ciao! Chiedimi qualcosa sulla tua situazione — es. \"cosa conviene comprare?\", \"quanto manca al mio obiettivo?\", \"quanti badge mi mancano?\".",
+        assistantHelp: "Posso rispondere su: soglie boost, cosa conviene comprare ora, il tuo obiettivo, quanto guadagni, il mayor, i badge mancanti, il Super Potenziamento, il tuo saldo AB, i tuoi terreni, e come guadagnare più AB. Prova a chiedermelo con parole tue!",
+        assistantIncomeSummary: "In questo momento guadagni circa {daily} al giorno, {monthly} al mese, {yearly} all'anno (con boost incluso).",
+        tipBadgeMaxAssistant: "Hai già il bonus passaporto massimo (+{percent}%): il tuo numero di badge è già ottimale.",
+        assistantBadgeProgress: "Ti mancano {remaining} badge per salire dal bonus +{current}% al +{percent}%: ogni badge in più aumenta la tua rendita in modo permanente.",
+        assistantSRB: "Se riesci a tenere attivo il Super Potenziamento (x50) per un giorno intero, la tua rendita salirebbe indicativamente a circa {value} al giorno — vale solo durante l'evento (~2,5 giorni al mese).",
+        assistantABBalance: "Hai {balance} AB disponibili al momento (il gruzzolo che hai inserito nel pannello ✏️).",
+        assistantLandsBreakdown: "Possiedi {total} terreni in totale: {common} Common, {rare} Rare, {epic} Epic, {legendary} Legendary.",
+        assistantABSources: "Le fonti principali di AB extra sono: Arcade, i mini-giochi (Golf, Warship, Bowling, Racer, Fishing), la conversione dell'affitto, i sondaggi, e il Super Potenziamento durante gli eventi. Trovi tutti i dettagli nella card \"Come guadagnare più AB\".",
+        assistantFallback: "Non sono sicuro di aver capito. Prova a chiedermi ad esempio: \"cosa conviene comprare?\", \"quanto manca al mio obiettivo?\", \"quanto guadagno?\", o scrivi \"aiuto\" per la lista completa.",
+        assistantTitle: "Assistente",
+        assistantDisclaimer: "Riconosce il tipo di domanda e risponde con calcoli reali sui tuoi dati — non è un'AI generica.",
+        assistantPlaceholder: "Scrivi una domanda...",
+        suggestionBuy: "Cosa conviene comprare?",
+        suggestionGoal: "Quanto manca al mio obiettivo?",
+        suggestionIncome: "Quanto guadagno?",
+        send: "Invia",
         srbBoxTitle: "Con il Super Potenziamento attivo (x50)",
         srbBoxNote: "Stima supplementare, non inclusa nella rendita ufficiale sopra: attiva solo durante l'evento (~2,5 giorni/mese) e per la durata in cui riesci a mantenerlo attivo.",
 
@@ -153,6 +171,24 @@ const translations = {
         tipMayorStrategy: "Becoming mayor requires owning more lands than anyone else in that specific city: before buying lands everywhere, consider focusing on a city with few active players, where overtaking the current mayor costs less.",
         badgeBonusInfo: "Passport bonus: +{percent}% ({badges} badges)",
         perSecondIncome: "Income per second: {value}",
+
+        assistantGreeting: "Hi! Ask me anything about your situation — e.g. \"what should I buy?\", \"how far am I from my goal?\", \"how many badges do I need?\".",
+        assistantHelp: "I can help with: boost thresholds, what's worth buying right now, your goal, how much you earn, mayor, missing badges, the Super Rent Boost, your AB balance, your lands, and how to earn more AB. Try asking in your own words!",
+        assistantIncomeSummary: "Right now you're earning about {daily} per day, {monthly} per month, {yearly} per year (boost included).",
+        tipBadgeMaxAssistant: "You already have the maximum passport bonus (+{percent}%): your badge count is already optimal.",
+        assistantBadgeProgress: "You need {remaining} more badges to go from +{current}% to +{percent}%: every extra badge permanently boosts your income.",
+        assistantSRB: "If you can keep the Super Rent Boost (x50) active for a full day, your income would roughly rise to about {value} per day — only during the event (~2.5 days per month).",
+        assistantABBalance: "You currently have {balance} AB available (the savings you entered in the ✏️ panel).",
+        assistantLandsBreakdown: "You own {total} lands in total: {common} Common, {rare} Rare, {epic} Epic, {legendary} Legendary.",
+        assistantABSources: "The main AB sources are: Arcade, mini-games (Golf, Warship, Bowling, Racer, Fishing), rent conversion, surveys, and the Super Rent Boost during events. Check the \"How to earn more AB\" card for details.",
+        assistantFallback: "I'm not sure I understood. Try asking me something like: \"what should I buy?\", \"how far am I from my goal?\", \"how much do I earn?\", or type \"help\" for the full list.",
+        assistantTitle: "Assistant",
+        assistantDisclaimer: "Recognizes the type of question and answers with real calculations on your data — not a general-purpose AI.",
+        assistantPlaceholder: "Type a question...",
+        suggestionBuy: "What should I buy?",
+        suggestionGoal: "How far am I from my goal?",
+        suggestionIncome: "How much do I earn?",
+        send: "Send",
         srbBoxTitle: "With Super Rent Boost active (x50)",
         srbBoxNote: "Supplementary estimate, not included in the official income above: only active during the event (~2.5 days/month) and for as long as you can keep it active.",
 
@@ -266,6 +302,12 @@ function applyTranslations() {
     document.querySelectorAll("[data-i18n]").forEach(function (el) {
 
         el.textContent = t(el.getAttribute("data-i18n"));
+
+    });
+
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(function (el) {
+
+        el.placeholder = t(el.getAttribute("data-i18n-placeholder"));
 
     });
 
