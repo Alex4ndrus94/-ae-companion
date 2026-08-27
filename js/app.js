@@ -247,26 +247,8 @@ function renderDashboard() {
     );
 
     // ======================================
-    // Consigli
+    // Come guadagnare più AB
     // ======================================
-
-    const adviceList = document.getElementById("advice-list");
-
-    if (adviceList) {
-
-        adviceList.innerHTML = "";
-
-        generateAdvice().forEach(function (tip) {
-
-            const li = document.createElement("li");
-            li.innerHTML =
-                '<img src="assets/icons/' + tip.icon + '.svg" class="icon-inline tip-icon" alt="">' +
-                '<span>' + tip.text + '</span>';
-            adviceList.appendChild(li);
-
-        });
-
-    }
 
     const abTipsList = document.getElementById("ab-tips-list");
 

@@ -122,7 +122,7 @@ const translations = {
         withoutBoost: "senza boost",
         navHome: "Home",
         navStrategy: "Strategia",
-        navTips: "Consigli"
+        navTips: "Extra AB"
 
     },
 
@@ -242,7 +242,7 @@ const translations = {
         withoutBoost: "without boost",
         navHome: "Home",
         navStrategy: "Strategy",
-        navTips: "Tips"
+        navTips: "AB Extra"
 
     }
 
