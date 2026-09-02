@@ -124,7 +124,10 @@ const translations = {
         withoutBoost: "senza boost",
         navHome: "Home",
         navStrategy: "Strategia",
-        navTips: "Extra AB"
+        navTips: "Extra AB",
+        shareCardCta: "Traccia anche tu i tuoi progressi su Atlas Earth",
+        shareCardFooter: "Gratis · Nessuna registrazione",
+        shareCardShareText: "Le mie statistiche su Atlas Earth, tracciate con AE Companion!"
 
     },
 
@@ -246,7 +249,10 @@ const translations = {
         withoutBoost: "without boost",
         navHome: "Home",
         navStrategy: "Strategy",
-        navTips: "AB Extra"
+        navTips: "AB Extra",
+        shareCardCta: "Track your Atlas Earth progress too",
+        shareCardFooter: "Free · No sign-up",
+        shareCardShareText: "My Atlas Earth stats, tracked with AE Companion!"
 
     }
 
