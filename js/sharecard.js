@@ -3,10 +3,38 @@
 // Genera un'immagine (Canvas, lato client, nessun
 // server) con le statistiche del giocatore, pronta
 // per essere condivisa su Instagram/WhatsApp/altrove.
+// Usa gli stessi font e colori del sito (Orbitron per
+// titoli/etichette, Inter per nomi/numeri) per dare
+// identità visiva coerente alla card.
 // ======================================
 
 const SHARE_CARD_W = 1080;
 const SHARE_CARD_H = 1920;
+
+const FONT_TITLE = "Orbitron";
+const FONT_BODY = "Inter";
+
+async function ensureShareFontsLoaded() {
+
+    if (!document.fonts) return;
+
+    try {
+
+        await Promise.all([
+            document.fonts.load('700 40px "' + FONT_TITLE + '"'),
+            document.fonts.load('600 40px "' + FONT_TITLE + '"'),
+            document.fonts.load('700 40px "' + FONT_BODY + '"'),
+            document.fonts.load('600 40px "' + FONT_BODY + '"'),
+            document.fonts.load('500 40px "' + FONT_BODY + '"')
+        ]);
+
+        await document.fonts.ready;
+
+    } catch (e) {
+        // se il caricamento fallisce, il canvas userà il font di sistema di riserva
+    }
+
+}
 
 function drawRoundedRect(ctx, x, y, w, h, r) {
 
@@ -38,13 +66,28 @@ function drawHexagon(ctx, cx, cy, r) {
 
 }
 
-function generateShareCardCanvas() {
+// Piccolo esagono decorativo (solo contorno), stessa lingua
+// visiva delle icone del sito, usato come accento sopra le stat
+function drawAccentHex(ctx, cx, cy, r, color) {
+
+    drawHexagon(ctx, cx, cy, r);
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = color;
+    ctx.stroke();
+
+}
+
+async function generateShareCardCanvas() {
+
+    await ensureShareFontsLoaded();
 
     const canvas = document.createElement("canvas");
     canvas.width = SHARE_CARD_W;
     canvas.height = SHARE_CARD_H;
 
     const ctx = canvas.getContext("2d");
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
 
     // ==============================
     // Sfondo
@@ -65,12 +108,19 @@ function generateShareCardCanvas() {
     ctx.fillStyle = glow2;
     ctx.fillRect(0, 0, SHARE_CARD_W, SHARE_CARD_H);
 
+    // Cornice esterna, come una grande "card" del sito
+    drawRoundedRect(ctx, 30, 30, SHARE_CARD_W - 60, SHARE_CARD_H - 60, 40);
+    ctx.strokeStyle = "#313846";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    const logoCx = SHARE_CARD_W / 2;
+
     // ==============================
     // Logo esagonale + "AE"
     // ==============================
 
-    const logoCx = SHARE_CARD_W / 2;
-    const logoCy = 210;
+    const logoCy = 220;
 
     const logoGrad = ctx.createLinearGradient(logoCx - 90, logoCy - 90, logoCx + 90, logoCy + 90);
     logoGrad.addColorStop(0, "#58E06D");
@@ -87,56 +137,54 @@ function generateShareCardCanvas() {
     ctx.stroke();
     ctx.restore();
 
-    ctx.font = "700 78px Arial";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
+    ctx.font = "700 76px " + FONT_BODY;
     ctx.fillStyle = logoGrad;
     ctx.fillText("AE", logoCx, logoCy + 6);
 
     // ==============================
-    // Titolo
+    // Titolo (Orbitron, come h1 nel sito)
     // ==============================
 
     const titleGrad = ctx.createLinearGradient(0, 0, SHARE_CARD_W, 0);
     titleGrad.addColorStop(0, "#58E06D");
     titleGrad.addColorStop(1, "#00D4FF");
 
-    ctx.font = "700 64px Arial";
+    ctx.font = "700 58px " + FONT_TITLE;
     ctx.fillStyle = titleGrad;
-    ctx.fillText("AE COMPANION", logoCx, 350);
+    ctx.fillText("AE COMPANION", logoCx, 365);
 
-    ctx.font = "600 30px Arial";
+    ctx.font = "600 26px " + FONT_TITLE;
     ctx.fillStyle = "#9AA4B2";
-    ctx.fillText("TRACK · PLAN · CONQUER", logoCx, 400);
+    ctx.fillText("TRACK · PLAN · CONQUER", logoCx, 415);
 
     // ==============================
-    // Nome giocatore
+    // Nome giocatore (Inter, come nella card player)
     // ==============================
 
-    ctx.font = "700 56px Arial";
+    ctx.font = "700 54px " + FONT_BODY;
     ctx.fillStyle = "#F5F7FA";
-    ctx.fillText(player.profile.name || "Player", logoCx, 500);
+    ctx.fillText(player.profile.name || "Player", logoCx, 510);
 
     // ==============================
-    // Box terreni totali (grande, centrale)
+    // Box terreni totali
     // ==============================
 
     const totalLands = getTotalLands();
 
-    drawRoundedRect(ctx, 140, 560, SHARE_CARD_W - 280, 280, 32);
+    drawRoundedRect(ctx, 140, 570, SHARE_CARD_W - 280, 270, 32);
     ctx.fillStyle = "#1A202A";
     ctx.fill();
     ctx.strokeStyle = "#313846";
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    ctx.font = "600 30px Arial";
+    ctx.font = "600 26px " + FONT_TITLE;
     ctx.fillStyle = "#9AA4B2";
-    ctx.fillText("TERRENI TOTALI", logoCx, 640);
+    ctx.fillText("TERRENI TOTALI", logoCx, 645);
 
-    ctx.font = "700 130px Arial";
+    ctx.font = "700 124px " + FONT_BODY;
     ctx.fillStyle = "#58E06D";
-    ctx.fillText(formatK(totalLands), logoCx, 760);
+    ctx.fillText(formatK(totalLands), logoCx, 765);
 
     // ==============================
     // Riga statistiche (boost, rendita, badge)
@@ -158,29 +206,32 @@ function generateShareCardCanvas() {
     stats.forEach(function (stat, i) {
 
         const x = 140 + i * (statW + 20);
+        const cx = x + statW / 2;
 
-        drawRoundedRect(ctx, x, statY, statW, 200, 24);
+        drawRoundedRect(ctx, x, statY, statW, 210, 24);
         ctx.fillStyle = "#1A202A";
         ctx.fill();
         ctx.strokeStyle = "#313846";
         ctx.lineWidth = 2;
         ctx.stroke();
 
-        ctx.font = "600 22px Arial";
-        ctx.fillStyle = "#9AA4B2";
-        ctx.fillText(stat.label, x + statW / 2, statY + 60);
+        drawAccentHex(ctx, cx, statY + 44, 20, stat.color);
 
-        ctx.font = "700 48px Arial";
+        ctx.font = "600 20px " + FONT_TITLE;
+        ctx.fillStyle = "#9AA4B2";
+        ctx.fillText(stat.label, cx, statY + 100);
+
+        ctx.font = "700 46px " + FONT_BODY;
         ctx.fillStyle = stat.color;
-        ctx.fillText(stat.value, x + statW / 2, statY + 130);
+        ctx.fillText(stat.value, cx, statY + 165);
 
     });
 
     // ==============================
-    // Rarità (riga colorata)
+    // Rarità (riga colorata, come le rarity-card nel sito)
     // ==============================
 
-    const rarityY = 1160;
+    const rarityY = 1170;
     const rarities = [
         { label: player.lands.common, color: "#9AA4B2" },
         { label: player.lands.rare, color: "#3A86FF" },
@@ -201,7 +252,7 @@ function generateShareCardCanvas() {
         ctx.strokeStyle = r.color;
         ctx.stroke();
 
-        ctx.font = "700 44px Arial";
+        ctx.font = "700 42px " + FONT_BODY;
         ctx.fillStyle = "#F5F7FA";
         ctx.fillText(formatK(r.label), x + rarityW / 2, rarityY + 78);
 
@@ -211,17 +262,17 @@ function generateShareCardCanvas() {
     // Footer / call to action
     // ==============================
 
-    ctx.font = "600 32px Arial";
+    ctx.font = "500 30px " + FONT_BODY;
     ctx.fillStyle = "#9AA4B2";
-    ctx.fillText(t("shareCardCta"), logoCx, 1720);
+    ctx.fillText(t("shareCardCta"), logoCx, 1730);
 
-    ctx.font = "700 40px Arial";
+    ctx.font = "700 38px " + FONT_TITLE;
     ctx.fillStyle = "#58E06D";
-    ctx.fillText("alex4ndrus94.github.io/-ae-companion", logoCx, 1775);
+    ctx.fillText("alex4ndrus94.github.io/-ae-companion", logoCx, 1785);
 
-    ctx.font = "500 26px Arial";
+    ctx.font = "500 24px " + FONT_BODY;
     ctx.fillStyle = "#9AA4B2";
-    ctx.fillText(t("shareCardFooter"), logoCx, 1840);
+    ctx.fillText(t("shareCardFooter"), logoCx, 1845);
 
     return canvas;
 
@@ -229,7 +280,7 @@ function generateShareCardCanvas() {
 
 async function shareStatsCard() {
 
-    const canvas = generateShareCardCanvas();
+    const canvas = await generateShareCardCanvas();
 
     canvas.toBlob(async function (blob) {
 
