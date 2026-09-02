@@ -494,16 +494,21 @@
     cursor:pointer;
 }
 
-.share-btn{
-    position:absolute;
-    top:18px;
-    right:62px;
+.share-btn-inline{
     background:var(--card-2);
     border:1px solid var(--border);
     border-radius:10px;
-    width:36px;
-    height:36px;
+    width:30px;
+    height:30px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
     cursor:pointer;
+    flex-shrink:0;
+}
+
+.share-btn-inline .icon-inline{
+    margin:0;
 }
 
 .edit-btn:active{
