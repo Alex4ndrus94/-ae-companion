@@ -127,7 +127,10 @@ const translations = {
         navTips: "Extra AB",
         shareCardCta: "Traccia anche tu i tuoi progressi su Atlas Earth",
         shareCardFooter: "Gratis · Nessuna registrazione",
-        shareCardShareText: "Le mie statistiche su Atlas Earth, tracciate con AE Companion!"
+        shareCardShareText: "Le mie statistiche su Atlas Earth, tracciate con AE Companion!",
+        shareCardFeatureAssistant: "Assistente strategico con calcoli reali",
+        shareCardFeatureStrategy: "Consigli personalizzati sui tuoi dati",
+        shareCardFeatureCommunity: "Tips AB dalla community, sempre aggiornati"
 
     },
 
@@ -252,7 +255,10 @@ const translations = {
         navTips: "AB Extra",
         shareCardCta: "Track your Atlas Earth progress too",
         shareCardFooter: "Free · No sign-up",
-        shareCardShareText: "My Atlas Earth stats, tracked with AE Companion!"
+        shareCardShareText: "My Atlas Earth stats, tracked with AE Companion!",
+        shareCardFeatureAssistant: "Strategic assistant with real calculations",
+        shareCardFeatureStrategy: "Personalized tips based on your data",
+        shareCardFeatureCommunity: "Community AB tips, always up to date"
 
     }
 

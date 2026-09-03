@@ -111,10 +111,12 @@ function drawIconHex(ctx, cx, cy, r, iconImg) {
 
 async function generateShareCardCanvas() {
 
-    const [boostImg, incomeImg, badgeImg] = await Promise.all([
+    const [boostImg, incomeImg, badgeImg, chatImg, ideaImg] = await Promise.all([
         loadImage("assets/icons/boost.svg"),
         loadImage("assets/icons/income.svg"),
         loadImage("assets/icons/badge.svg"),
+        loadImage("assets/icons/chat.svg"),
+        loadImage("assets/icons/idea.svg"),
         ensureShareFontsLoaded()
     ]);
 
@@ -291,6 +293,34 @@ async function generateShareCardCanvas() {
         ctx.font = "700 42px " + FONT_BODY + ", sans-serif";
         ctx.fillStyle = "#F5F7FA";
         ctx.fillText(formatK(r.label), x + rarityW / 2, rarityY + 78);
+
+    });
+
+    // ==============================
+    // Cosa ci distingue (le funzioni che
+    // spingono a provare la web app)
+    // ==============================
+
+    const features = [
+        { icon: chatImg, label: t("shareCardFeatureAssistant") },
+        { icon: ideaImg, label: t("shareCardFeatureStrategy") },
+        { icon: boostImg, label: t("shareCardFeatureCommunity") }
+    ];
+
+    const featuresY = 1350;
+    const featureRowH = 100;
+
+    features.forEach(function (feature, i) {
+
+        const y = featuresY + i * featureRowH;
+
+        drawIconHex(ctx, logoCx - 260, y, 30, feature.icon);
+
+        ctx.textAlign = "left";
+        ctx.font = "600 34px " + FONT_BODY + ", sans-serif";
+        ctx.fillStyle = "#F5F7FA";
+        ctx.fillText(feature.label, logoCx - 205, y + 2);
+        ctx.textAlign = "center";
 
     });
 
