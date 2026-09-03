@@ -3,9 +3,8 @@
 // Genera un'immagine (Canvas, lato client, nessun
 // server) con le statistiche del giocatore, pronta
 // per essere condivisa su Instagram/WhatsApp/altrove.
-// Usa gli stessi font e colori del sito (Orbitron per
-// titoli/etichette, Inter per nomi/numeri) per dare
-// identità visiva coerente alla card.
+// Usa gli stessi font, colori e icone del sito, per
+// dare identità visiva coerente alla card.
 // ======================================
 
 const SHARE_CARD_W = 1080;
@@ -14,6 +13,10 @@ const SHARE_CARD_H = 1920;
 const FONT_TITLE = "Orbitron";
 const FONT_BODY = "Inter";
 
+// Pesi realmente caricati dal sito (vedi il <link> Google Fonts
+// in index.html): Orbitron 600/700, Inter 400/600/700.
+// Usare qui un peso diverso (es. 500) farebbe cadere sul font
+// di sistema di riserva, motivo del problema segnalato.
 async function ensureShareFontsLoaded() {
 
     if (!document.fonts) return;
@@ -25,14 +28,38 @@ async function ensureShareFontsLoaded() {
             document.fonts.load('600 40px "' + FONT_TITLE + '"'),
             document.fonts.load('700 40px "' + FONT_BODY + '"'),
             document.fonts.load('600 40px "' + FONT_BODY + '"'),
-            document.fonts.load('500 40px "' + FONT_BODY + '"')
+            document.fonts.load('400 40px "' + FONT_BODY + '"')
         ]);
 
         await document.fonts.ready;
 
+        // Alcuni browser (Safari incluso) risolvono la promise di
+        // document.fonts.ready leggermente PRIMA che il font sia
+        // davvero pronto per essere usato dentro un canvas: due
+        // frame di margine bastano a evitare il fallback silenzioso
+        // al font di sistema.
+        await new Promise(function (resolve) {
+            requestAnimationFrame(function () {
+                requestAnimationFrame(resolve);
+            });
+        });
+
     } catch (e) {
         // se il caricamento fallisce, il canvas userà il font di sistema di riserva
     }
+
+}
+
+function loadImage(src) {
+
+    return new Promise(function (resolve, reject) {
+
+        const img = new Image();
+        img.onload = function () { resolve(img); };
+        img.onerror = reject;
+        img.src = src;
+
+    });
 
 }
 
@@ -66,20 +93,30 @@ function drawHexagon(ctx, cx, cy, r) {
 
 }
 
-// Piccolo esagono decorativo (solo contorno), stessa lingua
-// visiva delle icone del sito, usato come accento sopra le stat
-function drawAccentHex(ctx, cx, cy, r, color) {
+// Esagono con icona reale dentro, stesso linguaggio visivo
+// di .hex-icon-wrap nel sito (sfondo scuro, bordo verde, icona centrata)
+function drawIconHex(ctx, cx, cy, r, iconImg) {
 
     drawHexagon(ctx, cx, cy, r);
+    ctx.fillStyle = "#262D38";
+    ctx.fill();
     ctx.lineWidth = 3;
-    ctx.strokeStyle = color;
+    ctx.strokeStyle = "#58E06D";
     ctx.stroke();
+
+    const iconSize = r * 1.15;
+    ctx.drawImage(iconImg, cx - iconSize / 2, cy - iconSize / 2, iconSize, iconSize);
 
 }
 
 async function generateShareCardCanvas() {
 
-    await ensureShareFontsLoaded();
+    const [boostImg, incomeImg, badgeImg] = await Promise.all([
+        loadImage("assets/icons/boost.svg"),
+        loadImage("assets/icons/income.svg"),
+        loadImage("assets/icons/badge.svg"),
+        ensureShareFontsLoaded()
+    ]);
 
     const canvas = document.createElement("canvas");
     canvas.width = SHARE_CARD_W;
@@ -137,7 +174,7 @@ async function generateShareCardCanvas() {
     ctx.stroke();
     ctx.restore();
 
-    ctx.font = "700 76px " + FONT_BODY;
+    ctx.font = "700 76px " + FONT_BODY + ", sans-serif";
     ctx.fillStyle = logoGrad;
     ctx.fillText("AE", logoCx, logoCy + 6);
 
@@ -149,11 +186,11 @@ async function generateShareCardCanvas() {
     titleGrad.addColorStop(0, "#58E06D");
     titleGrad.addColorStop(1, "#00D4FF");
 
-    ctx.font = "700 58px " + FONT_TITLE;
+    ctx.font = "700 58px " + FONT_TITLE + ", sans-serif";
     ctx.fillStyle = titleGrad;
     ctx.fillText("AE COMPANION", logoCx, 365);
 
-    ctx.font = "600 26px " + FONT_TITLE;
+    ctx.font = "600 26px " + FONT_TITLE + ", sans-serif";
     ctx.fillStyle = "#9AA4B2";
     ctx.fillText("TRACK · PLAN · CONQUER", logoCx, 415);
 
@@ -161,7 +198,7 @@ async function generateShareCardCanvas() {
     // Nome giocatore (Inter, come nella card player)
     // ==============================
 
-    ctx.font = "700 54px " + FONT_BODY;
+    ctx.font = "700 54px " + FONT_BODY + ", sans-serif";
     ctx.fillStyle = "#F5F7FA";
     ctx.fillText(player.profile.name || "Player", logoCx, 510);
 
@@ -178,16 +215,18 @@ async function generateShareCardCanvas() {
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    ctx.font = "600 26px " + FONT_TITLE;
+    ctx.font = "600 26px " + FONT_TITLE + ", sans-serif";
     ctx.fillStyle = "#9AA4B2";
     ctx.fillText("TERRENI TOTALI", logoCx, 645);
 
-    ctx.font = "700 124px " + FONT_BODY;
+    ctx.font = "700 124px " + FONT_BODY + ", sans-serif";
     ctx.fillStyle = "#58E06D";
     ctx.fillText(formatK(totalLands), logoCx, 765);
 
     // ==============================
-    // Riga statistiche (boost, rendita, badge)
+    // Riga statistiche: icona esagonale reale + numero
+    // bianco, esattamente come .stats-grid nel sito
+    // (nessuna etichetta di testo separata: l'icona parla da sé)
     // ==============================
 
     const boostMultiplier = getBoostMultiplier();
@@ -196,11 +235,12 @@ async function generateShareCardCanvas() {
 
     const statY = 900;
     const statW = (SHARE_CARD_W - 280 - 40) / 3;
+    const statH = 200;
 
     const stats = [
-        { label: "BOOST", value: "x" + boostMultiplier, color: "#58E06D" },
-        { label: "RENDITA/GIORNO", value: dailyIncome, color: "#00D4FF" },
-        { label: "PASSAPORTO", value: "+" + badgePercent + "%", color: "#FFB322" }
+        { icon: boostImg, value: "x" + boostMultiplier },
+        { icon: incomeImg, value: dailyIncome },
+        { icon: badgeImg, value: "+" + badgePercent + "%" }
     ];
 
     stats.forEach(function (stat, i) {
@@ -208,22 +248,18 @@ async function generateShareCardCanvas() {
         const x = 140 + i * (statW + 20);
         const cx = x + statW / 2;
 
-        drawRoundedRect(ctx, x, statY, statW, 210, 24);
+        drawRoundedRect(ctx, x, statY, statW, statH, 24);
         ctx.fillStyle = "#1A202A";
         ctx.fill();
         ctx.strokeStyle = "#313846";
         ctx.lineWidth = 2;
         ctx.stroke();
 
-        drawAccentHex(ctx, cx, statY + 44, 20, stat.color);
+        drawIconHex(ctx, cx, statY + 58, 34, stat.icon);
 
-        ctx.font = "600 20px " + FONT_TITLE;
-        ctx.fillStyle = "#9AA4B2";
-        ctx.fillText(stat.label, cx, statY + 100);
-
-        ctx.font = "700 46px " + FONT_BODY;
-        ctx.fillStyle = stat.color;
-        ctx.fillText(stat.value, cx, statY + 165);
+        ctx.font = "700 40px " + FONT_BODY + ", sans-serif";
+        ctx.fillStyle = "#F5F7FA";
+        ctx.fillText(stat.value, cx, statY + 150);
 
     });
 
@@ -231,7 +267,7 @@ async function generateShareCardCanvas() {
     // Rarità (riga colorata, come le rarity-card nel sito)
     // ==============================
 
-    const rarityY = 1170;
+    const rarityY = 1150;
     const rarities = [
         { label: player.lands.common, color: "#9AA4B2" },
         { label: player.lands.rare, color: "#3A86FF" },
@@ -252,7 +288,7 @@ async function generateShareCardCanvas() {
         ctx.strokeStyle = r.color;
         ctx.stroke();
 
-        ctx.font = "700 42px " + FONT_BODY;
+        ctx.font = "700 42px " + FONT_BODY + ", sans-serif";
         ctx.fillStyle = "#F5F7FA";
         ctx.fillText(formatK(r.label), x + rarityW / 2, rarityY + 78);
 
@@ -262,15 +298,15 @@ async function generateShareCardCanvas() {
     // Footer / call to action
     // ==============================
 
-    ctx.font = "500 30px " + FONT_BODY;
+    ctx.font = "400 30px " + FONT_BODY + ", sans-serif";
     ctx.fillStyle = "#9AA4B2";
     ctx.fillText(t("shareCardCta"), logoCx, 1730);
 
-    ctx.font = "700 38px " + FONT_TITLE;
+    ctx.font = "700 38px " + FONT_TITLE + ", sans-serif";
     ctx.fillStyle = "#58E06D";
     ctx.fillText("alex4ndrus94.github.io/-ae-companion", logoCx, 1785);
 
-    ctx.font = "500 24px " + FONT_BODY;
+    ctx.font = "400 24px " + FONT_BODY + ", sans-serif";
     ctx.fillStyle = "#9AA4B2";
     ctx.fillText(t("shareCardFooter"), logoCx, 1845);
 
