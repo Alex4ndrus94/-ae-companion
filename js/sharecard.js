@@ -13,40 +13,81 @@ const SHARE_CARD_H = 1920;
 const FONT_TITLE = "Orbitron";
 const FONT_BODY = "Inter";
 
+// Il modo più affidabile per garantire che un font sia
+// davvero pronto per il Canvas (soprattutto su Safari, dove
+// document.fonts.ready a volte "mente") è farlo renderizzare
+// per un attimo da un elemento HTML vero e proprio, fuori
+// schermo: se il browser lo disegna in pagina, lo troverà
+// anche dentro il canvas subito dopo.
+function warmUpFonts() {
+
+    return new Promise(function (resolve) {
+
+        const warmer = document.createElement("div");
+
+        warmer.style.cssText =
+            "position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none;white-space:nowrap;";
+
+        warmer.innerHTML =
+            '<span style="font-family:\'' + FONT_TITLE + '\';font-weight:700;font-size:40px;">AE Companion</span>' +
+            '<span style="font-family:\'' + FONT_TITLE + '\';font-weight:600;font-size:40px;">AE Companion</span>' +
+            '<span style="font-family:\'' + FONT_BODY + '\';font-weight:700;font-size:40px;">AE Companion</span>' +
+            '<span style="font-family:\'' + FONT_BODY + '\';font-weight:600;font-size:40px;">AE Companion</span>' +
+            '<span style="font-family:\'' + FONT_BODY + '\';font-weight:400;font-size:40px;">AE Companion</span>';
+
+        document.body.appendChild(warmer);
+
+        // Forza il browser a calcolare davvero il layout (e quindi
+        // a caricare/rasterizzare il font) invece di rimandarlo
+        void warmer.offsetHeight;
+
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+                document.body.removeChild(warmer);
+                resolve();
+            });
+        });
+
+    });
+
+}
+
 // Pesi realmente caricati dal sito (vedi il <link> Google Fonts
 // in index.html): Orbitron 600/700, Inter 400/600/700.
 // Usare qui un peso diverso (es. 500) farebbe cadere sul font
 // di sistema di riserva, motivo del problema segnalato.
 async function ensureShareFontsLoaded() {
 
-    if (!document.fonts) return;
+    if (document.fonts) {
 
-    try {
+        try {
 
-        await Promise.all([
-            document.fonts.load('700 40px "' + FONT_TITLE + '"'),
-            document.fonts.load('600 40px "' + FONT_TITLE + '"'),
-            document.fonts.load('700 40px "' + FONT_BODY + '"'),
-            document.fonts.load('600 40px "' + FONT_BODY + '"'),
-            document.fonts.load('400 40px "' + FONT_BODY + '"')
-        ]);
+            await Promise.all([
+                document.fonts.load('700 40px "' + FONT_TITLE + '"'),
+                document.fonts.load('600 40px "' + FONT_TITLE + '"'),
+                document.fonts.load('700 40px "' + FONT_BODY + '"'),
+                document.fonts.load('600 40px "' + FONT_BODY + '"'),
+                document.fonts.load('400 40px "' + FONT_BODY + '"')
+            ]);
 
-        await document.fonts.ready;
+            await document.fonts.ready;
 
-        // Alcuni browser (Safari incluso) risolvono la promise di
-        // document.fonts.ready leggermente PRIMA che il font sia
-        // davvero pronto per essere usato dentro un canvas: due
-        // frame di margine bastano a evitare il fallback silenzioso
-        // al font di sistema.
-        await new Promise(function (resolve) {
-            requestAnimationFrame(function () {
-                requestAnimationFrame(resolve);
-            });
-        });
+        } catch (e) {
+            // proseguiamo comunque: warmUpFonts() sotto è la vera rete di sicurezza
+        }
 
-    } catch (e) {
-        // se il caricamento fallisce, il canvas userà il font di sistema di riserva
     }
+
+    // Rete di sicurezza definitiva, indipendente dal supporto
+    // dell'API document.fonts nel browser
+    await warmUpFonts();
+
+    // Un frame extra di margine dopo la rimozione dell'elemento
+    await new Promise(function (resolve) {
+        requestAnimationFrame(function () {
+            requestAnimationFrame(resolve);
+        });
+    });
 
 }
 
@@ -309,17 +350,49 @@ async function generateShareCardCanvas() {
 
     const featuresY = 1350;
     const featureRowH = 100;
+    const iconDiameter = 60; // 30px di raggio
+    const gap = 24;
 
-    features.forEach(function (feature, i) {
+    const maxFeatureWidth = SHARE_CARD_W - 200;
+
+    // Calcolo, per ogni riga, il font-size giusto (si rimpicciolisce
+    // se il testo tradotto risultasse troppo lungo) e la sua larghezza
+    const rows = features.map(function (feature) {
+
+        let fontSize = 34;
+        ctx.font = "600 " + fontSize + "px " + FONT_BODY + ", sans-serif";
+        let textWidth = ctx.measureText(feature.label).width;
+
+        while (iconDiameter + gap + textWidth > maxFeatureWidth && fontSize > 22) {
+            fontSize -= 2;
+            ctx.font = "600 " + fontSize + "px " + FONT_BODY + ", sans-serif";
+            textWidth = ctx.measureText(feature.label).width;
+        }
+
+        return { feature: feature, fontSize: fontSize, textWidth: textWidth };
+
+    });
+
+    // Il blocco (icona + testo) è un'unica colonna allineata:
+    // la larghezza di riferimento è quella della riga più lunga,
+    // così le 3 icone restano perfettamente in colonna e l'intero
+    // gruppo risulta centrato come blocco unico, non riga per riga
+    const widestTextWidth = Math.max.apply(null, rows.map(function (r) { return r.textWidth; }));
+    const blockWidth = iconDiameter + gap + widestTextWidth;
+    const startX = logoCx - blockWidth / 2;
+    const iconCx = startX + iconDiameter / 2;
+    const textX = startX + iconDiameter + gap;
+
+    rows.forEach(function (row, i) {
 
         const y = featuresY + i * featureRowH;
 
-        drawIconHex(ctx, logoCx - 260, y, 30, feature.icon);
+        drawIconHex(ctx, iconCx, y, 30, row.feature.icon);
 
         ctx.textAlign = "left";
-        ctx.font = "600 34px " + FONT_BODY + ", sans-serif";
+        ctx.font = "600 " + row.fontSize + "px " + FONT_BODY + ", sans-serif";
         ctx.fillStyle = "#F5F7FA";
-        ctx.fillText(feature.label, logoCx - 205, y + 2);
+        ctx.fillText(row.feature.label, textX, y + 2);
         ctx.textAlign = "center";
 
     });
