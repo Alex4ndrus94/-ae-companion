@@ -3,8 +3,16 @@
 // Genera un'immagine (Canvas, lato client, nessun
 // server) con le statistiche del giocatore, pronta
 // per essere condivisa su Instagram/WhatsApp/altrove.
-// Usa gli stessi font, colori e icone del sito, per
-// dare identità visiva coerente alla card.
+//
+// Approccio a due livelli:
+// - Forme, gradienti e icone -> disegnati col Canvas 2D
+//   (funzionano bene, nessun problema di font qui)
+// - TUTTO il testo -> renderizzato come SVG e poi
+//   sovrapposto come immagine. Canvas 2D ha un sistema
+//   di caricamento dei web font indipendente e meno
+//   affidabile; SVG <text> usa lo stesso motore CSS del
+//   resto della pagina, quindi eredita i font già
+//   caricati (Orbitron/Inter) in modo molto più solido.
 // ======================================
 
 const SHARE_CARD_W = 1080;
@@ -12,84 +20,6 @@ const SHARE_CARD_H = 1920;
 
 const FONT_TITLE = "Orbitron";
 const FONT_BODY = "Inter";
-
-// Il modo più affidabile per garantire che un font sia
-// davvero pronto per il Canvas (soprattutto su Safari, dove
-// document.fonts.ready a volte "mente") è farlo renderizzare
-// per un attimo da un elemento HTML vero e proprio, fuori
-// schermo: se il browser lo disegna in pagina, lo troverà
-// anche dentro il canvas subito dopo.
-function warmUpFonts() {
-
-    return new Promise(function (resolve) {
-
-        const warmer = document.createElement("div");
-
-        warmer.style.cssText =
-            "position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none;white-space:nowrap;";
-
-        warmer.innerHTML =
-            '<span style="font-family:\'' + FONT_TITLE + '\';font-weight:700;font-size:40px;">AE Companion</span>' +
-            '<span style="font-family:\'' + FONT_TITLE + '\';font-weight:600;font-size:40px;">AE Companion</span>' +
-            '<span style="font-family:\'' + FONT_BODY + '\';font-weight:700;font-size:40px;">AE Companion</span>' +
-            '<span style="font-family:\'' + FONT_BODY + '\';font-weight:600;font-size:40px;">AE Companion</span>' +
-            '<span style="font-family:\'' + FONT_BODY + '\';font-weight:400;font-size:40px;">AE Companion</span>';
-
-        document.body.appendChild(warmer);
-
-        // Forza il browser a calcolare davvero il layout (e quindi
-        // a caricare/rasterizzare il font) invece di rimandarlo
-        void warmer.offsetHeight;
-
-        requestAnimationFrame(function () {
-            requestAnimationFrame(function () {
-                document.body.removeChild(warmer);
-                resolve();
-            });
-        });
-
-    });
-
-}
-
-// Pesi realmente caricati dal sito (vedi il <link> Google Fonts
-// in index.html): Orbitron 600/700, Inter 400/600/700.
-// Usare qui un peso diverso (es. 500) farebbe cadere sul font
-// di sistema di riserva, motivo del problema segnalato.
-async function ensureShareFontsLoaded() {
-
-    if (document.fonts) {
-
-        try {
-
-            await Promise.all([
-                document.fonts.load('700 40px "' + FONT_TITLE + '"'),
-                document.fonts.load('600 40px "' + FONT_TITLE + '"'),
-                document.fonts.load('700 40px "' + FONT_BODY + '"'),
-                document.fonts.load('600 40px "' + FONT_BODY + '"'),
-                document.fonts.load('400 40px "' + FONT_BODY + '"')
-            ]);
-
-            await document.fonts.ready;
-
-        } catch (e) {
-            // proseguiamo comunque: warmUpFonts() sotto è la vera rete di sicurezza
-        }
-
-    }
-
-    // Rete di sicurezza definitiva, indipendente dal supporto
-    // dell'API document.fonts nel browser
-    await warmUpFonts();
-
-    // Un frame extra di margine dopo la rimozione dell'elemento
-    await new Promise(function (resolve) {
-        requestAnimationFrame(function () {
-            requestAnimationFrame(resolve);
-        });
-    });
-
-}
 
 function loadImage(src) {
 
@@ -100,6 +30,52 @@ function loadImage(src) {
         img.onerror = reject;
         img.src = src;
 
+    });
+
+}
+
+function escapeXml(str) {
+
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+}
+
+// Costruisce l'intero livello di testo come un unico SVG e lo
+// restituisce come immagine pronta da sovrapporre al canvas
+function buildTextLayerSvg(lines) {
+
+    const textElements = lines.map(function (l) {
+
+        const weight = l.weight || 600;
+        const anchor = l.anchor || "middle";
+        const family = l.family === "title" ? FONT_TITLE : FONT_BODY;
+        const letterSpacing = l.letterSpacing ? ' letter-spacing="' + l.letterSpacing + '"' : "";
+
+        return '<text x="' + l.x + '" y="' + l.y + '" ' +
+            'font-family="' + family + ', sans-serif" ' +
+            'font-weight="' + weight + '" ' +
+            'font-size="' + l.size + '" ' +
+            'fill="' + l.color + '" ' +
+            'text-anchor="' + anchor + '" ' +
+            'dominant-baseline="central"' + letterSpacing + '>' +
+            escapeXml(l.text) + '</text>';
+
+    }).join("");
+
+    const svg =
+        '<svg xmlns="http://www.w3.org/2000/svg" width="' + SHARE_CARD_W + '" height="' + SHARE_CARD_H + '">' +
+        '<style>text{font-synthesis:none;}</style>' +
+        textElements +
+        '</svg>';
+
+    const svgBlob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+    const url = URL.createObjectURL(svgBlob);
+
+    return loadImage(url).finally(function () {
+        URL.revokeObjectURL(url);
     });
 
 }
@@ -150,6 +126,16 @@ function drawIconHex(ctx, cx, cy, r, iconImg) {
 
 }
 
+// Stima larghezza testo senza dipendere dal font caricato nel
+// canvas (usata solo per decisioni di layout, non per il disegno
+// vero e proprio: bastano metriche approssimative)
+function estimateTextWidth(text, fontSizePx, weight) {
+
+    const avgCharWidth = fontSizePx * (weight >= 700 ? 0.62 : 0.56);
+    return text.length * avgCharWidth;
+
+}
+
 async function generateShareCardCanvas() {
 
     const [boostImg, incomeImg, badgeImg, chatImg, ideaImg] = await Promise.all([
@@ -157,8 +143,7 @@ async function generateShareCardCanvas() {
         loadImage("assets/icons/income.svg"),
         loadImage("assets/icons/badge.svg"),
         loadImage("assets/icons/chat.svg"),
-        loadImage("assets/icons/idea.svg"),
-        ensureShareFontsLoaded()
+        loadImage("assets/icons/idea.svg")
     ]);
 
     const canvas = document.createElement("canvas");
@@ -166,8 +151,8 @@ async function generateShareCardCanvas() {
     canvas.height = SHARE_CARD_H;
 
     const ctx = canvas.getContext("2d");
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
+
+    const textLines = [];
 
     // ==============================
     // Sfondo
@@ -197,7 +182,7 @@ async function generateShareCardCanvas() {
     const logoCx = SHARE_CARD_W / 2;
 
     // ==============================
-    // Logo esagonale + "AE"
+    // Logo esagonale
     // ==============================
 
     const logoCy = 220;
@@ -217,33 +202,15 @@ async function generateShareCardCanvas() {
     ctx.stroke();
     ctx.restore();
 
-    ctx.font = "700 76px " + FONT_BODY + ", sans-serif";
-    ctx.fillStyle = logoGrad;
-    ctx.fillText("AE", logoCx, logoCy + 6);
+    textLines.push({ x: logoCx, y: logoCy + 6, text: "AE", family: "body", weight: 700, size: 76, color: "#58E06D" });
 
     // ==============================
-    // Titolo (Orbitron, come h1 nel sito)
+    // Titolo + nome giocatore
     // ==============================
 
-    const titleGrad = ctx.createLinearGradient(0, 0, SHARE_CARD_W, 0);
-    titleGrad.addColorStop(0, "#58E06D");
-    titleGrad.addColorStop(1, "#00D4FF");
-
-    ctx.font = "700 58px " + FONT_TITLE + ", sans-serif";
-    ctx.fillStyle = titleGrad;
-    ctx.fillText("AE COMPANION", logoCx, 365);
-
-    ctx.font = "600 26px " + FONT_TITLE + ", sans-serif";
-    ctx.fillStyle = "#9AA4B2";
-    ctx.fillText("TRACK · PLAN · CONQUER", logoCx, 415);
-
-    // ==============================
-    // Nome giocatore (Inter, come nella card player)
-    // ==============================
-
-    ctx.font = "700 54px " + FONT_BODY + ", sans-serif";
-    ctx.fillStyle = "#F5F7FA";
-    ctx.fillText(player.profile.name || "Player", logoCx, 510);
+    textLines.push({ x: logoCx, y: 365, text: "AE COMPANION", family: "title", weight: 700, size: 58, color: "#58E06D", letterSpacing: 2 });
+    textLines.push({ x: logoCx, y: 415, text: "TRACK · PLAN · CONQUER", family: "title", weight: 600, size: 26, color: "#9AA4B2", letterSpacing: 3 });
+    textLines.push({ x: logoCx, y: 510, text: player.profile.name || "Player", family: "body", weight: 700, size: 54, color: "#F5F7FA" });
 
     // ==============================
     // Box terreni totali
@@ -258,18 +225,11 @@ async function generateShareCardCanvas() {
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    ctx.font = "600 26px " + FONT_TITLE + ", sans-serif";
-    ctx.fillStyle = "#9AA4B2";
-    ctx.fillText("TERRENI TOTALI", logoCx, 645);
-
-    ctx.font = "700 124px " + FONT_BODY + ", sans-serif";
-    ctx.fillStyle = "#58E06D";
-    ctx.fillText(formatK(totalLands), logoCx, 765);
+    textLines.push({ x: logoCx, y: 645, text: "TERRENI TOTALI", family: "title", weight: 600, size: 26, color: "#9AA4B2", letterSpacing: 2 });
+    textLines.push({ x: logoCx, y: 765, text: formatK(totalLands), family: "body", weight: 700, size: 124, color: "#58E06D" });
 
     // ==============================
     // Riga statistiche: icona esagonale reale + numero
-    // bianco, esattamente come .stats-grid nel sito
-    // (nessuna etichetta di testo separata: l'icona parla da sé)
     // ==============================
 
     const boostMultiplier = getBoostMultiplier();
@@ -300,22 +260,23 @@ async function generateShareCardCanvas() {
 
         drawIconHex(ctx, cx, statY + 58, 34, stat.icon);
 
-        ctx.font = "700 40px " + FONT_BODY + ", sans-serif";
-        ctx.fillStyle = "#F5F7FA";
-        ctx.fillText(stat.value, cx, statY + 150);
+        textLines.push({ x: cx, y: statY + 150, text: stat.value, family: "body", weight: 700, size: 40, color: "#F5F7FA" });
 
     });
 
     // ==============================
-    // Rarità (riga colorata, come le rarity-card nel sito)
+    // Rarità: nome + numero, come richiesto, per
+    // introdurre anche chi non conosce il gioco
     // ==============================
 
     const rarityY = 1150;
+    const rarityH = 160;
+
     const rarities = [
-        { label: player.lands.common, color: "#9AA4B2" },
-        { label: player.lands.rare, color: "#3A86FF" },
-        { label: player.lands.epic, color: "#9B5CFF" },
-        { label: player.lands.legendary, color: "#FFB322" }
+        { name: "COMMON", value: player.lands.common, color: "#9AA4B2" },
+        { name: "RARE", value: player.lands.rare, color: "#3A86FF" },
+        { name: "EPIC", value: player.lands.epic, color: "#9B5CFF" },
+        { name: "LEGENDARY", value: player.lands.legendary, color: "#FFB322" }
     ];
 
     const rarityW = (SHARE_CARD_W - 280 - 60) / 4;
@@ -323,23 +284,22 @@ async function generateShareCardCanvas() {
     rarities.forEach(function (r, i) {
 
         const x = 140 + i * (rarityW + 20);
+        const cx = x + rarityW / 2;
 
-        drawRoundedRect(ctx, x, rarityY, rarityW, 130, 20);
+        drawRoundedRect(ctx, x, rarityY, rarityW, rarityH, 20);
         ctx.fillStyle = "#1A202A";
         ctx.fill();
         ctx.lineWidth = 3;
         ctx.strokeStyle = r.color;
         ctx.stroke();
 
-        ctx.font = "700 42px " + FONT_BODY + ", sans-serif";
-        ctx.fillStyle = "#F5F7FA";
-        ctx.fillText(formatK(r.label), x + rarityW / 2, rarityY + 78);
+        textLines.push({ x: cx, y: rarityY + 44, text: r.name, family: "title", weight: 600, size: 17, color: r.color, letterSpacing: 1 });
+        textLines.push({ x: cx, y: rarityY + 104, text: formatK(r.value), family: "body", weight: 700, size: 40, color: "#F5F7FA" });
 
     });
 
     // ==============================
-    // Cosa ci distingue (le funzioni che
-    // spingono a provare la web app)
+    // Cosa ci distingue
     // ==============================
 
     const features = [
@@ -348,35 +308,27 @@ async function generateShareCardCanvas() {
         { icon: boostImg, label: t("shareCardFeatureCommunity") }
     ];
 
-    const featuresY = 1350;
+    const featuresY = rarityY + rarityH + 200;
     const featureRowH = 100;
-    const iconDiameter = 60; // 30px di raggio
+    const iconDiameter = 60;
     const gap = 24;
 
     const maxFeatureWidth = SHARE_CARD_W - 200;
 
-    // Calcolo, per ogni riga, il font-size giusto (si rimpicciolisce
-    // se il testo tradotto risultasse troppo lungo) e la sua larghezza
     const rows = features.map(function (feature) {
 
         let fontSize = 34;
-        ctx.font = "600 " + fontSize + "px " + FONT_BODY + ", sans-serif";
-        let textWidth = ctx.measureText(feature.label).width;
+        let textWidth = estimateTextWidth(feature.label, fontSize, 600);
 
         while (iconDiameter + gap + textWidth > maxFeatureWidth && fontSize > 22) {
             fontSize -= 2;
-            ctx.font = "600 " + fontSize + "px " + FONT_BODY + ", sans-serif";
-            textWidth = ctx.measureText(feature.label).width;
+            textWidth = estimateTextWidth(feature.label, fontSize, 600);
         }
 
         return { feature: feature, fontSize: fontSize, textWidth: textWidth };
 
     });
 
-    // Il blocco (icona + testo) è un'unica colonna allineata:
-    // la larghezza di riferimento è quella della riga più lunga,
-    // così le 3 icone restano perfettamente in colonna e l'intero
-    // gruppo risulta centrato come blocco unico, non riga per riga
     const widestTextWidth = Math.max.apply(null, rows.map(function (r) { return r.textWidth; }));
     const blockWidth = iconDiameter + gap + widestTextWidth;
     const startX = logoCx - blockWidth / 2;
@@ -389,11 +341,7 @@ async function generateShareCardCanvas() {
 
         drawIconHex(ctx, iconCx, y, 30, row.feature.icon);
 
-        ctx.textAlign = "left";
-        ctx.font = "600 " + row.fontSize + "px " + FONT_BODY + ", sans-serif";
-        ctx.fillStyle = "#F5F7FA";
-        ctx.fillText(row.feature.label, textX, y + 2);
-        ctx.textAlign = "center";
+        textLines.push({ x: textX, y: y + 2, text: row.feature.label, family: "body", weight: 600, size: row.fontSize, color: "#F5F7FA", anchor: "start" });
 
     });
 
@@ -401,17 +349,18 @@ async function generateShareCardCanvas() {
     // Footer / call to action
     // ==============================
 
-    ctx.font = "400 30px " + FONT_BODY + ", sans-serif";
-    ctx.fillStyle = "#9AA4B2";
-    ctx.fillText(t("shareCardCta"), logoCx, 1730);
+    const footerY = featuresY + (features.length - 1) * featureRowH + 180;
 
-    ctx.font = "700 38px " + FONT_TITLE + ", sans-serif";
-    ctx.fillStyle = "#58E06D";
-    ctx.fillText("alex4ndrus94.github.io/-ae-companion", logoCx, 1785);
+    textLines.push({ x: logoCx, y: footerY, text: t("shareCardCta"), family: "body", weight: 400, size: 30, color: "#9AA4B2" });
+    textLines.push({ x: logoCx, y: footerY + 55, text: "alex4ndrus94.github.io/-ae-companion", family: "title", weight: 700, size: 38, color: "#58E06D" });
+    textLines.push({ x: logoCx, y: footerY + 105, text: t("shareCardFooter"), family: "body", weight: 400, size: 24, color: "#9AA4B2" });
 
-    ctx.font = "400 24px " + FONT_BODY + ", sans-serif";
-    ctx.fillStyle = "#9AA4B2";
-    ctx.fillText(t("shareCardFooter"), logoCx, 1845);
+    // ==============================
+    // Sovrappongo l'intero livello di testo (SVG -> immagine)
+    // ==============================
+
+    const textLayerImg = await buildTextLayerSvg(textLines);
+    ctx.drawImage(textLayerImg, 0, 0, SHARE_CARD_W, SHARE_CARD_H);
 
     return canvas;
 
