@@ -4,56 +4,58 @@
 // server) con le statistiche del giocatore, pronta
 // per essere condivisa su Instagram/WhatsApp/altrove.
 //
-// Un solo font (Inter, lo stesso del sito) usato per
-// tutta la card. Per garantire che si carichi sempre,
-// ovunque, il file del font viene scaricato e registrato
-// direttamente dai suoi dati binari tramite l'API
-// FontFace — non tramite il <link> della pagina, che il
-// caricamento nativo del Canvas 2D non riesce sempre a
-// vedere in tempo.
+// Stessi due font del sito: Orbitron per i titoli (il
+// nome giocatore compreso — sul sito è un <h2>, quindi
+// eredita Orbitron come tutti i titoli) e Inter per
+// numeri/etichette. Entrambi vengono caricati dai file
+// LOCALI in assets/fonts/ e registrati direttamente dai
+// loro dati binari tramite l'API FontFace — non da Google
+// Fonts: una richiesta di rete in più al momento della
+// condivisione è un punto di fallimento in più, i file
+// locali invece ci sono sempre, senza eccezioni.
 // ======================================
 
 const SHARE_CARD_W = 1080;
 const SHARE_CARD_H = 1920;
 
-const SHARE_FONT_FAMILY = "AECardFont";
-const SHARE_FONT = "'" + SHARE_FONT_FAMILY + "', -apple-system, sans-serif";
+const SHARE_TITLE_FAMILY = "AECardTitleFont";
+const SHARE_BODY_FAMILY = "AECardBodyFont";
+
+const SHARE_FONT_TITLE = "'" + SHARE_TITLE_FAMILY + "', -apple-system, sans-serif";
+const SHARE_FONT_BODY = "'" + SHARE_BODY_FAMILY + "', -apple-system, sans-serif";
 
 let fontsReadyPromise = null;
 
-// Scarica i file reali di Inter (regular + bold) da Google Fonts,
-// li registra come FontFace direttamente da dati binari (non da un
-// link esterno) e attende che siano DAVVERO pronti prima di
-// disegnare. A differenza di document.fonts.ready (che su alcuni
-// browser si risolve un istante troppo presto), il .load() di un
-// singolo FontFace è un segnale diretto e affidabile.
+// Carica i 4 file font locali (Orbitron 600/700, Inter 400/700)
+// e li registra come FontFace direttamente dai loro dati binari.
+// A differenza di document.fonts.ready (che su alcuni browser si
+// risolve un istante troppo presto), il .load() di un singolo
+// FontFace è un segnale diretto e affidabile.
 //
-// Se il download fallisse (rete assente/instabile), NON deve
+// Se il caricamento fallisse per qualche motivo, NON deve
 // bloccare la generazione della card: si torna al font di sistema
-// (già previsto come fallback in SHARE_FONT) invece di lasciare
-// l'utente con un pulsante "condividi" che non fa nulla.
+// (già previsto come fallback) invece di lasciare l'utente con
+// un pulsante "condividi" che non fa nulla.
 function ensureShareFontsLoaded() {
 
     if (fontsReadyPromise) return fontsReadyPromise;
 
-    const weights = [
-        { weight: "400", cssUrl: "https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap" },
-        { weight: "700", cssUrl: "https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap" }
+    const fonts = [
+        { family: SHARE_TITLE_FAMILY, weight: "600", url: "assets/fonts/Orbitron-SemiBold.woff2" },
+        { family: SHARE_TITLE_FAMILY, weight: "700", url: "assets/fonts/Orbitron-Bold.woff2" },
+        { family: SHARE_BODY_FAMILY, weight: "400", url: "assets/fonts/Inter-Regular.woff2" },
+        { family: SHARE_BODY_FAMILY, weight: "700", url: "assets/fonts/Inter-Bold.woff2" }
     ];
 
-    fontsReadyPromise = Promise.all(weights.map(async function (w) {
+    fontsReadyPromise = Promise.all(fonts.map(async function (f) {
 
-        const cssRes = await fetch(w.cssUrl);
-        const cssText = await cssRes.text();
+        const fontRes = await fetch(f.url);
 
-        const match = cssText.match(/url\((https:\/\/fonts\.gstatic\.com\/[^)]+\.woff2)\)/);
+        if (!fontRes.ok) throw new Error("File font non trovato: " + f.url);
 
-        if (!match) throw new Error("Font URL non trovato per il peso " + w.weight);
-
-        const fontRes = await fetch(match[1]);
         const fontBuffer = await fontRes.arrayBuffer();
 
-        const fontFace = new FontFace(SHARE_FONT_FAMILY, fontBuffer, { weight: w.weight });
+        const fontFace = new FontFace(f.family, fontBuffer, { weight: f.weight });
 
         await fontFace.load();
 
@@ -61,7 +63,7 @@ function ensureShareFontsLoaded() {
 
     })).catch(function (e) {
 
-        console.error("AE Companion: font Inter non scaricato, uso il fallback di sistema", e);
+        console.error("AE Companion: font locali non caricati, uso il fallback di sistema", e);
 
     });
 
@@ -195,7 +197,7 @@ async function generateShareCardCanvas() {
     ctx.stroke();
     ctx.restore();
 
-    ctx.font = "700 76px " + SHARE_FONT;
+    ctx.font = "700 76px " + SHARE_FONT_BODY;
     ctx.fillStyle = logoGrad;
     ctx.fillText("AE", logoCx, logoCy + 6);
 
@@ -207,11 +209,11 @@ async function generateShareCardCanvas() {
     titleGrad.addColorStop(0, "#58E06D");
     titleGrad.addColorStop(1, "#00D4FF");
 
-    ctx.font = "700 58px " + SHARE_FONT;
+    ctx.font = "700 58px " + SHARE_FONT_TITLE;
     ctx.fillStyle = titleGrad;
     ctx.fillText("AE COMPANION", logoCx, 365);
 
-    ctx.font = "700 26px " + SHARE_FONT;
+    ctx.font = "700 26px " + SHARE_FONT_TITLE;
     ctx.fillStyle = "#9AA4B2";
     ctx.fillText("TRACK · PLAN · CONQUER", logoCx, 415);
 
@@ -219,7 +221,7 @@ async function generateShareCardCanvas() {
     // Nome giocatore
     // ==============================
 
-    ctx.font = "700 54px " + SHARE_FONT;
+    ctx.font = "700 54px " + SHARE_FONT_TITLE;
     ctx.fillStyle = "#F5F7FA";
     ctx.fillText(player.profile.name || "Player", logoCx, 510);
 
@@ -236,11 +238,11 @@ async function generateShareCardCanvas() {
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    ctx.font = "700 26px " + SHARE_FONT;
+    ctx.font = "700 26px " + SHARE_FONT_TITLE;
     ctx.fillStyle = "#9AA4B2";
     ctx.fillText("TERRENI TOTALI", logoCx, 645);
 
-    ctx.font = "700 124px " + SHARE_FONT;
+    ctx.font = "700 124px " + SHARE_FONT_BODY;
     ctx.fillStyle = "#58E06D";
     ctx.fillText(formatK(totalLands), logoCx, 765);
 
@@ -276,7 +278,7 @@ async function generateShareCardCanvas() {
 
         drawIconHex(ctx, cx, statY + 58, 34, stat.icon);
 
-        ctx.font = "700 40px " + SHARE_FONT;
+        ctx.font = "700 40px " + SHARE_FONT_BODY;
         ctx.fillStyle = "#F5F7FA";
         ctx.fillText(stat.value, cx, statY + 150);
 
@@ -311,11 +313,11 @@ async function generateShareCardCanvas() {
         ctx.strokeStyle = r.color;
         ctx.stroke();
 
-        ctx.font = "700 17px " + SHARE_FONT;
+        ctx.font = "700 17px " + SHARE_FONT_TITLE;
         ctx.fillStyle = r.color;
         ctx.fillText(r.name, cx, rarityY + 44);
 
-        ctx.font = "700 40px " + SHARE_FONT;
+        ctx.font = "700 40px " + SHARE_FONT_BODY;
         ctx.fillStyle = "#F5F7FA";
         ctx.fillText(formatK(r.value), cx, rarityY + 104);
 
@@ -341,12 +343,12 @@ async function generateShareCardCanvas() {
     const rows = features.map(function (feature) {
 
         let fontSize = 34;
-        ctx.font = "700 " + fontSize + "px " + SHARE_FONT;
+        ctx.font = "700 " + fontSize + "px " + SHARE_FONT_BODY;
         let textWidth = ctx.measureText(feature.label).width;
 
         while (iconDiameter + gap + textWidth > maxFeatureWidth && fontSize > 22) {
             fontSize -= 2;
-            ctx.font = "700 " + fontSize + "px " + SHARE_FONT;
+            ctx.font = "700 " + fontSize + "px " + SHARE_FONT_BODY;
             textWidth = ctx.measureText(feature.label).width;
         }
 
@@ -367,7 +369,7 @@ async function generateShareCardCanvas() {
         drawIconHex(ctx, iconCx, y, 30, row.feature.icon);
 
         ctx.textAlign = "left";
-        ctx.font = "700 " + row.fontSize + "px " + SHARE_FONT;
+        ctx.font = "700 " + row.fontSize + "px " + SHARE_FONT_BODY;
         ctx.fillStyle = "#F5F7FA";
         ctx.fillText(row.feature.label, textX, y + 2);
         ctx.textAlign = "center";
@@ -380,15 +382,15 @@ async function generateShareCardCanvas() {
 
     const footerY = featuresY + (features.length - 1) * featureRowH + 180;
 
-    ctx.font = "400 30px " + SHARE_FONT;
+    ctx.font = "400 30px " + SHARE_FONT_BODY;
     ctx.fillStyle = "#9AA4B2";
     ctx.fillText(t("shareCardCta"), logoCx, footerY);
 
-    ctx.font = "700 38px " + SHARE_FONT;
+    ctx.font = "700 38px " + SHARE_FONT_TITLE;
     ctx.fillStyle = "#58E06D";
     ctx.fillText("alex4ndrus94.github.io/-ae-companion", logoCx, footerY + 55);
 
-    ctx.font = "400 24px " + SHARE_FONT;
+    ctx.font = "400 24px " + SHARE_FONT_BODY;
     ctx.fillStyle = "#9AA4B2";
     ctx.fillText(t("shareCardFooter"), logoCx, footerY + 105);
 
