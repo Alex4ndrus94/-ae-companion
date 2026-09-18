@@ -16,7 +16,7 @@
 // ======================================
 
 const SHARE_CARD_W = 1080;
-const SHARE_CARD_H = 1920;
+const SHARE_CARD_H = 2100;
 
 const SHARE_TITLE_FAMILY = "AECardTitleFont";
 const SHARE_BODY_FAMILY = "AECardBodyFont";
