@@ -4,10 +4,11 @@
 // server) con le statistiche del giocatore, pronta
 // per essere condivisa su Instagram/WhatsApp/altrove.
 //
-// Stessi due font del sito: Orbitron per i titoli (il
-// nome giocatore compreso — sul sito è un <h2>, quindi
-// eredita Orbitron come tutti i titoli) e Inter per
-// numeri/etichette. Entrambi vengono caricati dai file
+// È la versione condivisibile della Home: stessa struttura
+// (hero, funzionalità, player card con Pass, rarità 2x2, stat),
+// stessi token colore (le rarità sono lette da design-system.css),
+// stessi font — Orbitron per titoli, nome giocatore e rarità
+// (nome + numeri dei terreni), Inter per il resto. Entrambi vengono caricati dai file
 // LOCALI in assets/fonts/ e registrati direttamente dai
 // loro dati binari tramite l'API FontFace — non da Google
 // Fonts: una richiesta di rete in più al momento della
@@ -16,7 +17,6 @@
 // ======================================
 
 const SHARE_CARD_W = 1080;
-const SHARE_CARD_H = 2100;
 
 const SHARE_TITLE_FAMILY = "AECardTitleFont";
 const SHARE_BODY_FAMILY = "AECardBodyFont";
@@ -96,303 +96,532 @@ function drawRoundedRect(ctx, x, y, w, h, r) {
 
 }
 
-function drawHexagon(ctx, cx, cy, r) {
+// --------------------------------------
+// Utility di disegno
+// --------------------------------------
+
+// Legge un token da design-system.css: così la card di condivisione
+// e le card della dashboard usano SEMPRE la stessa palette rarità.
+function cssVar(name, fallback) {
+
+    const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+    return value || fallback;
+
+}
+
+// Esagono "flat-top" identico a .hex-icon-wrap del sito (clip-path 25%/75%)
+function hexPath(ctx, x, y, w, h) {
 
     ctx.beginPath();
-
-    for (let i = 0; i < 6; i++) {
-
-        const angle = (Math.PI / 3) * i - Math.PI / 6;
-        const px = cx + r * Math.cos(angle);
-        const py = cy + r * Math.sin(angle);
-
-        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
-
-    }
-
+    ctx.moveTo(x + w * 0.25, y);
+    ctx.lineTo(x + w * 0.75, y);
+    ctx.lineTo(x + w, y + h / 2);
+    ctx.lineTo(x + w * 0.75, y + h);
+    ctx.lineTo(x + w * 0.25, y + h);
+    ctx.lineTo(x, y + h / 2);
     ctx.closePath();
 
 }
 
-// Esagono con icona reale dentro, stesso linguaggio visivo
-// di .hex-icon-wrap nel sito (sfondo scuro, bordo verde, icona centrata)
-function drawIconHex(ctx, cx, cy, r, iconImg) {
+// Stessa costruzione di .hex-icon-wrap: esagono verde + esagono interno
+// scuro (inset = 2px su 32px di larghezza) + icona al 55%
+function drawHexIcon(ctx, cx, cy, w, iconImg, glow) {
 
-    drawHexagon(ctx, cx, cy, r);
+    const h = w * 28 / 32;
+    const inset = w * 2 / 32;
+    const x = cx - w / 2;
+    const y = cy - h / 2;
+
+    ctx.save();
+
+    if (glow) {
+        ctx.shadowColor = "rgba(88,224,109,.35)";
+        ctx.shadowBlur = 26;
+    }
+
+    hexPath(ctx, x, y, w, h);
+    ctx.fillStyle = "#58E06D";
+    ctx.fill();
+
+    ctx.restore();
+
+    hexPath(ctx, x + inset, y + inset, w - inset * 2, h - inset * 2);
     ctx.fillStyle = "#262D38";
     ctx.fill();
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = "#58E06D";
-    ctx.stroke();
 
-    const iconSize = r * 1.15;
+    const iconSize = h * 0.55;
     ctx.drawImage(iconImg, cx - iconSize / 2, cy - iconSize / 2, iconSize, iconSize);
+
+}
+
+// Rettangolo arrotondato con bordo interno (il bordo non sporge dal rettangolo)
+function drawBoxedRect(ctx, x, y, w, h, r, fill, stroke, lineWidth) {
+
+    drawRoundedRect(ctx, x, y, w, h, r);
+    ctx.fillStyle = fill;
+    ctx.fill();
+
+    if (stroke) {
+
+        const half = lineWidth / 2;
+
+        drawRoundedRect(ctx, x + half, y + half, w - lineWidth, h - lineWidth, Math.max(0, r - half));
+        ctx.lineWidth = lineWidth;
+        ctx.strokeStyle = stroke;
+        ctx.stroke();
+
+    }
+
+}
+
+function wrapLines(ctx, text, maxWidth) {
+
+    const words = String(text).split(" ");
+    const lines = [];
+    let line = "";
+
+    words.forEach(function (word) {
+
+        const test = line ? line + " " + word : word;
+
+        if (ctx.measureText(test).width > maxWidth && line) {
+            lines.push(line);
+            line = word;
+        } else {
+            line = test;
+        }
+
+    });
+
+    if (line) lines.push(line);
+
+    return lines;
+
+}
+
+// Riduce il corpo del testo finché non sta nella larghezza data
+function fitFont(ctx, text, weight, family, size, maxWidth, minSize) {
+
+    let s = size;
+
+    ctx.font = weight + " " + s + "px " + family;
+
+    while (ctx.measureText(text).width > maxWidth && s > minSize) {
+        s -= 2;
+        ctx.font = weight + " " + s + "px " + family;
+    }
+
+    return s;
+
+}
+
+// Stesso pattern esagonale di .hex-bg del sito (tessera 60x104, scala 2)
+function drawHexPattern(ctx, w, h) {
+
+    const k = 2;
+
+    ctx.save();
+    ctx.strokeStyle = "rgba(88,224,109,0.07)";
+    ctx.lineWidth = 2;
+
+    for (let ty = -35 * k; ty < h; ty += 104 * k) {
+
+        for (let tx = 0; tx < w; tx += 60 * k) {
+
+            [[0, 0], [0, 35]].forEach(function (off) {
+
+                const oy = ty + off[1] * k;
+
+                ctx.beginPath();
+                ctx.moveTo(tx + 30 * k, oy);
+                ctx.lineTo(tx + 60 * k, oy + 17 * k);
+                ctx.lineTo(tx + 60 * k, oy + 52 * k);
+                ctx.lineTo(tx + 30 * k, oy + 69 * k);
+                ctx.lineTo(tx, oy + 52 * k);
+                ctx.lineTo(tx, oy + 17 * k);
+                ctx.closePath();
+                ctx.stroke();
+
+            });
+
+        }
+
+    }
+
+    ctx.restore();
+
+}
+
+// Rarità: nome + colori presi dai token CSS (stessa identità della dashboard)
+function getShareRarities() {
+
+    return [
+        { key: "common",    name: "COMMON",    value: player.lands.common },
+        { key: "rare",      name: "RARE",      value: player.lands.rare },
+        { key: "epic",      name: "EPIC",      value: player.lands.epic },
+        { key: "legendary", name: "LEGENDARY", value: player.lands.legendary }
+    ].map(function (r) {
+
+        r.color = cssVar("--rarity-" + r.key, "#9AA4B2");
+        r.fill = cssVar("--rarity-" + r.key + "-fill", "#262D38");
+        r.glow = cssVar("--rarity-" + r.key + "-glow", "transparent");
+        r.borderWidth = parseFloat(cssVar("--rarity-border-w", "3")) || 3;
+
+        return r;
+
+    });
 
 }
 
 async function generateShareCardCanvas() {
 
-    const [boostImg, incomeImg, badgeImg, chatImg, ideaImg] = await Promise.all([
+    const [boostImg, incomeImg, badgeImg, chatImg, ideaImg, checkImg, landsImg, logoImg, missionImg, explorerImg] = await Promise.all([
         loadImage("assets/icons/boost.svg"),
         loadImage("assets/icons/income.svg"),
         loadImage("assets/icons/badge.svg"),
         loadImage("assets/icons/chat.svg"),
         loadImage("assets/icons/idea.svg"),
+        loadImage("assets/icons/check.svg"),
+        loadImage("assets/icons/lands.svg"),
+        loadImage("assets/logo.svg"),
+        loadImage("assets/icons/mission-badge.svg"),
+        loadImage("assets/icons/explorer-badge.svg"),
         ensureShareFontsLoaded()
     ]);
 
+    // Scala: la Home è larga ~390px di contenuto, la card 976px → 2.5x
+    const W = SHARE_CARD_W;
+    const M = 52;
+    const CW = W - M * 2;
+    const cx = W / 2;
+    const PAD = 48;
+
+    const scratch = document.createElement("canvas").getContext("2d");
+
+    // ---- Nota "tabelle ufficiali per Paese": misuro prima, per calcolare l'altezza
+    const noteHex = 64;
+    const noteTextX = M + 36 + noteHex + 26;
+    const noteTextW = W - M - 36 - noteTextX;
+
+    scratch.font = "700 30px " + SHARE_FONT_BODY;
+    const noteTitleLines = wrapLines(scratch, t("countryNoteTitle"), noteTextW);
+
+    scratch.font = "400 25px " + SHARE_FONT_BODY;
+    const noteSubLines = wrapLines(scratch, t("countryNoteText"), noteTextW);
+
+    const noteH = 34 * 2 + noteTitleLines.length * 40 + noteSubLines.length * 34 + 8;
+
+    // ---- Layout verticale
+    const logoSize = 170;
+    const logoTop = 70;
+    const titleY = logoTop + logoSize + 58;
+    const tagY = titleY + 54;
+
+    const featTop = tagY + 58;
+    const featH = 250;
+
+    const cardTop = featTop + featH + 40;
+    const nameCy = cardTop + PAD + 38;
+    const totalCy = nameCy + 100;
+    const hr1Y = totalCy + 56;
+    const rarityTop = hr1Y + 30;
+    const rarityH = 150;
+    const rarityGap = 24;
+    const rarityBottom = rarityTop + rarityH * 2 + rarityGap;
+    const hr2Y = rarityBottom + 30;
+    const statTop = hr2Y + 30;
+    const statH = 190;
+    const cardBottom = statTop + statH + PAD;
+
+    const noteTop = cardBottom + 36;
+    const ctaY = noteTop + noteH + 76;
+
+    const H = ctaY + 105 + 70;
+
     const canvas = document.createElement("canvas");
-    canvas.width = SHARE_CARD_W;
-    canvas.height = SHARE_CARD_H;
+    canvas.width = W;
+    canvas.height = H;
 
     const ctx = canvas.getContext("2d");
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 
     // ==============================
-    // Sfondo
+    // Sfondo (come il body del sito: colore + pattern esagonale + due aloni)
     // ==============================
 
     ctx.fillStyle = "#10141B";
-    ctx.fillRect(0, 0, SHARE_CARD_W, SHARE_CARD_H);
+    ctx.fillRect(0, 0, W, H);
 
-    const glow1 = ctx.createRadialGradient(180, 200, 0, 180, 200, 700);
+    drawHexPattern(ctx, W, H);
+
+    const glow1 = ctx.createRadialGradient(W * 0.15, H * 0.06, 0, W * 0.15, H * 0.06, 760);
     glow1.addColorStop(0, "rgba(69,194,86,.16)");
     glow1.addColorStop(1, "rgba(69,194,86,0)");
     ctx.fillStyle = glow1;
-    ctx.fillRect(0, 0, SHARE_CARD_W, SHARE_CARD_H);
+    ctx.fillRect(0, 0, W, H);
 
-    const glow2 = ctx.createRadialGradient(920, 1700, 0, 920, 1700, 700);
+    const glow2 = ctx.createRadialGradient(W * 0.85, H * 0.3, 0, W * 0.85, H * 0.3, 700);
     glow2.addColorStop(0, "rgba(0,212,255,.10)");
     glow2.addColorStop(1, "rgba(0,212,255,0)");
     ctx.fillStyle = glow2;
-    ctx.fillRect(0, 0, SHARE_CARD_W, SHARE_CARD_H);
+    ctx.fillRect(0, 0, W, H);
 
-    // Cornice esterna, come una grande "card" del sito
-    drawRoundedRect(ctx, 30, 30, SHARE_CARD_W - 60, SHARE_CARD_H - 60, 40);
+    drawRoundedRect(ctx, 22, 22, W - 44, H - 44, 40);
     ctx.strokeStyle = "#313846";
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    const logoCx = SHARE_CARD_W / 2;
-
     // ==============================
-    // Logo esagonale + "AE"
+    // Hero: logo reale + titolo + tagline (come l'header della Home)
     // ==============================
-
-    const logoCy = 220;
-
-    const logoGrad = ctx.createLinearGradient(logoCx - 90, logoCy - 90, logoCx + 90, logoCy + 90);
-    logoGrad.addColorStop(0, "#58E06D");
-    logoGrad.addColorStop(1, "#2FA84A");
 
     ctx.save();
-    ctx.shadowColor = "rgba(88,224,109,.55)";
-    ctx.shadowBlur = 40;
-    drawHexagon(ctx, logoCx, logoCy, 90);
-    ctx.fillStyle = "#10141B";
-    ctx.fill();
-    ctx.lineWidth = 6;
-    ctx.strokeStyle = logoGrad;
-    ctx.stroke();
+    ctx.shadowColor = "rgba(88,224,109,.35)";
+    ctx.shadowBlur = 45;
+    ctx.drawImage(logoImg, cx - logoSize / 2, logoTop, logoSize, logoSize);
     ctx.restore();
 
-    ctx.font = "700 76px " + SHARE_FONT_BODY;
-    ctx.fillStyle = logoGrad;
-    ctx.fillText("AE", logoCx, logoCy + 6);
-
-    // ==============================
-    // Titolo
-    // ==============================
-
-    const titleGrad = ctx.createLinearGradient(0, 0, SHARE_CARD_W, 0);
+    const titleGrad = ctx.createLinearGradient(cx - 300, 0, cx + 300, 0);
     titleGrad.addColorStop(0, "#58E06D");
     titleGrad.addColorStop(1, "#00D4FF");
 
-    ctx.font = "700 58px " + SHARE_FONT_TITLE;
+    ctx.font = "700 72px " + SHARE_FONT_TITLE;
     ctx.fillStyle = titleGrad;
-    ctx.fillText("AE COMPANION", logoCx, 365);
+    ctx.fillText(t("appName").toUpperCase(), cx, titleY);
 
     ctx.font = "700 26px " + SHARE_FONT_TITLE;
     ctx.fillStyle = "#9AA4B2";
-    ctx.fillText("TRACK · PLAN · CONQUER", logoCx, 415);
+    if ("letterSpacing" in ctx) ctx.letterSpacing = "6px";
+    ctx.fillText(t("tagline").toUpperCase(), cx, tagY);
+    if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
 
     // ==============================
-    // Nome giocatore
-    // ==============================
-
-    ctx.font = "700 54px " + SHARE_FONT_TITLE;
-    ctx.fillStyle = "#F5F7FA";
-    ctx.fillText(player.profile.name || "Player", logoCx, 510);
-
-    // ==============================
-    // Box terreni totali
-    // ==============================
-
-    const totalLands = getTotalLands();
-
-    drawRoundedRect(ctx, 140, 570, SHARE_CARD_W - 280, 270, 32);
-    ctx.fillStyle = "#1A202A";
-    ctx.fill();
-    ctx.strokeStyle = "#313846";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    ctx.font = "700 26px " + SHARE_FONT_TITLE;
-    ctx.fillStyle = "#9AA4B2";
-    ctx.fillText("TERRENI TOTALI", logoCx, 645);
-
-    ctx.font = "700 124px " + SHARE_FONT_BODY;
-    ctx.fillStyle = "#58E06D";
-    ctx.fillText(formatK(totalLands), logoCx, 765);
-
-    // ==============================
-    // Riga statistiche: icona esagonale reale + numero
-    // ==============================
-
-    const boostMultiplier = getBoostMultiplier();
-    const dailyIncome = formatCurrency(getDailyIncomeConverted());
-    const badgePercent = getBadgeBoostPercent(player.badges);
-
-    const statY = 900;
-    const statW = (SHARE_CARD_W - 280 - 40) / 3;
-    const statH = 200;
-
-    const stats = [
-        { icon: boostImg, value: "x" + boostMultiplier },
-        { icon: incomeImg, value: dailyIncome },
-        { icon: badgeImg, value: "+" + badgePercent + "%" }
-    ];
-
-    stats.forEach(function (stat, i) {
-
-        const x = 140 + i * (statW + 20);
-        const cx = x + statW / 2;
-
-        drawRoundedRect(ctx, x, statY, statW, statH, 24);
-        ctx.fillStyle = "#1A202A";
-        ctx.fill();
-        ctx.strokeStyle = "#313846";
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
-        drawIconHex(ctx, cx, statY + 58, 34, stat.icon);
-
-        ctx.font = "700 40px " + SHARE_FONT_BODY;
-        ctx.fillStyle = "#F5F7FA";
-        ctx.fillText(stat.value, cx, statY + 150);
-
-    });
-
-    // ==============================
-    // Rarità: nome + numero, per introdurre anche
-    // chi non conosce ancora il funzionamento del gioco
-    // ==============================
-
-    const rarityY = 1150;
-    const rarityH = 160;
-
-    const rarities = [
-        { name: "COMMON", value: player.lands.common, color: "#9AA4B2" },
-        { name: "RARE", value: player.lands.rare, color: "#3A86FF" },
-        { name: "EPIC", value: player.lands.epic, color: "#9B5CFF" },
-        { name: "LEGENDARY", value: player.lands.legendary, color: "#FFB322" }
-    ];
-
-    const rarityW = (SHARE_CARD_W - 280 - 60) / 4;
-
-    rarities.forEach(function (r, i) {
-
-        const x = 140 + i * (rarityW + 20);
-        const cx = x + rarityW / 2;
-
-        drawRoundedRect(ctx, x, rarityY, rarityW, rarityH, 20);
-        ctx.fillStyle = "#1A202A";
-        ctx.fill();
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = r.color;
-        ctx.stroke();
-
-        ctx.font = "700 17px " + SHARE_FONT_TITLE;
-        ctx.fillStyle = r.color;
-        ctx.fillText(r.name, cx, rarityY + 44);
-
-        ctx.font = "700 40px " + SHARE_FONT_BODY;
-        ctx.fillStyle = "#F5F7FA";
-        ctx.fillText(formatK(r.value), cx, rarityY + 104);
-
-    });
-
-    // ==============================
-    // Cosa ci distingue
+    // Funzionalità strategiche: stessi tre tile della Home
     // ==============================
 
     const features = [
-        { icon: chatImg, label: t("shareCardFeatureAssistant") },
-        { icon: ideaImg, label: t("shareCardFeatureStrategy") },
-        { icon: boostImg, label: t("shareCardFeatureCommunity") }
+        { icon: chatImg,  title: t("featureAssistantTitle"), sub: t("featureAssistantSub") },
+        { icon: ideaImg,  title: t("featureAdviceTitle"),    sub: t("featureAdviceSub") },
+        { icon: boostImg, title: t("featureTipsTitle"),      sub: t("featureTipsSub") }
     ];
 
-    const featuresY = rarityY + rarityH + 200;
-    const featureRowH = 100;
-    const iconDiameter = 60;
-    const gap = 24;
+    const featGap = 25;
+    const featW = (CW - featGap * 2) / 3;
 
-    const maxFeatureWidth = SHARE_CARD_W - 200;
+    features.forEach(function (f, i) {
 
-    const rows = features.map(function (feature) {
+        const x = M + i * (featW + featGap);
+        const fcx = x + featW / 2;
 
-        let fontSize = 34;
-        ctx.font = "700 " + fontSize + "px " + SHARE_FONT_BODY;
-        let textWidth = ctx.measureText(feature.label).width;
+        ctx.save();
+        ctx.shadowColor = "rgba(0,0,0,.35)";
+        ctx.shadowBlur = 40;
+        ctx.shadowOffsetY = 14;
+        drawBoxedRect(ctx, x, featTop, featW, featH, 45, "#1A202A", null, 0);
+        ctx.restore();
 
-        while (iconDiameter + gap + textWidth > maxFeatureWidth && fontSize > 22) {
-            fontSize -= 2;
-            ctx.font = "700 " + fontSize + "px " + SHARE_FONT_BODY;
-            textWidth = ctx.measureText(feature.label).width;
-        }
+        drawBoxedRect(ctx, x, featTop, featW, featH, 45, "#1A202A", "#313846", 2.5);
 
-        return { feature: feature, fontSize: fontSize, textWidth: textWidth };
+        drawHexIcon(ctx, fcx, featTop + 90, 132, f.icon, true);
 
-    });
-
-    const widestTextWidth = Math.max.apply(null, rows.map(function (r) { return r.textWidth; }));
-    const blockWidth = iconDiameter + gap + widestTextWidth;
-    const startX = logoCx - blockWidth / 2;
-    const iconCx = startX + iconDiameter / 2;
-    const textX = startX + iconDiameter + gap;
-
-    rows.forEach(function (row, i) {
-
-        const y = featuresY + i * featureRowH;
-
-        drawIconHex(ctx, iconCx, y, 30, row.feature.icon);
-
-        ctx.textAlign = "left";
-        ctx.font = "700 " + row.fontSize + "px " + SHARE_FONT_BODY;
+        fitFont(ctx, f.title.toUpperCase(), "700", SHARE_FONT_TITLE, 30, featW - 34, 18);
         ctx.fillStyle = "#F5F7FA";
-        ctx.fillText(row.feature.label, textX, y + 2);
-        ctx.textAlign = "center";
+        ctx.fillText(f.title.toUpperCase(), fcx, featTop + 186);
+
+        fitFont(ctx, f.sub, "400", SHARE_FONT_BODY, 25, featW - 30, 16);
+        ctx.fillStyle = "#9AA4B2";
+        ctx.fillText(f.sub, fcx, featTop + 224);
 
     });
+
+    // ==============================
+    // Player card (come .player-card della Home)
+    // ==============================
+
+    ctx.save();
+    ctx.shadowColor = "rgba(0,0,0,.35)";
+    ctx.shadowBlur = 65;
+    ctx.shadowOffsetY = 20;
+    drawBoxedRect(ctx, M, cardTop, CW, cardBottom - cardTop, 45, "#1A202A", null, 0);
+    ctx.restore();
+
+    drawBoxedRect(ctx, M, cardTop, CW, cardBottom - cardTop, 45, "#1A202A", "#313846", 2.5);
+
+    const innerL = M + PAD;
+    const innerR = M + CW - PAD;
+    const innerW = CW - PAD * 2;
+
+    // ---- Nome giocatore + icone dei Pass realmente attivi
+    const activePasses = [];
+
+    if (player.passes.mission === true) activePasses.push({ img: missionImg, glow: "rgba(58,134,255,.5)" });
+    if (player.passes.explorer === true) activePasses.push({ img: explorerImg, glow: "rgba(155,92,255,.5)" });
+
+    const badgeSize = 70;
+    const badgeGap = 15;
+    const nameGap = 25;
+    const passesW = activePasses.length
+        ? activePasses.length * badgeSize + (activePasses.length - 1) * badgeGap + nameGap
+        : 0;
+
+    const playerName = player.profile.name || "Player";
+
+    const nameSize = fitFont(ctx, playerName, "700", SHARE_FONT_TITLE, 56, innerW - passesW, 28);
+    ctx.font = "700 " + nameSize + "px " + SHARE_FONT_TITLE;
+
+    const nameW = ctx.measureText(playerName).width;
+    const rowW = nameW + passesW;
+    const rowX = cx - rowW / 2;
+
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#F5F7FA";
+    ctx.fillText(playerName, rowX, nameCy);
+    ctx.textAlign = "center";
+
+    activePasses.forEach(function (p, i) {
+
+        ctx.save();
+        ctx.shadowColor = p.glow;
+        ctx.shadowBlur = 12;
+        ctx.drawImage(
+            p.img,
+            rowX + nameW + nameGap + i * (badgeSize + badgeGap),
+            nameCy - badgeSize / 2,
+            badgeSize,
+            badgeSize
+        );
+        ctx.restore();
+
+    });
+
+    // ---- Terreni totali
+    drawHexIcon(ctx, innerL + 28, totalCy, 56, landsImg, false);
+
+    ctx.textAlign = "left";
+    ctx.font = "700 44px " + SHARE_FONT_BODY;
+    ctx.fillStyle = "#F5F7FA";
+    ctx.fillText(t("lands"), innerL + 28 + 28 + 18, totalCy);
+
+    ctx.textAlign = "right";
+    ctx.fillText(formatK(getTotalLands()), innerR, totalCy);
+    ctx.textAlign = "center";
+
+    // ---- Separatore
+    ctx.fillStyle = "#313846";
+    ctx.fillRect(innerL, hr1Y, innerW, 2.5);
+
+    // ---- Rarità 2x2: nome + numero in Orbitron (stesso font del nome player)
+    const rarityGapX = 30;
+    const rarityW = (innerW - rarityGapX) / 2;
+
+    getShareRarities().forEach(function (r, i) {
+
+        const col = i % 2;
+        const row = Math.floor(i / 2);
+
+        const x = innerL + col * (rarityW + rarityGapX);
+        const y = rarityTop + row * (rarityH + rarityGap);
+        const rcx = x + rarityW / 2;
+
+        // riempimento: base della card + tinta della rarità (come sul sito)
+        ctx.save();
+        ctx.shadowColor = r.glow;
+        ctx.shadowBlur = 30;
+        drawBoxedRect(ctx, x, y, rarityW, rarityH, 30, "#1A202A", null, 0);
+        ctx.restore();
+
+        drawBoxedRect(ctx, x, y, rarityW, rarityH, 30, r.fill, null, 0);
+
+        drawBoxedRect(ctx, x, y, rarityW, rarityH, 30, "rgba(0,0,0,0)", r.color, r.borderWidth * 2.5);
+
+        ctx.font = "700 27px " + SHARE_FONT_TITLE;
+        ctx.fillStyle = r.color;
+        ctx.fillText(r.name, rcx, y + 44);
+
+        const numText = formatK(r.value);
+        fitFont(ctx, numText, "700", SHARE_FONT_TITLE, 56, rarityW - 40, 30);
+        ctx.fillStyle = "#F5F7FA";
+        ctx.fillText(numText, rcx, y + 100);
+
+    });
+
+    // ---- Separatore
+    ctx.fillStyle = "#313846";
+    ctx.fillRect(innerL, hr2Y, innerW, 2.5);
+
+    // ---- Stat tile: boost, rendita giornaliera, bonus passaporto
+    const stats = [
+        { icon: boostImg,  value: "x" + getBoostMultiplier() },
+        { icon: incomeImg, value: formatCurrency(getDailyIncomeConverted()) },
+        { icon: badgeImg,  value: "+" + getBadgeBoostPercent(player.badges) + "%" }
+    ];
+
+    const statGap = 20;
+    const statW = (innerW - statGap * 2) / 3;
+
+    stats.forEach(function (stat, i) {
+
+        const x = innerL + i * (statW + statGap);
+        const scx = x + statW / 2;
+
+        drawBoxedRect(ctx, x, statTop, statW, statH, 30, "#262D38", null, 0);
+
+        drawHexIcon(ctx, scx, statTop + 68, 84, stat.icon, false);
+
+        fitFont(ctx, stat.value, "700", SHARE_FONT_BODY, 38, statW - 24, 22);
+        ctx.fillStyle = "#F5F7FA";
+        ctx.fillText(stat.value, scx, statTop + 140);
+
+    });
+
+    // ==============================
+    // Nota: tabelle ufficiali Atlas Earth, per Paese
+    // ==============================
+
+    drawBoxedRect(ctx, M, noteTop, CW, noteH, 35, "rgba(0,212,255,.06)", "rgba(0,212,255,.35)", 2.5);
+
+    drawHexIcon(ctx, M + 36 + noteHex / 2, noteTop + noteH / 2, noteHex, checkImg, false);
+
+    ctx.textAlign = "left";
+
+    let lineY = noteTop + 34 + 20;
+
+    ctx.font = "700 30px " + SHARE_FONT_BODY;
+    ctx.fillStyle = "#00D4FF";
+
+    noteTitleLines.forEach(function (line) {
+        ctx.fillText(line, noteTextX, lineY);
+        lineY += 40;
+    });
+
+    lineY += 4;
+    ctx.font = "400 25px " + SHARE_FONT_BODY;
+    ctx.fillStyle = "#9AA4B2";
+
+    noteSubLines.forEach(function (line) {
+        ctx.fillText(line, noteTextX, lineY);
+        lineY += 34;
+    });
+
+    ctx.textAlign = "center";
 
     // ==============================
     // Footer / call to action
     // ==============================
 
-    const footerY = featuresY + (features.length - 1) * featureRowH + 180;
-
     ctx.font = "400 30px " + SHARE_FONT_BODY;
     ctx.fillStyle = "#9AA4B2";
-    ctx.fillText(t("shareCardCta"), logoCx, footerY);
+    ctx.fillText(t("shareCardCta"), cx, ctaY);
 
     ctx.font = "700 38px " + SHARE_FONT_TITLE;
     ctx.fillStyle = "#58E06D";
-    ctx.fillText("alex4ndrus94.github.io/-ae-companion", logoCx, footerY + 55);
+    ctx.fillText("alex4ndrus94.github.io/-ae-companion", cx, ctaY + 55);
 
     ctx.font = "400 24px " + SHARE_FONT_BODY;
     ctx.fillStyle = "#9AA4B2";
-    ctx.fillText(t("shareCardFooter"), logoCx, footerY + 105);
+    ctx.fillText(t("shareCardFooter"), cx, ctaY + 105);
 
     return canvas;
 

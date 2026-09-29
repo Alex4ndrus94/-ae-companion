@@ -130,7 +130,16 @@ const translations = {
         shareCardShareText: "Le mie statistiche su Atlas Earth, tracciate con AE Companion!",
         shareCardFeatureAssistant: "Assistente strategico con calcoli reali",
         shareCardFeatureStrategy: "Consigli personalizzati sui tuoi dati",
-        shareCardFeatureCommunity: "Tips AB dalla community, sempre aggiornati"
+        shareCardFeatureCommunity: "Tips AB dalla community, sempre aggiornati",
+
+        featureAssistantTitle: "Assistente",
+        featureAssistantSub: "Calcoli reali",
+        featureAdviceTitle: "Consigli",
+        featureAdviceSub: "Sui tuoi dati",
+        featureTipsTitle: "Tips AB",
+        featureTipsSub: "Sempre aggiornati",
+        countryNoteTitle: "Calcoli basati sulle tabelle ufficiali Atlas Earth",
+        countryNoteText: "Specifiche per ogni Paese: puoi cambiare il tuo da Modifica dati."
 
     },
 
@@ -258,7 +267,16 @@ const translations = {
         shareCardShareText: "My Atlas Earth stats, tracked with AE Companion!",
         shareCardFeatureAssistant: "Strategic assistant with real calculations",
         shareCardFeatureStrategy: "Personalized tips based on your data",
-        shareCardFeatureCommunity: "Community AB tips, always up to date"
+        shareCardFeatureCommunity: "Community AB tips, always up to date",
+
+        featureAssistantTitle: "Assistant",
+        featureAssistantSub: "Real calculations",
+        featureAdviceTitle: "Advice",
+        featureAdviceSub: "Based on your data",
+        featureTipsTitle: "AB Tips",
+        featureTipsSub: "Always up to date",
+        countryNoteTitle: "Calculations based on the official Atlas Earth tables",
+        countryNoteText: "Specific to each country: you can change yours in Edit data."
 
     }
 

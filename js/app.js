@@ -16,20 +16,33 @@ function renderDashboard() {
 
     setText("player-name", player.profile.name);
 
+    // Icone dei Pass: mostrate solo se il Pass è realmente attivo nei dati
+    // del player (player.passes). Nessun Pass attivo = nessuna icona e
+    // nessun contenitore vuoto.
     const explorerBadge = document.getElementById("badge-explorer");
     const missionBadge = document.getElementById("badge-mission");
+    const passRow = document.getElementById("pass-badges-row");
+
+    const explorerActive = player.passes.explorer === true;
+    const missionActive = player.passes.mission === true;
 
     if (explorerBadge) {
 
-        explorerBadge.style.display = player.passes.explorer ? "block" : "none";
-        explorerBadge.alt = t("passBadgeExplorerAlt");
+        explorerBadge.style.display = explorerActive ? "block" : "none";
+        explorerBadge.alt = explorerActive ? t("passBadgeExplorerAlt") : "";
 
     }
 
     if (missionBadge) {
 
-        missionBadge.style.display = player.passes.mission ? "block" : "none";
-        missionBadge.alt = t("passBadgeMissionAlt");
+        missionBadge.style.display = missionActive ? "block" : "none";
+        missionBadge.alt = missionActive ? t("passBadgeMissionAlt") : "";
+
+    }
+
+    if (passRow) {
+
+        passRow.style.display = (explorerActive || missionActive) ? "flex" : "none";
 
     }
 
