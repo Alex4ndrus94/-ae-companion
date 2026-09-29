@@ -49,6 +49,30 @@
 
 </header>
 
+<!-- FUNZIONALITÀ STRATEGICHE -->
+<section class="feature-strip">
+
+    <button type="button" class="feature-tile" onclick="switchTab('strategy')">
+        <span class="hex-icon-wrap feature-hex"><img src="assets/icons/chat.svg" alt=""></span>
+        <span class="feature-title" data-i18n="featureAssistantTitle">Assistente</span>
+        <span class="feature-sub" data-i18n="featureAssistantSub">Calcoli reali</span>
+    </button>
+
+    <button type="button" class="feature-tile" onclick="switchTab('strategy')">
+        <span class="hex-icon-wrap feature-hex"><img src="assets/icons/idea.svg" alt=""></span>
+        <span class="feature-title" data-i18n="featureAdviceTitle">Consigli</span>
+        <span class="feature-sub" data-i18n="featureAdviceSub">Sui tuoi dati</span>
+    </button>
+
+    <button type="button" class="feature-tile" onclick="switchTab('tips')">
+        <span class="hex-icon-wrap feature-hex"><img src="assets/icons/boost.svg" alt=""></span>
+        <span class="feature-title" data-i18n="featureTipsTitle">Tips AB</span>
+        <span class="feature-sub" data-i18n="featureTipsSub">Sempre aggiornati</span>
+    </button>
+
+</section>
+
+
 <div class="card player-card">
 
     <button class="share-btn" onclick="shareStatsCard()"><img src="assets/icons/share.svg" class="icon-inline" alt=""></button>
@@ -57,7 +81,7 @@
 
     <div class="player-name-row">
         <h2 id="player-name"></h2>
-        <span class="pass-badges-row" id="pass-badges-row">
+        <span class="pass-badges-row" id="pass-badges-row" style="display:none;">
             <img id="badge-mission" class="pass-badge mission" src="assets/icons/mission-badge.svg" alt="" style="display:none;">
             <img id="badge-explorer" class="pass-badge explorer" src="assets/icons/explorer-badge.svg" alt="" style="display:none;">
         </span>
@@ -72,13 +96,13 @@
 
     <div class="rarity-grid">
 
-        <div class="rarity-card common"><span id="common-count"></span></div>
+        <div class="rarity-card common"><span class="rarity-name">Common</span><span class="rarity-count" id="common-count"></span></div>
 
-        <div class="rarity-card rare"><span id="rare-count"></span></div>
+        <div class="rarity-card rare"><span class="rarity-name">Rare</span><span class="rarity-count" id="rare-count"></span></div>
 
-        <div class="rarity-card epic"><span id="epic-count"></span></div>
+        <div class="rarity-card epic"><span class="rarity-name">Epic</span><span class="rarity-count" id="epic-count"></span></div>
 
-        <div class="rarity-card legendary"><span id="legendary-count"></span></div>
+        <div class="rarity-card legendary"><span class="rarity-name">Legendary</span><span class="rarity-count" id="legendary-count"></span></div>
 
     </div>
 
@@ -121,6 +145,14 @@
             <span class="value-base" id="yearlyIncomeBase"></span>
         </div>
 
+    </div>
+
+    <div class="country-note">
+        <span class="hex-icon-wrap sm"><img src="assets/icons/check.svg" alt=""></span>
+        <div>
+            <span class="country-note-title" data-i18n="countryNoteTitle">Calcoli basati sulle tabelle ufficiali Atlas Earth</span>
+            <span class="country-note-text" data-i18n="countryNoteText">Specifiche per ogni Paese: puoi cambiare il tuo da Modifica dati.</span>
+        </div>
     </div>
 
 
@@ -175,6 +207,14 @@
     </div>
 
 </div>
+
+    <div class="country-note">
+        <span class="hex-icon-wrap sm"><img src="assets/icons/check.svg" alt=""></span>
+        <div>
+            <span class="country-note-title" data-i18n="countryNoteTitle">Calcoli basati sulle tabelle ufficiali Atlas Earth</span>
+            <span class="country-note-text" data-i18n="countryNoteText">Specifiche per ogni Paese: puoi cambiare il tuo da Modifica dati.</span>
+        </div>
+    </div>
 
 <!-- FINE NUOVA CARD -->
 
@@ -402,8 +442,8 @@
     </div>
 
     <div class="footer-meta">
-        <span class="version-badge">v0.5</span>
-        <span class="footer-update"><span data-i18n="lastUpdate">Ultimo aggiornamento</span>: 3 agosto 2026</span>
+        <span class="version-badge">v0.6</span>
+        <span class="footer-update"><span data-i18n="lastUpdate">Ultimo aggiornamento</span>: 30 settembre 2026</span>
     </div>
 </footer>
 
