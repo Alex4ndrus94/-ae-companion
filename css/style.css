@@ -77,14 +77,18 @@
 
 .player-name-row{
     display:flex;
+    flex-wrap:wrap;
     align-items:center;
     justify-content:center;
-    gap:10px;
+    gap:8px 10px;
     margin-bottom:16px;
+    padding:0 38px;   /* lascia libero lo spazio dei pulsanti Condividi / Modifica */
 }
 
 .player-name-row h2{
     margin-bottom:0;
+    min-width:0;
+    overflow-wrap:anywhere;
 }
 
 .pass-badges-row{
@@ -128,37 +132,58 @@
 }
 
 .rarity-card{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
     border-radius:var(--radius-sm);
-    padding:12px;
+    padding:12px 8px;
     text-align:center;
+    font-family:var(--font-title);   /* stesso font del nome del player */
     font-weight:700;
-    font-size:1.1rem;
-    border:2px solid var(--border);
+    border:var(--rarity-border-w) solid var(--border);
     transition:.2s;
+    min-width:0;
+}
+
+.rarity-name{
+    font-size:.7rem;
+    letter-spacing:.5px;
+    text-transform:uppercase;
+}
+
+.rarity-count{
+    font-size:1.3rem;
+    color:var(--text);
 }
 
 .rarity-card.common{
-    background:var(--card-2);
-    border-color:var(--text-2);
+    background:var(--rarity-common-fill);
+    border-color:var(--rarity-common);
+    box-shadow:0 0 12px var(--rarity-common-glow);
 }
+.rarity-card.common .rarity-name{ color:var(--rarity-common); }
 
 .rarity-card.rare{
-    background:rgba(58,134,255,.14);
-    border-color:var(--blue-rare);
-    box-shadow:0 0 12px rgba(58,134,255,.2);
+    background:var(--rarity-rare-fill);
+    border-color:var(--rarity-rare);
+    box-shadow:0 0 12px var(--rarity-rare-glow);
 }
+.rarity-card.rare .rarity-name{ color:var(--rarity-rare); }
 
 .rarity-card.epic{
-    background:rgba(155,92,255,.14);
-    border-color:var(--purple-epic);
-    box-shadow:0 0 12px rgba(155,92,255,.2);
+    background:var(--rarity-epic-fill);
+    border-color:var(--rarity-epic);
+    box-shadow:0 0 12px var(--rarity-epic-glow);
 }
+.rarity-card.epic .rarity-name{ color:var(--rarity-epic); }
 
 .rarity-card.legendary{
-    background:rgba(255,179,34,.14);
-    border-color:var(--gold-legend);
-    box-shadow:0 0 12px rgba(255,179,34,.2);
+    background:var(--rarity-legendary-fill);
+    border-color:var(--rarity-legendary);
+    box-shadow:0 0 12px var(--rarity-legendary-glow);
 }
+.rarity-card.legendary .rarity-name{ color:var(--rarity-legendary); }
 
 .stats-grid{
     display:grid;
@@ -193,7 +218,7 @@
 
 .income-grid{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(3,minmax(0,1fr));
     gap:12px;
     margin-top:18px;
 }
@@ -201,8 +226,9 @@
 .income-box{
     background:var(--card-2);
     border-radius:14px;
-    padding:16px;
+    padding:16px 8px;
     text-align:center;
+    min-width:0;
 }
 
 .label{
@@ -216,8 +242,9 @@
 
 .value{
     color:var(--green-glow);
-    font-size:20px;
+    font-size:clamp(14px,4.6vw,20px);
     font-weight:700;
+    white-space:nowrap;
 }
 
 .value-base{
@@ -616,25 +643,46 @@
    CAMPI RARITÀ (stessa logica delle card nella dashboard)
 ============================== */
 
-.rarity-input-field input{
-    border-width:2px !important;
+.rarity-input-field{
+    font-family:var(--font-title);
+    font-weight:700;
+    font-size:.72rem !important;
+    letter-spacing:.5px;
+    text-transform:uppercase;
 }
 
-.rarity-input-field.common input{ border-color:var(--text-2) !important; }
+.rarity-input-field input{
+    border-width:var(--rarity-border-w) !important;
+    font-family:var(--font-title);
+    font-weight:700;
+}
+
+.rarity-input-field.common{ color:var(--rarity-common); }
+.rarity-input-field.rare{ color:var(--rarity-rare); }
+.rarity-input-field.epic{ color:var(--rarity-epic); }
+.rarity-input-field.legendary{ color:var(--rarity-legendary); }
+
+.rarity-input-field.common input{
+    border-color:var(--rarity-common) !important;
+    background:var(--rarity-common-fill);
+}
 
 .rarity-input-field.rare input{
-    border-color:var(--blue-rare) !important;
-    box-shadow:0 0 8px rgba(58,134,255,.2);
+    border-color:var(--rarity-rare) !important;
+    background:var(--rarity-rare-fill);
+    box-shadow:0 0 8px var(--rarity-rare-glow);
 }
 
 .rarity-input-field.epic input{
-    border-color:var(--purple-epic) !important;
-    box-shadow:0 0 8px rgba(155,92,255,.2);
+    border-color:var(--rarity-epic) !important;
+    background:var(--rarity-epic-fill);
+    box-shadow:0 0 8px var(--rarity-epic-glow);
 }
 
 .rarity-input-field.legendary input{
-    border-color:var(--gold-legend) !important;
-    box-shadow:0 0 8px rgba(255,179,34,.2);
+    border-color:var(--rarity-legendary) !important;
+    background:var(--rarity-legendary-fill);
+    box-shadow:0 0 8px var(--rarity-legendary-glow);
 }
 
 /* ==============================
@@ -961,4 +1009,104 @@
     font-family:var(--font-title);
     padding:2px 8px;
     border-radius:999px;
+}
+
+/* ==============================
+   FUNZIONALITÀ STRATEGICHE
+============================== */
+
+.feature-strip{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-bottom:18px;
+}
+
+.feature-tile{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    min-width:0;
+    padding:16px 6px 14px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:0 8px 26px rgba(0,0,0,.35);
+    color:var(--text);
+    font-family:var(--font-body);
+    text-align:center;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.feature-tile:hover,
+.feature-tile:active{
+    border-color:var(--green);
+}
+
+.hex-icon-wrap.feature-hex{
+    width:60px;
+    height:52px;
+    filter:drop-shadow(0 0 10px rgba(88,224,109,.35));
+}
+
+.feature-hex::before{
+    inset:3px;
+}
+
+.feature-title{
+    font-family:var(--font-title);
+    font-weight:700;
+    font-size:.72rem;
+    letter-spacing:.3px;
+    text-transform:uppercase;
+    color:var(--text);
+}
+
+.feature-sub{
+    font-size:.68rem;
+    line-height:1.25;
+    color:var(--text-2);
+}
+
+/* ==============================
+   NOTA TABELLE UFFICIALI PER PAESE
+============================== */
+
+.country-note{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    margin-top:16px;
+    padding:12px 14px;
+    text-align:left;
+    background:rgba(0,212,255,.06);
+    border:1px solid rgba(0,212,255,.35);
+    border-radius:14px;
+}
+
+.country-note .hex-icon-wrap{
+    margin-top:1px;
+}
+
+.country-note-title{
+    display:block;
+    color:var(--cyan-info);
+    font-weight:700;
+    font-size:.8rem;
+    line-height:1.3;
+}
+
+.country-note-text{
+    display:block;
+    margin-top:3px;
+    color:var(--text-2);
+    font-size:.72rem;
+    line-height:1.35;
+}
+
+/* Il nome del player non deve sbilanciarsi quando non ci sono Pass */
+.pass-badges-row:empty{
+    display:none;
 }

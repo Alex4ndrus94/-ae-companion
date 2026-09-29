@@ -20,6 +20,27 @@
     --gold-legend:#FFB322;
     --cyan-info:#00D4FF;
 
+    /* Palette rarità — unica fonte di verità: la usano le card della
+       dashboard, i campi del pannello Modifica dati e la card di
+       condivisione (sharecard.js legge questi valori) */
+    --rarity-border-w:3px;
+
+    --rarity-common:#9AA4B2;
+    --rarity-common-fill:#262D38;
+    --rarity-common-glow:transparent;
+
+    --rarity-rare:#3A86FF;
+    --rarity-rare-fill:rgba(58,134,255,.14);
+    --rarity-rare-glow:rgba(58,134,255,.2);
+
+    --rarity-epic:#9B5CFF;
+    --rarity-epic-fill:rgba(155,92,255,.14);
+    --rarity-epic-glow:rgba(155,92,255,.2);
+
+    --rarity-legendary:#FFB322;
+    --rarity-legendary-fill:rgba(255,179,34,.14);
+    --rarity-legendary-glow:rgba(255,179,34,.2);
+
     --radius:18px;
     --radius-sm:12px;
 
