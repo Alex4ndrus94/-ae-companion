@@ -161,29 +161,8 @@
 
 <h2><span class="hex-icon-wrap"><img src="assets/icons/strategy.svg" alt=""></span> <span data-i18n="strategy">Strategia</span></h2>
 
-<div class="strategy-grid">
-
-    <div class="strategy-box">
-        <div class="strategy-title" id="strategy-metric-label" data-i18n="landsLabel">Terreni</div>
-        <div class="strategy-value" id="landsRemaining"></div>
-    </div>
-
-    <div class="strategy-box">
-        <div class="strategy-title" data-i18n="costLabel">Costo</div>
-        <div class="strategy-value" id="abNeeded"></div>
-    </div>
-
-    <div class="strategy-box">
-        <div class="strategy-title" data-i18n="abPerDay">AB/giorno</div>
-        <div class="strategy-value" id="dailyAB"></div>
-    </div>
-
-    <div class="strategy-box">
-        <div class="strategy-title" data-i18n="timeLabel">Tempo</div>
-        <div class="strategy-value" id="daysRemaining"></div>
-    </div>
-
-</div>
+<!-- Contenuto generato da renderStrategy(getStrategyModel()) -->
+<div id="strategy-dynamic"></div>
 
     <div class="country-note">
         <span class="hex-icon-wrap sm"><img src="assets/icons/check.svg" alt=""></span>
@@ -194,21 +173,6 @@
     </div>
 
 <!-- FINE NUOVA CARD -->
-
-<h3 data-i18n="nextGoal">Prossimo obiettivo</h3>
-
-<div class="progress">
-
-<div class="progress-fill" id="progress-fill"></div>
-
-</div>
-
-<p id="progress-text"></p>
-
-<p class="icon-text-line breakpoint-warning" id="breakpoint-warning-line">
-    <img src="assets/icons/warning.svg" class="icon-inline" alt="">
-    <span id="breakpoint-warning"></span>
-</p>
 
 </div>
 
@@ -458,6 +422,7 @@
 <script src="js/settings.js"></script>
 <script src="js/install-banner.js"></script>
 <script src="js/navigation.js"></script>
+<script src="js/strategy-ui.js"></script>
 <script src="js/app.js"></script>
 
 <!-- Analytics (GoatCounter) -->
