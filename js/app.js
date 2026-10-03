@@ -65,105 +65,6 @@ function renderDashboard() {
     setText("ab-balance-display", formatK(player.settings.abBalance) + " AB");
 
     // ======================================
-    // AE Core
-    // ======================================
-
-    const current = getCurrentBreakpoint(totalLands) || { min: 0, max: totalLands || 1, boost: 1 };
-
-    const next = getNextBreakpoint(totalLands);
-
-    const remaining =
-        getRemainingLandsToNextBreakpoint(totalLands);
-
-    // ======================================
-    // Target "intelligente" per Strategia e barra di progresso
-    // Deve essere coerente con quello che dicono i Consigli:
-    // - se sei in zona morta ed è urgente, punta al recupero (non al breakpoint immediato)
-    // - se l'obiettivo scelto è "terreni", punta a quello
-    // - altrimenti, punta al prossimo breakpoint boost normale
-    // ======================================
-
-    const recovery = getBracketTransitionRecovery(totalLands);
-
-    let nearBoostThreshold = false;
-
-    if (next) {
-
-        const bracketSize = next.min - current.min;
-        const urgentThreshold = Math.max(5, Math.round(bracketSize * 0.2));
-
-        nearBoostThreshold = remaining <= urgentThreshold;
-
-    }
-
-    const deadZoneUrgent = !!(recovery && recovery.hasDeadZone && nearBoostThreshold);
-
-    let strategyTargetLands = null;
-
-    if (player.goal.type === "lands" && player.goal.landsTarget > totalLands) {
-
-        strategyTargetLands = player.goal.landsTarget;
-
-    } else if (deadZoneUrgent) {
-
-        strategyTargetLands = recovery.recoveryLands;
-
-    } else if (next) {
-
-        strategyTargetLands = next.min;
-
-    }
-
-    const remainingToTarget = strategyTargetLands
-        ? Math.max(0, strategyTargetLands - totalLands)
-        : 0;
-
-    // ======================================
-    // Barra progresso (riempimento della fascia boost attuale)
-    // ======================================
-
-    const percentage =
-        ((totalLands - current.min) /
-        (current.max - current.min)) * 100;
-
-    setWidth(
-        "progress-fill",
-        percentage + "%"
-    );
-
-    document.getElementById("progress-fill")
-        .classList.toggle("warning", nearBoostThreshold);
-
-    setText(
-        "progress-text",
-        strategyTargetLands
-            ? t("progressText", { total: totalLands, next: strategyTargetLands, remaining: remainingToTarget })
-            : t("progressTextLast", { total: totalLands })
-    );
-
-    const warningLine = document.getElementById("breakpoint-warning-line");
-
-    if (recovery && recovery.hasDeadZone) {
-
-        setText(
-            "breakpoint-warning",
-            t("breakpointWarningInline", {
-                cap: recovery.current.max,
-                current: recovery.current.boost,
-                next: recovery.next.boost,
-                recoveryLands: recovery.recoveryLands
-            })
-        );
-
-        warningLine.classList.add("visible");
-
-    } else {
-
-        warningLine.classList.remove("visible");
-
-    }
-
-    // ======================================
     // Rendita (con boost + senza boost)
     // ======================================
 
@@ -228,36 +129,10 @@ function renderDashboard() {
     );
 
     // ======================================
-    // Strategia (si adatta: terreni o badge, in base
-    // a cosa conviene davvero in questo momento)
+    // Strategia: il Goal Engine calcola, la UI disegna
     // ======================================
 
-    const plan = getStrategyPlan(totalLands);
-
-    setText(
-        "strategy-metric-label",
-        plan.metric === "badge" ? t("badgeLabel") : t("landsLabel")
-    );
-
-    setText(
-        "landsRemaining",
-        formatK(plan.remaining)
-    );
-
-    setText(
-        "abNeeded",
-        formatK(plan.remaining * plan.unitCostAB) + " AB"
-    );
-
-    setText(
-        "dailyAB",
-        formatK(player.settings.dailyLoginAB) + " AB"
-    );
-
-    setText(
-        "daysRemaining",
-        getAcquisitionTimeText(plan.remaining * plan.unitCostAB)
-    );
+    renderStrategy(getStrategyModel());
 
     // ======================================
     // Come guadagnare più AB
