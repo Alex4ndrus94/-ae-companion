@@ -466,6 +466,199 @@
     font-weight:700;
 }
 
+.strategy-box{
+    min-width:0;
+}
+
+.strategy-box.wide{
+    grid-column:1 / -1;
+}
+
+.strategy-value{
+    line-height:1.25;
+    overflow-wrap:anywhere;
+}
+
+.strategy-value.small{
+    font-size:1rem;
+}
+
+.strategy-value.tone-gold{ color:var(--gold-legend); }
+.strategy-value.tone-cyan{ color:var(--cyan-info); }
+.strategy-value.tone-muted{ color:var(--text-2); }
+
+/* --- Card Strategia dinamica --- */
+
+#strategy-dynamic{
+    --accent:var(--green-glow);
+}
+
+#strategy-dynamic[data-goal="income"]{ --accent:var(--cyan-info); }
+#strategy-dynamic[data-goal="lands"]{ --accent:var(--blue-rare); }
+#strategy-dynamic[data-goal="mayor"]{ --accent:var(--gold-legend); }
+
+.strategy-head{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-top:14px;
+}
+
+.strategy-head-text{
+    display:flex;
+    flex-direction:column;
+    min-width:0;
+    flex:1;
+}
+
+.strategy-eyebrow{
+    display:block;
+    color:var(--text-2);
+    font-family:var(--font-title);
+    font-size:.68rem;
+    letter-spacing:.8px;
+    text-transform:uppercase;
+}
+
+.strategy-goal-title{
+    color:var(--accent);
+    font-family:var(--font-title);
+    font-size:1.02rem;
+    font-weight:700;
+    line-height:1.25;
+}
+
+.strategy-status{
+    flex-shrink:0;
+    font-size:.68rem;
+    font-weight:700;
+    padding:5px 9px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    color:var(--text-2);
+    text-align:center;
+    max-width:110px;
+    line-height:1.2;
+}
+
+.strategy-status.status-active{
+    color:var(--accent);
+    border-color:var(--accent);
+}
+
+.strategy-status.status-reached{
+    color:var(--gold-legend);
+    border-color:var(--gold-legend);
+    background:rgba(255,179,34,.1);
+}
+
+.strategy-desc{
+    margin:10px 0 0;
+    color:var(--text-2);
+    font-size:.82rem;
+    line-height:1.4;
+}
+
+.strategy-hero{
+    margin-top:16px;
+    padding:18px 14px;
+    text-align:center;
+    background:var(--card-2);
+    border:1px solid var(--accent);
+    border-radius:16px;
+    box-shadow:0 0 14px rgba(0,0,0,.25);
+}
+
+.strategy-hero-label{
+    color:var(--text-2);
+    font-family:var(--font-title);
+    font-size:.74rem;
+    letter-spacing:.6px;
+    text-transform:uppercase;
+}
+
+.strategy-hero-value{
+    margin-top:8px;
+    color:var(--accent);
+    font-family:var(--font-title);
+    font-size:1.7rem;
+    font-weight:700;
+    line-height:1.2;
+    overflow-wrap:anywhere;
+}
+
+.strategy-hero-sub{
+    margin-top:8px;
+    color:var(--text-2);
+    font-size:.78rem;
+    line-height:1.35;
+}
+
+.strategy-ab-line{
+    margin:12px 0 0;
+    text-align:center;
+    color:var(--text-2);
+    font-size:.78rem;
+}
+
+.strategy-action{
+    margin-top:16px;
+    padding:14px;
+    background:var(--card-2);
+    border-left:3px solid var(--accent);
+    border-radius:12px;
+}
+
+.strategy-action-head{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.strategy-action-head > div{
+    min-width:0;
+}
+
+.strategy-action-label{
+    display:block;
+    color:var(--text);
+    font-weight:700;
+    font-size:.95rem;
+    line-height:1.3;
+}
+
+.strategy-explanation{
+    margin:10px 0 0;
+    color:var(--text);
+    font-size:.84rem;
+    line-height:1.5;
+}
+
+.strategy-note{
+    margin:10px 0 0;
+    color:var(--text-2);
+    font-size:.76rem;
+    line-height:1.45;
+}
+
+.strategy-cta{
+    margin-top:12px;
+    width:100%;
+    padding:12px;
+    border:1px solid var(--accent);
+    border-radius:12px;
+    background:transparent;
+    color:var(--accent);
+    font-family:var(--font-title);
+    font-size:.82rem;
+    font-weight:700;
+    cursor:pointer;
+}
+
+#strategy-dynamic h3{
+    margin-top:20px;
+}
+
 /* ==============================
    PROGRESS BAR
 ============================== */
