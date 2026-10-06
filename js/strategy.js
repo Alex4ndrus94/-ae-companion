@@ -17,7 +17,8 @@ function getStrategyABState() {
 
     return {
         balance: Math.max(0, Number(player.settings.abBalance) || 0),
-        daily: Math.max(0, Number(player.settings.dailyLoginAB) || 0)
+        // AB/day: automatici (reward table) se Explorer Club è in corso, altrimenti manuali
+        daily: getEffectiveDailyAB()
     };
 
 }
@@ -31,6 +32,12 @@ function getDaysForAB(ab) {
     const state = getStrategyABState();
 
     if (ab <= state.balance) return 0;
+
+    // Explorer Club in corso: si sommano le reward giorno per giorno dalla
+    // ladder (milestone inclusi), non AB/day × giorni
+    const explorer = getExplorerState();
+
+    if (isExplorerAutomatic(explorer)) return getExplorerDaysForAB(ab, state.balance, explorer);
 
     if (state.daily <= 0) return null;
 
@@ -206,15 +213,84 @@ function createStrategyModel(goalType, data) {
         abSummary: {
             balance: state.balance,
             daily: state.daily,
-            text: t("strategyAbLine", {
-                balance: formatK(Math.round(state.balance)),
-                daily: formatK(Math.round(state.daily))
-            })
-        }
+            text: getExplorerState().status === "active"
+                ? t("strategyAbLineExplorer", {
+                    balance: formatK(Math.round(state.balance)),
+                    daily: formatExplorerAB(state.daily, true)
+                })
+                : t("strategyAbLine", {
+                    balance: formatK(Math.round(state.balance)),
+                    daily: formatK(Math.round(state.daily))
+                })
+        },
+
+        // Righe informative Explorer Club (vuote se il pass non è attivo)
+        explorerLines: buildExplorerStrategyLines()
 
     };
 
     return Object.assign(model, data);
+
+}
+
+// Righe Explorer Club per la Strategia: milestone, reward da verificare,
+// pass scaduto. Solo testo: i numeri arrivano da explorer.js
+function buildExplorerStrategyLines() {
+
+    const s = getExplorerState();
+    const lines = [];
+
+    if (s.status === "inactive" || s.status === "needsStart") return lines;
+
+    if (s.status === "notStarted") {
+
+        lines.push({
+            icon: "star",
+            text: t("strategyExplorerNotStarted", { date: formatExplorerDate(s.startDate) })
+        });
+
+    } else if (s.status === "expired") {
+
+        lines.push({ icon: "warning", warn: true, text: t("strategyExplorerExpired") });
+
+    } else {
+
+        if (s.nextMilestone) {
+
+            lines.push({
+                icon: "star",
+                text: s.nextMilestone.inDays === 0
+                    ? t("explorerMilestoneToday", {
+                        day: s.nextMilestone.day,
+                        ab: formatExplorerAB(s.nextMilestone.totalAB, true)
+                    })
+                    : t("explorerNextMilestone", {
+                        day: s.nextMilestone.day,
+                        days: formatDays(s.nextMilestone.inDays),
+                        ab: formatExplorerAB(s.nextMilestone.totalAB, true)
+                    })
+            });
+
+        }
+
+        // oggi, se non confermato, è nella stima; i giorni passati non confermati no
+        const pastPending = s.pendingCount - 1;
+
+        if (pastPending > 0) {
+
+            lines.push({
+                icon: "warning",
+                warn: true,
+                text: t("strategyExplorerPending", { count: pastPending })
+            });
+
+        }
+
+        lines.push({ icon: "idea", text: t("strategyExplorerVariable") });
+
+    }
+
+    return lines;
 
 }
 

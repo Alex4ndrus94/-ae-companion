@@ -38,9 +38,11 @@ function getABNeeded(lands) {
 // Giorni necessari
 function getEstimatedDays(lands) {
 
-    return Math.ceil(
-        getABNeeded(lands) /
-        player.settings.dailyLoginAB
-    );
+    // AB/day automatici se Explorer Club è in corso, altrimenti quelli inseriti dal player
+    const daily = getEffectiveDailyAB();
+
+    if (daily <= 0) return Infinity;
+
+    return Math.ceil(getABNeeded(lands) / daily);
 
 }

@@ -11,6 +11,17 @@ function onGoalTypeChange() {
 
 }
 
+// Con Explorer Club attivo compaiono le date e sparisce l'AB/day manuale
+function updateExplorerSettingsVisibility() {
+
+    const active = document.getElementById("explorer-pass-input").checked;
+    const hasStart = !!document.getElementById("explorer-start-input").value;
+
+    document.getElementById("explorer-settings-fields").style.display = active ? "block" : "none";
+    document.getElementById("dailyab-field").style.display = (active && hasStart) ? "none" : "";
+
+}
+
 function openSettings(isOnboarding) {
 
     document.getElementById("name-input").value = player.profile.name;
@@ -25,6 +36,10 @@ function openSettings(isOnboarding) {
 
     document.getElementById("explorer-pass-input").checked = player.passes.explorer;
     document.getElementById("mission-pass-input").checked = player.passes.mission;
+
+    document.getElementById("explorer-start-input").value = player.explorer.startDate || "";
+    document.getElementById("explorer-end-input").value = player.explorer.endDate || "";
+    updateExplorerSettingsVisibility();
 
     // Obiettivo
     document.getElementById("goal-input").value = player.goal.type;
@@ -82,6 +97,18 @@ function saveSettings() {
 
     player.passes.explorer = document.getElementById("explorer-pass-input").checked;
     player.passes.mission = document.getElementById("mission-pass-input").checked;
+
+    // Explorer Club: nuova data di Day 1 = nuovo ciclo (lo storico viene archiviato)
+    if (player.passes.explorer) {
+
+        const exStart = document.getElementById("explorer-start-input").value;
+        const exEnd = document.getElementById("explorer-end-input").value;
+
+        if (explorerValidKey(exStart)) {
+            restartExplorerStreak(exStart, exEnd || null, { skipSync: true });
+        }
+
+    }
 
     // Obiettivo
     player.goal.type = document.getElementById("goal-input").value;

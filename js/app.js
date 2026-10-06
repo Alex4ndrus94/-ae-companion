@@ -132,6 +132,8 @@ function renderDashboard() {
     // Strategia: il Goal Engine calcola, la UI disegna
     // ======================================
 
+    renderExplorerCard();
+
     renderStrategy(getStrategyModel());
 
     // ======================================

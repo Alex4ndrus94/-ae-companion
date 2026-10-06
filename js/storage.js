@@ -30,6 +30,8 @@ function loadPlayerData() {
 
         if (saved.passes) Object.assign(player.passes, saved.passes);
 
+        if (saved.explorer) player.explorer = sanitizeExplorerData(saved.explorer);
+
         if (saved.settings) Object.assign(player.settings, saved.settings);
 
         isFirstRun = false;
@@ -52,6 +54,7 @@ function savePlayerData() {
         mayorTarget: player.mayorTarget,
         goal: player.goal,
         passes: player.passes,
+        explorer: player.explorer,
         settings: player.settings
     };
 

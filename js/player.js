@@ -54,6 +54,24 @@ const player = {
     },
 
     // ==================================
+    // Explorer Club (data di inizio, conferme, scadenza).
+    // "Attivo" = player.passes.explorer: nessun secondo flag.
+    // Il Day si ricalcola dalla data, vedi explorer.js
+    // ==================================
+
+    explorer: {
+
+        startDate: null,
+        endDate: null,
+        confirmedDay: 0,
+        lastConfirmedRewardDate: null,
+        addToBalance: true,
+        claimed: {},
+        history: []
+
+    },
+
+    // ==================================
     // Obiettivo principale
     // ==================================
 

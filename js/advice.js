@@ -86,13 +86,10 @@ function getAcquisitionTimeText(abNeeded) {
 
     }
 
-    const remaining = abNeeded - abBalance;
+    // stessa logica della Strategia: ladder Explorer Club se attiva, altrimenti AB/day manuali
+    const days = getDaysForAB(abNeeded);
 
-    const dailyAB = player.settings.dailyLoginAB;
-
-    if (dailyAB <= 0) return "—";
-
-    const days = Math.ceil(remaining / dailyAB);
+    if (days === null) return "—";
 
     return formatDays(days);
 

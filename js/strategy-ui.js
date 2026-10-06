@@ -88,6 +88,16 @@ function renderStrategy(model) {
 
     if (!isMissing) {
         html += '<p class="strategy-ab-line">' + e(model.abSummary.text) + '</p>';
+
+        (model.explorerLines || []).forEach(function (line) {
+
+            html +=
+                '<p class="strategy-explorer-line' + (line.warn ? ' warn' : '') + '">' +
+                    '<img src="assets/icons/' + e(line.icon) + '.svg" class="icon-inline" alt=""> ' +
+                    '<span>' + e(line.text) + '</span>' +
+                '</p>';
+
+        });
     }
 
     // Azione consigliata + spiegazione
