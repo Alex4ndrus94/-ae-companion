@@ -157,6 +157,9 @@
 
 <div class="tab-view" id="tab-strategy">
 
+<!-- Explorer Club: visibile solo con il pass attivo (explorer-ui.js) -->
+<div class="card explorer-card" id="explorer-card" style="display:none;"></div>
+
 <div class="card">
 
 <h2><span class="hex-icon-wrap"><img src="assets/icons/strategy.svg" alt=""></span> <span data-i18n="strategy">Strategia</span></h2>
@@ -336,7 +339,7 @@
             <input type="number" id="mayorTarget-input" min="0">
         </label>
 
-        <label class="settings-field"><span class="field-label-row"><img src="assets/icons/income.svg" class="icon-inline" alt=""><span data-i18n="dailyABLabel">AB guadagnati al giorno</span></span>
+        <label class="settings-field" id="dailyab-field"><span class="field-label-row"><img src="assets/icons/income.svg" class="icon-inline" alt=""><span data-i18n="dailyABLabel">AB guadagnati al giorno</span></span>
             <input type="number" id="dailyAB-input" min="0">
         </label>
 
@@ -347,9 +350,23 @@
         <div class="settings-section"><img src="assets/icons/star.svg" class="icon-inline" alt=""><span data-i18n="sectionPasses">I tuoi pass attivi</span></div>
 
         <label class="goal-checkbox-field">
-            <input type="checkbox" id="explorer-pass-input">
+            <input type="checkbox" id="explorer-pass-input" onchange="updateExplorerSettingsVisibility()">
             <img src="assets/icons/star.svg" class="icon-inline" alt=""><span data-i18n="explorerPassLabel">Pass Esploratore (Atlas Explorer Club)</span>
         </label>
+
+        <div id="explorer-settings-fields" style="display:none;">
+
+            <label class="settings-field"><span class="field-label-row"><img src="assets/icons/clock.svg" class="icon-inline" alt=""><span data-i18n="explorerStartLabel">Data di inizio (Day 1)</span></span>
+                <input type="date" id="explorer-start-input" oninput="updateExplorerSettingsVisibility()">
+            </label>
+
+            <label class="settings-field"><span class="field-label-row"><img src="assets/icons/clock.svg" class="icon-inline" alt=""><span data-i18n="explorerEndLabel">Scadenza pass (facoltativa)</span></span>
+                <input type="date" id="explorer-end-input">
+            </label>
+
+            <p class="explorer-note" data-i18n="explorerSettingsHint">Con Explorer Club attivo gli AB/day arrivano dalla ladder: non serve inserirli.</p>
+
+        </div>
 
         <label class="goal-checkbox-field">
             <input type="checkbox" id="mission-pass-input">
@@ -404,10 +421,16 @@
 
 </div>
 
+<!-- Pannelli Explorer Club (start / correzione streak / saldo AB) -->
+<div class="settings-overlay" id="explorer-overlay">
+    <div class="settings-panel" id="explorer-sheet"></div>
+</div>
+
 <script src="js/config.js"></script>
 <script src="js/i18n.js"></script>
 <script src="js/countries.js"></script>
 <script src="js/player.js"></script>
+<script src="js/explorer.js"></script>
 <script src="js/storage.js"></script>
 <script src="js/playerEngine.js"></script>
 <script src="js/strategy.js"></script>
@@ -423,6 +446,7 @@
 <script src="js/install-banner.js"></script>
 <script src="js/navigation.js"></script>
 <script src="js/strategy-ui.js"></script>
+<script src="js/explorer-ui.js"></script>
 <script src="js/app.js"></script>
 
 <!-- Analytics (GoatCounter) -->

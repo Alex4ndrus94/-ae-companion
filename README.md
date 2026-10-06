@@ -253,3 +253,11 @@ This project is currently private.
 All rights reserved.
 
 © 2026 Alessandro Chindemi
+
+## Explorer Club (v0.6)
+
+- `js/explorer.js` — logica: reward table unica (`EXPLORER_REWARD_TABLE`), Day calcolato dalla data
+  (giorni di calendario, sicuro con ora legale), stato teorico vs confermato, proiezione sulla ladder.
+- `js/explorer-ui.js` — card nella tab Strategia e pannelli (correzione streak, date, saldo AB).
+- La Strategia legge gli AB/day da `getEffectiveDailyAB()` / `getExplorerDaysForAB()`.
+- Test: `TZ=Europe/Rome node tests/explorer.test.js`
