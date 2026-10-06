@@ -1303,3 +1303,95 @@
 .pass-badges-row:empty{
     display:none;
 }
+
+/* ==============================
+   EXPLORER CLUB
+   Riusa strategy-*, progress e settings-*: qui solo i pezzi nuovi
+============================== */
+
+.explorer-card .strategy-hero{
+    margin-bottom:10px;
+}
+
+.explorer-card .progress{
+    margin-bottom:12px;
+}
+
+.explorer-note{
+    margin:8px 0 0;
+    font-size:.74rem;
+    line-height:1.4;
+    color:var(--text-2);
+}
+
+.strategy-explorer-line,
+.explorer-ok,
+.explorer-feedback{
+    display:flex;
+    align-items:flex-start;
+    gap:8px;
+    margin:10px 0 0;
+    font-size:.78rem;
+    line-height:1.4;
+    color:var(--text-2);
+}
+
+.strategy-explorer-line.warn{
+    color:var(--gold-legend);
+}
+
+.explorer-ok{
+    color:var(--green);
+    font-weight:600;
+}
+
+.explorer-feedback{
+    color:var(--cyan-info);
+}
+
+.explorer-card .breakpoint-warning small{
+    color:var(--text-2);
+    font-weight:500;
+}
+
+.explorer-links{
+    display:flex;
+    gap:8px;
+    margin-top:12px;
+}
+
+.explorer-links button{
+    flex:1;
+    padding:10px 8px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:transparent;
+    color:var(--text-2);
+    font-family:var(--font-body);
+    font-size:.78rem;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.explorer-balance-toggle small{
+    color:var(--text-2);
+}
+
+.explorer-error{
+    min-height:1em;
+    margin:8px 0 0;
+    font-size:.76rem;
+    color:var(--gold-legend);
+}
+
+#explorer-sheet .settings-actions{
+    margin-bottom:8px;
+}
+
+.explorer-card{
+    --accent:var(--green);
+}
+
+.settings-panel .explorer-note{
+    margin:0 0 12px;
+}
