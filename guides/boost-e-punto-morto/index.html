@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boost Atlas Earth e “punto morto”: fasce per Paese e come evitarlo</title>
+<meta name="description" content="Come funzionano le fasce di boost in Atlas Earth secondo le tabelle di AE Companion, cos'è la zona morte tra due fasce e come si calcola quanti terreni servono per recuperare.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://alex4ndrus94.github.io/-ae-companion/guides/boost-e-punto-morto/">
+<link rel="icon" href="../../assets/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../assets/icons/pwa/apple-touch-icon.png">
+<meta name="theme-color" content="#10141B">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AE Companion">
+<meta property="og:title" content="Boost Atlas Earth e “punto morto”: fasce per Paese e come evitarlo">
+<meta property="og:description" content="Come funzionano le fasce di boost in Atlas Earth secondo le tabelle di AE Companion, cos'è la zona morte tra due fasce e come si calcola quanti terreni servono per recuperare.">
+<meta property="og:url" content="https://alex4ndrus94.github.io/-ae-companion/guides/boost-e-punto-morto/">
+<meta property="og:image" content="https://alex4ndrus94.github.io/-ae-companion/assets/og-image.png">
+<meta property="og:locale" content="it_IT">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/design-system.css">
+<link rel="stylesheet" href="../../css/pages.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "AE Companion",
+      "item": "https://alex4ndrus94.github.io/-ae-companion/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Guide",
+      "item": "https://alex4ndrus94.github.io/-ae-companion/guides/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Fasce di boost e “punto morto”",
+      "item": "https://alex4ndrus94.github.io/-ae-companion/guides/boost-e-punto-morto/"
+    }
+  ]
+}
+</script>
+</head>
+<body class="doc-page">
+<header class="doc-header">
+  <a class="doc-brand" href="../../"><img src="../../assets/logo.svg" alt="" width="32" height="32"><span>AE Companion</span></a>
+  <nav class="doc-nav" aria-label="Principale">
+    <a href="../../">App</a><a href="../../guides/">Guide</a><a href="../../about/">Informazioni</a>
+  </nav>
+</header>
+<main class="doc-main">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../../">AE Companion</a> › <a href="../../guides/">Guide</a> › <span aria-current="page">Fasce di boost e “punto morto”</span></nav>
+<h1>Fasce di boost e “punto morto”</h1>
+
+<p class="note"><strong>Nota sulle fonti.</strong> Le tabelle sono quelle incorporate in AE Companion (nel codice indicate come tratte dall'Help Center di Atlas Reality) e vengono qui generate automaticamente dal codice. Non sono state riverificate in modo indipendente per questa pagina e il gioco può modificarle. <strong>Data ultima verifica: da confermare dal proprietario.</strong></p>
+<h2>Come funzionano le fasce</h2>
+<p>Il boost è un moltiplicatore della rendita che dipende dal <em>numero totale di terreni</em> e dal Paese. Più terreni hai, più il moltiplicatore scende: la rendita totale in genere cresce, ma con l'aumentare delle fasce ogni terreno in più rende meno in proporzione.</p>
+<h2>Italia e Europa occidentale (tabella usata dall'app)</h2>
+<p>Gruppo: 🇮🇹 Italia / 🇩🇪 Germania / 🇫🇷 Francia / 🇪🇸 Spagna / 🇳🇱 Paesi Bassi / 🇵🇹 Portogallo.</p>
+<div class="table-wrap"><table><thead><tr><th>Terreni</th><th>Boost</th></tr></thead><tbody><tr><td>1–70</td><td>x20</td></tr><tr><td>71–100</td><td>x15</td></tr><tr><td>101–135</td><td>x10</td></tr><tr><td>136–170</td><td>x8</td></tr><tr><td>171–200</td><td>x7</td></tr><tr><td>201–250</td><td>x6</td></tr><tr><td>251–300</td><td>x5</td></tr><tr><td>301–350</td><td>x4</td></tr><tr><td>351–400</td><td>x3</td></tr><tr><td>401+</td><td>x2</td></tr></tbody></table></div>
+<h2>Il punto morto</h2>
+<p>Al passaggio tra due fasce il moltiplicatore scende. Se superi il tetto della fascia attuale di poco, la rendita totale può diminuire invece di salire, finché non hai abbastanza terreni nella fascia successiva. AE Companion calcola la soglia di recupero così:</p>
+<p class="formula">terreni di recupero = ⌈ tetto fascia attuale × boost attuale ÷ boost fascia successiva ⌉</p>
+<p><strong>Esempio con la tabella sopra.</strong> Al tetto della prima fascia (70 terreni) il boost è x20; nella successiva è x15, che parte da 71 terreni. Servono ⌈70 × 20 ÷ 15⌉ = <strong>94 terreni</strong> per eguagliare la rendita che avevi a 70. Tra 71 e 93 terreni, a parità di rarità e badge, la rendita è inferiore. Qui esiste quindi una zona morte.</p>
+<h3>Soglie di recupero per fascia (stessa tabella)</h3>
+<div class="table-wrap"><table><thead><tr><th>Tetto fascia</th><th>Boost</th><th>Recupero a</th><th>Zona morte</th></tr></thead><tbody>
+<tr><td>70</td><td>x20 → x15</td><td>94</td><td>sì</td></tr><tr><td>100</td><td>x15 → x10</td><td>150</td><td>sì</td></tr><tr><td>135</td><td>x10 → x8</td><td>169</td><td>sì</td></tr><tr><td>170</td><td>x8 → x7</td><td>195</td><td>sì</td></tr><tr><td>200</td><td>x7 → x6</td><td>234</td><td>sì</td></tr><tr><td>250</td><td>x6 → x5</td><td>300</td><td>sì</td></tr><tr><td>300</td><td>x5 → x4</td><td>375</td><td>sì</td></tr><tr><td>350</td><td>x4 → x3</td><td>467</td><td>sì</td></tr><tr><td>400</td><td>x3 → x2</td><td>600</td><td>sì</td></tr>
+</tbody></table></div>
+<p>I valori assumono rarità e badge costanti: in pratica contano anche la rarità dei terreni nuovi e il bonus badge. È un calcolo, non un consiglio d'acquisto.</p>
+<h2>Altri gruppi di Paesi</h2>
+<details><summary>🇺🇸 Stati Uniti</summary><div class="table-wrap"><table><thead><tr><th>Terreni</th><th>Boost</th></tr></thead><tbody><tr><td>1–150</td><td>x30</td></tr><tr><td>151–220</td><td>x20</td></tr><tr><td>221–290</td><td>x15</td></tr><tr><td>291–365</td><td>x12</td></tr><tr><td>366–435</td><td>x10</td></tr><tr><td>436–545</td><td>x8</td></tr><tr><td>546–625</td><td>x7</td></tr><tr><td>626–730</td><td>x6</td></tr><tr><td>731–875</td><td>x5</td></tr><tr><td>876–1100</td><td>x4</td></tr><tr><td>1101–1500</td><td>x3</td></tr><tr><td>1501+</td><td>x2</td></tr></tbody></table></div></details>
+<details><summary>🇬🇧 UK / 🇨🇦 Canada / 🇦🇺 Australia / 🇿🇦 Sudafrica / 🇮🇪 Irlanda / 🇳🇿 Nuova Zelanda</summary><div class="table-wrap"><table><thead><tr><th>Terreni</th><th>Boost</th></tr></thead><tbody><tr><td>1–60</td><td>x20</td></tr><tr><td>61–100</td><td>x15</td></tr><tr><td>101–150</td><td>x10</td></tr><tr><td>151–180</td><td>x8</td></tr><tr><td>181–220</td><td>x7</td></tr><tr><td>221–250</td><td>x6</td></tr><tr><td>251–300</td><td>x5</td></tr><tr><td>301–350</td><td>x4</td></tr><tr><td>351–450</td><td>x3</td></tr><tr><td>451+</td><td>x2</td></tr></tbody></table></div></details>
+<details><summary>🇸🇪 Svezia / 🇫🇮 Finlandia / 🇦🇹 Austria / 🇹🇼 Taiwan / 🇳🇴 Norvegia / 🇩🇰 Danimarca / 🇧🇪 Belgio</summary><div class="table-wrap"><table><thead><tr><th>Terreni</th><th>Boost</th></tr></thead><tbody><tr><td>1–30</td><td>x15</td></tr><tr><td>31–50</td><td>x12</td></tr><tr><td>51–70</td><td>x8</td></tr><tr><td>71–105</td><td>x5</td></tr><tr><td>106–130</td><td>x4</td></tr><tr><td>131–150</td><td>x3</td></tr><tr><td>151+</td><td>x2</td></tr></tbody></table></div></details>
+<details><summary>🇹🇭 Thailandia / 🇸🇰 Slovacchia / 🇱🇻 Lettonia / 🇵🇭 Filippine</summary><div class="table-wrap"><table><thead><tr><th>Terreni</th><th>Boost</th></tr></thead><tbody><tr><td>1–30</td><td>x8</td></tr><tr><td>31–50</td><td>x6</td></tr><tr><td>51–70</td><td>x4</td></tr><tr><td>71–105</td><td>x3</td></tr><tr><td>106+</td><td>x2</td></tr></tbody></table></div></details>
+<details><summary>🇰🇷 Corea del Sud / 🇯🇵 Giappone / 🇸🇬 Singapore / 🇦🇪 Emirati Arabi / 🇨🇭 Svizzera</summary><div class="table-wrap"><table><thead><tr><th>Terreni</th><th>Boost</th></tr></thead><tbody><tr><td>1–50</td><td>x20</td></tr><tr><td>51–70</td><td>x15</td></tr><tr><td>71–105</td><td>x12</td></tr><tr><td>106–130</td><td>x8</td></tr><tr><td>131–150</td><td>x7</td></tr><tr><td>151–175</td><td>x6</td></tr><tr><td>176–200</td><td>x5</td></tr><tr><td>201–225</td><td>x4</td></tr><tr><td>226–300</td><td>x3</td></tr><tr><td>301+</td><td>x2</td></tr></tbody></table></div></details>
+<details><summary>🇧🇷 Brasile</summary><div class="table-wrap"><table><thead><tr><th>Terreni</th><th>Boost</th></tr></thead><tbody><tr><td>1–60</td><td>x20</td></tr><tr><td>61–75</td><td>x15</td></tr><tr><td>76–100</td><td>x12</td></tr><tr><td>101–120</td><td>x10</td></tr><tr><td>121–150</td><td>x8</td></tr><tr><td>151–200</td><td>x6</td></tr><tr><td>201–250</td><td>x5</td></tr><tr><td>251–300</td><td>x4</td></tr><tr><td>301–400</td><td>x3</td></tr><tr><td>401+</td><td>x2</td></tr></tbody></table></div></details>
+<details><summary>🇲🇽 Messico</summary><div class="table-wrap"><table><thead><tr><th>Terreni</th><th>Boost</th></tr></thead><tbody><tr><td>1–50</td><td>x20</td></tr><tr><td>51–85</td><td>x15</td></tr><tr><td>86–100</td><td>x12</td></tr><tr><td>101–140</td><td>x8</td></tr><tr><td>141–175</td><td>x7</td></tr><tr><td>176–225</td><td>x5</td></tr><tr><td>226–300</td><td>x4</td></tr><tr><td>301–400</td><td>x3</td></tr><tr><td>401+</td><td>x2</td></tr></tbody></table></div></details>
+<p>Per applicarlo ai tuoi numeri apri <a href="../../">AE Companion</a>; il metodo di calcolo della rendita è in <a href="../calcolo-rendita/">questa guida</a>.</p>
+<p class="cta"><a class="btn-link" href="../../">Apri AE Companion</a></p>
+</main>
+<footer class="doc-footer">
+<p>AE Companion è un progetto indipendente, non affiliato, sponsorizzato né approvato da Atlas Reality o Atlas Earth. “Atlas Earth” è un marchio dei rispettivi titolari. I risultati sono stime a scopo informativo.</p>
+<p><a href="../../guides/">Guide</a> · <a href="../../about/">Informazioni</a> · <a href="../../privacy/">Privacy</a></p>
+</footer>
+</body>
+</html>
