@@ -117,10 +117,26 @@ const translations = {
         abTipSurveyBoost: "Potenziamento sondaggi: aumenta gli AB guadagnati completando i sondaggi nella sezione Guadagna.",
         abTipSuperRentBoost: "Super Potenziamento Affitto (SRB): durante l'evento (circa 2,5 giorni al mese) l'affitto si accumula fino a 50x più veloce — pianifica gli acquisti di terreni prima di questo evento per sfruttarlo al massimo.",
 
+        aboutTitle: "Cos'è AE Companion",
+        aboutPositioning: "Atlas Earth Calculator, Portfolio Tracker & Strategy Companion",
+        aboutText: "AE Companion è uno strumento gratuito e indipendente per i giocatori di Atlas Earth: calcola la rendita dei tuoi terreni con le fasce di boost del tuo Paese, tiene traccia di rarità, badge e obiettivo Mayor e ti propone una strategia in base ai tuoi dati.",
+        aboutItem1: "Rendita giornaliera, mensile e annuale, con e senza boost",
+        aboutItem2: "Fasce di boost per Paese e avviso sulle «zone morte»",
+        aboutItem3: "Pianificazione degli AB, anche con Explorer Club",
+        aboutItem4: "Assistente e strategia basati sul tuo obiettivo",
+        aboutStart: "Per iniziare tocca la matita in alto e inserisci terreni, badge e obiettivo. I dati restano salvati su questo dispositivo.",
+        aboutDisclaimer: "Progetto indipendente: non è affiliato, sponsorizzato né approvato da Atlas Reality o Atlas Earth. I risultati sono stime.",
+        footerGuides: "Guide",
+        footerAbout: "Informazioni",
+        footerPrivacy: "Privacy",
+
         createdBy: "Creato da",
         igCta: "Richieste o consigli? Scrivimi su Instagram",
         coffeeCta: "Ti è utile? Offrimi un caffè",
         lastUpdate: "Ultimo aggiornamento",
+        lastUpdateDate: "9 ottobre 2026",
+        metaTitle: "AE Companion – Calcolatore Atlas Earth, Tracker e Strategia",
+        metaDescription: "Companion gratuito per Atlas Earth: calcola la rendita dei terreni con le fasce di boost, pianifica gli AB e ricevi una strategia in base al tuo obiettivo.",
         withoutBoost: "senza boost",
         navHome: "Home",
         navStrategy: "Strategia",
@@ -404,10 +420,26 @@ const translations = {
         abTipSurveyBoost: "Survey boost: increases the AB earned by completing surveys in the Earn section.",
         abTipSuperRentBoost: "Super Rent Boost (SRB): during the event (about 2.5 days per month) rent accrues up to 50x faster — plan your land purchases ahead of this event to make the most of it.",
 
+        aboutTitle: "What is AE Companion",
+        aboutPositioning: "Atlas Earth Calculator, Portfolio Tracker & Strategy Companion",
+        aboutText: "AE Companion is a free, independent tool for Atlas Earth players: it calculates your parcel income using your country's boost tiers, tracks rarities, badges and your Mayor goal, and suggests a strategy based on your data.",
+        aboutItem1: "Daily, monthly and yearly income, with and without boost",
+        aboutItem2: "Boost tiers by country and \"dead zone\" warnings",
+        aboutItem3: "AB planning, including Explorer Club",
+        aboutItem4: "Assistant and strategy based on your goal",
+        aboutStart: "To start, tap the pencil at the top and enter your parcels, badges and goal. Your data stays saved on this device.",
+        aboutDisclaimer: "Independent project: not affiliated with, sponsored by or endorsed by Atlas Reality or Atlas Earth. Results are estimates.",
+        footerGuides: "Guides",
+        footerAbout: "About",
+        footerPrivacy: "Privacy",
+
         createdBy: "Created by",
         igCta: "Requests or feedback? Message me on Instagram",
         coffeeCta: "Find this useful? Buy me a coffee",
         lastUpdate: "Last update",
+        lastUpdateDate: "October 9, 2026",
+        metaTitle: "AE Companion – Atlas Earth Calculator & Strategy",
+        metaDescription: "Free Atlas Earth companion with parcel tracking, rent and boost calculations, AB planning and personalized strategy tools.",
         withoutBoost: "without boost",
         navHome: "Home",
         navStrategy: "Strategy",
@@ -632,6 +664,13 @@ function formatDays(n) {
 function applyTranslations() {
 
     document.documentElement.lang = currentLang;
+
+    // Title e meta description seguono la lingua attiva (stessa lingua di <html lang>)
+    document.title = t("metaTitle");
+
+    const metaDescriptionEl = document.querySelector('meta[name="description"]');
+
+    if (metaDescriptionEl) metaDescriptionEl.setAttribute("content", t("metaDescription"));
 
     document.querySelectorAll("[data-i18n]").forEach(function (el) {
 
