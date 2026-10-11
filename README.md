@@ -1,8 +1,18 @@
-# -ae-companion
-    Strategic Dashboard for Atlas Earth
-# 🌍 AE Companion
+# AE Companion
 
-> Strategic Dashboard for Atlas Earth
+> Track. Plan. Conquer. — strumento web gratuito e indipendente per giocatori di Atlas Earth.
+
+## Stato attuale (v0.8.1)
+
+Funzioni realmente presenti: rendita giornaliera/mensile/annuale con e senza boost, terreni per rarità, badge con bonus passaporto, fasce di boost per gruppo di Paesi con avviso "zona morta", obiettivo (efficienza, rendita, terreni, Mayor) con Strategia dinamica, Assistente, Explorer Club (ladder e Day), flag Mission Pass, consigli Extra AB, card di condivisione, interfaccia IT/EN, salvataggio locale (localStorage).
+
+HTML, CSS e JavaScript vanilla, nessun build e nessun framework. Hosting: GitHub Pages. Statistiche: GoatCounter (solo pagina dell'app). Non è affiliato né approvato da Atlas Reality / Atlas Earth.
+
+Le sezioni "Main Features", "Roadmap" e "Technology Stack" più sotto sono il **piano originale** del progetto: grafici, storico, Mayor Tracker con date, analisi ROI dei pass e Chart.js **non sono implementati**.
+
+Verifiche automatiche (Node): `node tests/check-seo.js`, `node tests/check-lang-privacy.js`, `node tests/regression-compare.js <cartella-vecchia> <cartella-nuova>`.
+
+---
 
 **Powered by Alessandro Chindemi**
 
@@ -260,4 +270,13 @@ All rights reserved.
   (giorni di calendario, sicuro con ora legale), stato teorico vs confermato, proiezione sulla ladder.
 - `js/explorer-ui.js` — card nella tab Strategia e pannelli (correzione streak, date, saldo AB).
 - La Strategia legge gli AB/day da `getEffectiveDailyAB()` / `getExplorerDaysForAB()`.
-- Test: `TZ=Europe/Rome node tests/explorer.test.js`
+
+
+## SEO, pagine informative e test (v0.8)
+
+- `about/`, `privacy/`, `guides/` — pagine statiche generate da `tools/build-pages.js` (tabelle lette da `js/config.js` e `js/countries.js`).
+- `sitemap.xml`, `robots.txt`, `404.html`, `assets/og-image.png`.
+- `node tests/check-seo.js` — controlli statici (title, canonical, sitemap, JSON-LD, link).
+- `docs/` — report, guida di pubblicazione, Search Console, piani.
+- `node tests/check-lang-privacy.js` — coerenza lingua/metadata, privacy e disclaimer (v0.8.1).
+- Lingua: HTML iniziale e metadata sono in italiano (lingua predefinita); cambiando lingua con IT/EN, `applyTranslations()` aggiorna anche title, meta description e `<html lang>`.
