@@ -1395,3 +1395,49 @@
 .settings-panel .explorer-note{
     margin:0 0 12px;
 }
+
+/* ======================================
+   Sezione informativa (SEO) e link footer
+====================================== */
+
+.about-positioning{
+    color:var(--cyan-info);
+    font-size:.85rem;
+    font-weight:600;
+    margin:0 0 10px;
+}
+
+.about-card p{
+    font-size:.88rem;
+    line-height:1.55;
+    color:var(--text-2);
+    margin:0 0 10px;
+}
+
+.about-list{
+    margin:0 0 12px;
+    padding-left:20px;
+    font-size:.88rem;
+    line-height:1.6;
+    color:var(--text);
+}
+
+.about-card .about-disclaimer{
+    font-size:.75rem;
+    margin:12px 0 0;
+}
+
+.footer-links{
+    display:flex;
+    justify-content:center;
+    gap:6px;
+    margin-top:12px;
+}
+
+.footer-links a{
+    color:var(--cyan-info);
+    text-decoration:none;
+    padding:10px 12px;
+    min-height:44px;
+    box-sizing:border-box;
+}
