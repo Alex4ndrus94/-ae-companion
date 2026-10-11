@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calcolo rendita Atlas Earth: come lo fa AE Companion</title>
+<meta name="description" content="Come AE Companion calcola la rendita dei terreni di Atlas Earth: rendita al secondo per rarità, bonus badge, boost, giorno, mese e anno, e Super Rent Boost.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://alex4ndrus94.github.io/-ae-companion/guides/calcolo-rendita/">
+<link rel="icon" href="../../assets/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../assets/icons/pwa/apple-touch-icon.png">
+<meta name="theme-color" content="#10141B">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AE Companion">
+<meta property="og:title" content="Calcolo rendita Atlas Earth: come lo fa AE Companion">
+<meta property="og:description" content="Come AE Companion calcola la rendita dei terreni di Atlas Earth: rendita al secondo per rarità, bonus badge, boost, giorno, mese e anno, e Super Rent Boost.">
+<meta property="og:url" content="https://alex4ndrus94.github.io/-ae-companion/guides/calcolo-rendita/">
+<meta property="og:image" content="https://alex4ndrus94.github.io/-ae-companion/assets/og-image.png">
+<meta property="og:locale" content="it_IT">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/design-system.css">
+<link rel="stylesheet" href="../../css/pages.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "AE Companion",
+      "item": "https://alex4ndrus94.github.io/-ae-companion/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Guide",
+      "item": "https://alex4ndrus94.github.io/-ae-companion/guides/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Come viene calcolata la rendita in AE Companion",
+      "item": "https://alex4ndrus94.github.io/-ae-companion/guides/calcolo-rendita/"
+    }
+  ]
+}
+</script>
+</head>
+<body class="doc-page">
+<header class="doc-header">
+  <a class="doc-brand" href="../../"><img src="../../assets/logo.svg" alt="" width="32" height="32"><span>AE Companion</span></a>
+  <nav class="doc-nav" aria-label="Principale">
+    <a href="../../">App</a><a href="../../guides/">Guide</a><a href="../../about/">Informazioni</a>
+  </nav>
+</header>
+<main class="doc-main">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../../">AE Companion</a> › <a href="../../guides/">Guide</a> › <span aria-current="page">Come viene calcolata la rendita in AE Companion</span></nav>
+<h1>Come viene calcolata la rendita in AE Companion</h1>
+
+<p class="note"><strong>Nota sulle fonti.</strong> Questa guida descrive il calcolo <em>implementato in AE Companion</em>, ricavato dal suo codice. I valori per rarità e le soglie sono costanti dell'app (nel codice sono indicati come ripresi dall'Help Center di Atlas Earth); non sono stati riverificati in modo indipendente per questa pagina. <strong>Data ultima verifica: da confermare dal proprietario.</strong></p>
+<h2>Passaggi</h2>
+<ol>
+<li><strong>Rendita grezza al secondo</strong>: somma, per ogni rarità, dei terreni posseduti per la rendita al secondo di quella rarità.</li>
+<li><strong>Bonus passaporto</strong>: la rendita viene moltiplicata per 1 + percentuale del bonus legata al numero di badge.</li>
+<li><strong>Boost</strong>: il risultato viene moltiplicato per il boost della fascia in cui cade il totale dei terreni, secondo la tabella del Paese (<a href="../boost-e-punto-morto/">vedi le fasce</a>).</li>
+<li><strong>Periodi</strong>: giorno = secondi × 86.400; mese = 30 giorni; anno = 365 giorni.</li>
+<li><strong>Valuta</strong>: in inglese i valori sono in USD; in italiano sono convertiti in EUR con un tasso fisso nell'app (0.86).</li>
+</ol>
+<p>La riga “senza boost” della Home salta il passaggio 3.</p>
+<h2>Rendita al secondo per rarità (valori usati dall'app)</h2>
+<div class="table-wrap"><table><thead><tr><th>Rarità</th><th>$ al secondo</th></tr></thead><tbody>
+<tr><td>Common</td><td>0,0000000011</td></tr><tr><td>Rare</td><td>0,0000000016</td></tr><tr><td>Epic</td><td>0,0000000022</td></tr><tr><td>Legendary</td><td>0,0000000044</td></tr>
+</tbody></table></div>
+<h2>Bonus passaporto per numero di badge (valori usati dall'app)</h2>
+<div class="table-wrap"><table><thead><tr><th>Badge</th><th>Bonus</th></tr></thead><tbody>
+<tr><td>0</td><td>+0%</td></tr><tr><td>1–10</td><td>+5%</td></tr><tr><td>11–30</td><td>+10%</td></tr><tr><td>31–60</td><td>+15%</td></tr><tr><td>61–100</td><td>+20%</td></tr><tr><td>101+</td><td>+25%</td></tr>
+</tbody></table></div>
+<h2>Super Rent Boost</h2>
+<p>La Home mostra a parte una stima supplementare del Super Rent Boost (moltiplicatore x50 nell'app), calcolata sulla rendita base con bonus badge e <em>senza</em> boost dei terreni. Non è inclusa nella rendita principale perché dipende dalla durata dell'evento e dal tempo in cui lo mantieni attivo. Non è confermato se in gioco i moltiplicatori si sommino: tratta il valore come ipotesi.</p>
+<h2>Prova con i tuoi numeri</h2>
+<p>Inserisci i tuoi dati in <a href="../../">AE Companion</a>; per capire quando conviene comprare terreni leggi anche <a href="../boost-e-punto-morto/">boost e punto morto</a>.</p>
+<p class="cta"><a class="btn-link" href="../../">Apri AE Companion</a></p>
+</main>
+<footer class="doc-footer">
+<p>AE Companion è un progetto indipendente, non affiliato, sponsorizzato né approvato da Atlas Reality o Atlas Earth. “Atlas Earth” è un marchio dei rispettivi titolari. I risultati sono stime a scopo informativo.</p>
+<p><a href="../../guides/">Guide</a> · <a href="../../about/">Informazioni</a> · <a href="../../privacy/">Privacy</a></p>
+</footer>
+</body>
+</html>
