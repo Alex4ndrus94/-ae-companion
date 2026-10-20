@@ -195,10 +195,12 @@
 
     </div>
 
+    <p class="srb-info-note" id="daily-estimate-warning" data-i18n="dailyEstimateWarning">Le stime giornaliere, mensili e annuali assumono il boost ordinario attivo 24 ore su 24. Nel gioco ogni annuncio attiva il boost per 1 ora (fino a 6 annunci impilati), quindi la rendita reale può essere inferiore. Sono stime indicative, non guadagni garantiti.</p>
+
     <div class="country-note">
         <span class="hex-icon-wrap sm"><img src="assets/icons/check.svg" alt=""></span>
         <div>
-            <span class="country-note-title" data-i18n="countryNoteTitle">Calcoli basati sulle tabelle ufficiali Atlas Earth</span>
+            <span class="country-note-title" data-i18n="countryNoteTitle">Calcoli basati su tabelle per Paese (indicative, non ancora verificate una per una)</span>
             <span class="country-note-text" data-i18n="countryNoteText">Specifiche per ogni Paese: puoi cambiare il tuo da Modifica dati.</span>
         </div>
     </div>
@@ -213,10 +215,15 @@
 <div class="srb-info-box">
     <div class="srb-info-title"><img src="assets/icons/rocket.svg" class="icon-inline" alt=""> <span data-i18n="srbBoxTitle">Con il Super Potenziamento attivo (x50)</span></div>
     <div class="srb-info-value" id="srb-estimate"></div>
+    <div class="srb-info-note srb-info-range" id="srb-range" hidden></div>
+    <div class="srb-info-note" id="srb-assumptions" data-i18n="srbAssumptions"></div>
+    <div class="srb-info-note" id="srb-limit-note"></div>
+    <div class="srb-info-note" id="srb-range-note" hidden></div>
     <div class="srb-info-note" data-i18n="srbBoxNote">
-        Stima supplementare, non inclusa nella rendita ufficiale sopra: attiva solo durante l'evento (~2,5 giorni/mese) e per la durata in cui riesci a mantenerlo attivo.
+        Stima supplementare giornaliera, non inclusa nella rendita sopra: vale solo durante l'evento. Durata e frequenza degli eventi non sono garantite, quindi l'app non stima un guadagno mensile.
     </div>
 </div>
+<div class="srb-info-note" id="currency-estimate-note"></div>
 
 </div>
 
@@ -262,7 +269,7 @@
     <div class="country-note">
         <span class="hex-icon-wrap sm"><img src="assets/icons/check.svg" alt=""></span>
         <div>
-            <span class="country-note-title" data-i18n="countryNoteTitle">Calcoli basati sulle tabelle ufficiali Atlas Earth</span>
+            <span class="country-note-title" data-i18n="countryNoteTitle">Calcoli basati su tabelle per Paese (indicative, non ancora verificate una per una)</span>
             <span class="country-note-text" data-i18n="countryNoteText">Specifiche per ogni Paese: puoi cambiare il tuo da Modifica dati.</span>
         </div>
     </div>
@@ -364,8 +371,18 @@
         </label>
 
         <label class="settings-field"><span class="field-label-row"><img src="assets/icons/lands.svg" class="icon-inline" alt=""><span data-i18n="countryLabel">Paese</span></span>
-            <select id="country-input" onchange="setCountryGroup(this.value)"></select>
+            <select id="country-input" onchange="stageCountryGroup(this.value)"></select>
         </label>
+
+        <div id="country-suggestion" class="settings-hint" style="display:none;">
+            <span id="country-suggestion-text"></span>
+            <button type="button" id="country-suggestion-btn" class="btn-cancel" onclick="confirmSuggestedCountryGroup()" data-i18n="countrySuggestionConfirm">Conferma</button>
+        </div>
+
+        <label class="settings-field"><span class="field-label-row"><img src="assets/icons/exchange.svg" class="icon-inline" alt=""><span data-i18n="currencyLabel">Valuta</span></span>
+            <select id="currency-input"></select>
+        </label>
+        <p id="currency-note" class="settings-hint"></p>
 
         <div class="settings-section"><img src="assets/icons/idea.svg" class="icon-inline" alt=""><span data-i18n="sectionGoal">Il tuo obiettivo</span></div>
 
@@ -498,7 +515,7 @@
     </nav>
 
     <div class="footer-meta">
-        <span class="version-badge">v0.8.1</span>
+        <span class="version-badge">v0.9.5</span>
         <span class="footer-update"><span data-i18n="lastUpdate">Ultimo aggiornamento</span>: <span data-i18n="lastUpdateDate">9 ottobre 2026</span></span>
     </div>
 </footer>
@@ -525,7 +542,9 @@
 </div>
 
 <script src="js/config.js"></script>
+<script src="js/prefs.js"></script>
 <script src="js/i18n.js"></script>
+<script src="js/money.js"></script>
 <script src="js/countries.js"></script>
 <script src="js/player.js"></script>
 <script src="js/explorer.js"></script>
