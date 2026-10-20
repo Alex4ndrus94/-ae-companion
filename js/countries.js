@@ -1,6 +1,8 @@
 // ======================================
 // AE Companion - Gruppi Boost per Paese
-// Dati ufficiali: Atlas Reality Help Center
+// Origine dei dati: soglie e appartenenze NON sono state riverificate in v0.9 (le tabelle
+// ufficiali dell'Help Center sono pubblicate come immagini). Stato per regola: docs/07-AUDIT-FONTI.md.
+// Non trattare queste tabelle come "ufficiali" finche' non sono verificate.
 // ======================================
 
 const COUNTRY_KEY = "aeCountryGroup";
@@ -179,23 +181,64 @@ const localeToCountryGroup = {
 
 };
 
+// Gruppo di partenza "provvisorio" per i calcoli quando l'utente non ha ancora CONFERMATO un cluster.
+// E' lo stesso comportamento di v0.8.1 (lingua del browser, fallback EU_WEST), cosi' i numeri
+// non cambiano: ma NON viene salvato finche' l'utente non lo conferma.
 let currentCountryGroup = "EU_WEST";
+let countryGroupConfirmed = false;
 
-function detectCountryGroup() {
+function getSavedCountryGroup() {
 
-    const saved = localStorage.getItem(COUNTRY_KEY);
+    try {
+        const saved = localStorage.getItem(COUNTRY_KEY);
+        if (saved && countryGroups[saved]) return saved;
+    } catch (e) { /* storage non disponibile */ }
 
-    if (saved && countryGroups[saved]) return saved;
+    return null;
 
-    const nav = (navigator.language || "it").toLowerCase();
+}
 
-    if (localeToCountryGroup[nav]) return localeToCountryGroup[nav];
+// Suggerimento dal browser. ATTENZIONE: la lingua del browser NON e' il Paese di residenza.
+// reliability: "region" = il browser indica anche una regione (es. en-GB);
+//              "language" = solo la lingua (es. it): suggerimento debole;
+//              "none" = nessun suggerimento disponibile.
+function suggestCountryGroup(navLang) {
+
+    const raw = navLang !== undefined ? navLang
+        : ((typeof navigator !== "undefined" && navigator.language) || "");
+
+    const nav = String(raw || "").toLowerCase();
+
+    if (!nav) return { group: null, reliability: "none" };
+
+    if (localeToCountryGroup[nav] && nav.indexOf("-") !== -1) return { group: localeToCountryGroup[nav], reliability: "region" };
 
     const base = nav.split("-")[0];
 
-    if (localeToCountryGroup[base]) return localeToCountryGroup[base];
+    if (localeToCountryGroup[nav]) return { group: localeToCountryGroup[nav], reliability: "language" };
 
-    return "EU_WEST";
+    if (localeToCountryGroup[base]) return { group: localeToCountryGroup[base], reliability: "language" };
+
+    return { group: null, reliability: "none" };
+
+}
+
+// Gruppo usato dai calcoli: salvato (confermato) oppure provvisorio come in v0.8.1
+function detectCountryGroup() {
+
+    const saved = getSavedCountryGroup();
+
+    if (saved) return saved;
+
+    const sug = suggestCountryGroup();
+
+    return sug.group || "EU_WEST";
+
+}
+
+function isCountryGroupConfirmed() {
+
+    return countryGroupConfirmed;
 
 }
 
@@ -211,15 +254,98 @@ function getActiveBreakpoints() {
 
 }
 
+// Persiste il cluster: da chiamare SOLO quando l'utente lo ha scelto/confermato esplicitamente.
+// Non e' mai chiamata da cambi di lingua o di valuta.
 function setCountryGroup(group) {
 
     if (!countryGroups[group]) return;
 
     currentCountryGroup = group;
+    countryGroupConfirmed = true;
 
-    localStorage.setItem(COUNTRY_KEY, group);
+    try { localStorage.setItem(COUNTRY_KEY, group); } catch (e) { /* ignora */ }
 
     if (typeof renderDashboard === "function") renderDashboard();
+
+}
+
+// Selezione "in bozza" nel pannello Impostazioni: non salva nulla finche' non si preme Salva
+let pendingCountryGroup = null;
+
+function stageCountryGroup(group) {
+
+    pendingCountryGroup = countryGroups[group] ? group : null;
+
+    updateCountrySuggestionUI();
+
+}
+
+function confirmSuggestedCountryGroup() {
+
+    const sug = suggestCountryGroup();
+
+    if (sug.group) {
+        pendingCountryGroup = sug.group;
+        const select = document.getElementById("country-input");
+        if (select) select.value = sug.group;
+    }
+
+    updateCountrySuggestionUI();
+
+}
+
+function resetPendingCountryGroup() {
+
+    pendingCountryGroup = null;
+
+}
+
+function applyPendingCountryGroup() {
+
+    if (pendingCountryGroup) {
+        const g = pendingCountryGroup;
+        pendingCountryGroup = null;
+        setCountryGroup(g);
+        return true;
+    }
+
+    return false;
+
+}
+
+function updateCountrySuggestionUI() {
+
+    const box = document.getElementById("country-suggestion");
+
+    if (!box) return;
+
+    if (countryGroupConfirmed) {
+        box.style.display = "none";
+        return;
+    }
+
+    const sug = suggestCountryGroup();
+    const lang = getCurrentLanguage();
+    const text = document.getElementById("country-suggestion-text");
+    const btn = document.getElementById("country-suggestion-btn");
+
+    box.style.display = "block";
+
+    if (sug.group) {
+
+        const grp = countryGroups[sug.group];
+        const label = (lang === "it" ? grp.label : grp.labelEn) || grp.label;
+
+        if (text) text.textContent = t(sug.reliability === "region" ? "countrySuggestionRegion" : "countrySuggestionLanguage", { group: label })
+            + " " + (pendingCountryGroup ? t("countrySuggestionPending") : t("countrySuggestionUnconfirmed"));
+        if (btn) btn.style.display = pendingCountryGroup === sug.group ? "none" : "";
+
+    } else {
+
+        if (text) text.textContent = t("countrySuggestionNone");
+        if (btn) btn.style.display = "none";
+
+    }
 
 }
 
@@ -230,8 +356,18 @@ function populateCountrySelect() {
     if (!select) return;
 
     const lang = getCurrentLanguage();
+    const shown = pendingCountryGroup || (countryGroupConfirmed ? currentCountryGroup : "");
 
     select.innerHTML = "";
+
+    // Nessun cluster confermato e nessuna bozza: scelta esplicita richiesta
+    if (!shown) {
+        const ph = document.createElement("option");
+        ph.value = "";
+        ph.textContent = t("countryChoosePlaceholder");
+        ph.selected = true;
+        select.appendChild(ph);
+    }
 
     Object.keys(countryGroups).forEach(function (key) {
 
@@ -241,12 +377,18 @@ function populateCountrySelect() {
         option.value = key;
         option.textContent = (lang === "it" ? group.label : group.labelEn) || group.label;
 
-        if (key === currentCountryGroup) option.selected = true;
+        if (key === shown) option.selected = true;
 
         select.appendChild(option);
 
     });
 
+    updateCountrySuggestionUI();
+
 }
+
+const savedCountryGroupAtLoad = getSavedCountryGroup();
+
+countryGroupConfirmed = savedCountryGroupAtLoad !== null;
 
 currentCountryGroup = detectCountryGroup();

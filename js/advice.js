@@ -66,13 +66,7 @@ function getEfficiencyComparison(totalLands) {
 
 }
 
-function convertToDisplay(usdValue) {
-
-    return getCurrentLanguage() === "it"
-        ? usdValue * CONFIG.exchangeRate
-        : usdValue;
-
-}
+// convertToDisplay() e' ora in js/money.js (valuta indipendente dalla lingua)
 
 // Tempo stimato per raggiungere un certo costo in AB,
 // considerando PRIMA il gruzzolo già disponibile, poi il ritmo giornaliero

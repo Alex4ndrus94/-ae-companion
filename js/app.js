@@ -123,16 +123,48 @@ function renderDashboard() {
         t("perSecondIncome", { value: formatCurrencyPrecise(getIncomePerSecondConverted()) })
     );
 
+    // Stima SRB: una sola fonte (getSRBDisplay -> getSRBView -> getSRBBreakdown / getSRBDailyBoundsUSD)
+    const srbDisplay = getSRBDisplay();
+
     setText(
         "srb-estimate",
-        formatCurrency(getSRBDailyIncomeEstimateConverted()) + " / " + (getCurrentLanguage() === "it" ? "giorno" : "day")
+        srbDisplay.estimate + " / " + t("day")
     );
+
+    // Intervallo teorico: solo oltre 150.000 terreni e solo se gli estremi sono diversi
+    const srbRange = document.getElementById("srb-range");
+    const srbRangeNote = document.getElementById("srb-range-note");
+    if (srbRange) {
+        srbRange.textContent = srbDisplay.hasRange ? t("srbRangeLine", { low: srbDisplay.low, high: srbDisplay.high }) : "";
+        srbRange.hidden = !srbDisplay.hasRange;
+    }
+    if (srbRangeNote) {
+        srbRangeNote.textContent = srbDisplay.hasRange ? t("srbRangeNote") : "";
+        srbRangeNote.hidden = !srbDisplay.hasRange;
+    }
+
+    setText("currency-estimate-note", getCurrencyNoteText());
+
+    const srbAssumptions = document.getElementById("srb-assumptions");
+    if (srbAssumptions) srbAssumptions.textContent = t("srbAssumptions");
+
+    // Oltre 150.000 terreni: mostra come e' stata ripartita la stima (x50 / boost ordinario)
+    const srbLimitNote = document.getElementById("srb-limit-note");
+    if (srbLimitNote) {
+        const d = srbDisplay.view.details;
+        const nf = new Intl.NumberFormat(getDisplayLocale());
+        srbLimitNote.textContent = d.overLimit
+            ? t("srbLimitNote", { total: nf.format(d.totalLands), srb: nf.format(d.srbLands), boost: d.ordinaryBoost, rest: nf.format(d.ordinaryLands) })
+            : "";
+    }
 
     // ======================================
     // Strategia: il Goal Engine calcola, la UI disegna
     // ======================================
 
     renderExplorerCard();
+
+    if (typeof refreshAssistantMessages === "function") refreshAssistantMessages();
 
     renderStrategy(getStrategyModel());
 
@@ -161,5 +193,7 @@ function renderDashboard() {
 }
 
 applyTranslations();
+
+populateCurrencySelect(true);
 
 renderDashboard();

@@ -65,20 +65,14 @@ function formatStrategyAB(ab) {
 
 }
 
-// Importo (salvato in USD) nella valuta della lingua. Sotto 1 centesimo
+// Importo (salvato in USD) nella valuta di visualizzazione scelta. Sotto 1 centesimo
 // usa più decimali, altrimenti sparirebbe sempre come "0,00"
 function formatStrategyMoney(usd) {
 
     const value = convertToDisplay(Number(usd) || 0);
-    const lang = getCurrentLanguage();
     const digits = (value === 0 || Math.abs(value) >= 0.01) ? 2 : 4;
 
-    return new Intl.NumberFormat(lang === "it" ? "it-IT" : "en-US", {
-        style: "currency",
-        currency: lang === "it" ? "EUR" : "USD",
-        minimumFractionDigits: digits,
-        maximumFractionDigits: digits
-    }).format(value);
+    return formatMoneyDigits(value, digits);
 
 }
 

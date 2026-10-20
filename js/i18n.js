@@ -57,7 +57,20 @@ const translations = {
         assistantIncomeSummary: "In questo momento guadagni circa {daily} al giorno, {monthly} al mese, {yearly} all'anno (con boost incluso).",
         tipBadgeMaxAssistant: "Hai già il bonus passaporto massimo (+{percent}%): il tuo numero di badge è già ottimale.",
         assistantBadgeProgress: "Ti mancano {remaining} badge per salire dal bonus +{current}% al +{percent}%: ogni badge in più aumenta la tua rendita in modo permanente.",
-        assistantSRB: "Se riesci a tenere attivo il Super Potenziamento (x50) per un giorno intero, la tua rendita salirebbe indicativamente a circa {value} al giorno — vale solo durante l'evento (~2,5 giorni al mese).",
+        assistantSRB: "Stima indicativa: durante un giorno di Super Rent Boost (×50) la rendita del tuo profilo sarebbe di circa {value} al giorno. Vale solo mentre l'evento è attivo; durata e frequenza non sono garantite. Ipotesi: bonus badge incluso, boost ordinario non sommato al ×50 (cumulabilità non confermata ufficialmente). È una stima, non un guadagno garantito.",
+        assistantCurrencyNote: "Importi in euro: conversione indicativa (1 USD = {rate} EUR, cambio fisso non ufficiale), non la rendita erogata dal gioco.",
+        assistantSRBRange: "Stima centrale durante un giorno di Super Rent Boost (×50): {value} al giorno. Intervallo teorico: {low}–{high} al giorno. L'intervallo riflette l'ordine di acquisizione sconosciuto dei terreni (l'app conserva le quantità per rarità, non la cronologia). La stima centrale ripartisce proporzionalmente le rarità; i valori estremi sono scenari teorici, non previsioni garantite né un intervallo statistico. Ipotesi: hai {total} terreni, il ×50 vale per i primi {limit} e gli altri {rest} rendono con il boost ordinario ×{boost} (attivo 24 ore su 24); bonus badge incluso; boost ordinario non sommato al ×50. È una stima, non un guadagno garantito.",
+        assistantSRBSplit: "Hai {total} terreni: il ×50 vale per i primi {limit}, gli altri {rest} rendono con il boost ordinario ×{boost}.",
+        assistantEventAmbiguous: "Non è chiaro a quale evento ti riferisci, quindi non stimo nessun importo. Se intendi il Super Rent Boost (×50), scrivimi ad esempio «Quanto renderei durante l'SRB?» oppure «Quanto renderei con 200.000 terreni e 15 badge durante l'SRB?». Se parli di un altro evento o di AB, indicamelo.",
+        assistantSRBNeedData: "Per stimare il Super Rent Boost mi serve un numero di terreni maggiore di zero, e nel tuo profilo non ce ne sono. Non voglio inventare dati: scrivimi ad esempio «Quanto renderei con 200.000 terreni e 15 badge durante l'SRB?» oppure inserisci i tuoi terreni dal pannello Modifica dati.",
+        assistantSRBBadgesProfile: " (dal tuo profilo)",
+        assistantSRBRarityOdds: "Rarità ripartite secondo le probabilità di assegnazione usate dall'app (comune {common}%, rara {rare}%, epica {epic}%, leggendaria {legendary}%): è un'ipotesi del modello, non la tua distribuzione reale.",
+        assistantSRBRarityScaled: "Rarità ripartite in proporzione a quelle del tuo profilo (ipotesi di proporzionalità).",
+        assistantSRBRarityExtended: "Terreni del tuo profilo mantenuti; i {extra} aggiuntivi sono ripartiti secondo le probabilità di assegnazione usate dall'app (comune {common}%, rara {rare}%, epica {epic}%, leggendaria {legendary}%): è un'ipotesi del modello, non la distribuzione reale che avresti.",
+        assistantSRBRaritySaved: "Rarità dei terreni del tuo profilo.",
+        assistantSRBHypo: "Scenario ipotetico (il profilo salvato non viene modificato): {lands} terreni e {badges} badge{badgeSrc}. {rarity} Stima indicativa per un giorno di Super Rent Boost (×50): circa {value} al giorno. Vale solo mentre l'evento è attivo; durata e frequenza non sono garantite. Ipotesi: bonus badge incluso, boost ordinario non sommato al ×50 (cumulabilità non confermata ufficialmente). È una stima, non un guadagno garantito.",
+        assistantSRBHypoSplit: "Con {total} terreni il ×50 vale per i primi {limit}, gli altri {rest} rendono con il boost ordinario ×{boost}.",
+        assistantSRBHypoRange: "Scenario ipotetico (il profilo salvato non viene modificato): {lands} terreni e {badges} badge{badgeSrc}. {rarity} Stima centrale per un giorno di Super Rent Boost (×50): {value} al giorno. Intervallo teorico: {low}–{high} al giorno. L'intervallo riflette l'ordine di acquisizione sconosciuto dei terreni; la stima centrale ripartisce proporzionalmente le rarità e i valori estremi sono scenari teorici, non un intervallo statistico né una garanzia. Ipotesi: il ×50 vale per i primi {limit} terreni e gli altri {rest} rendono con il boost ordinario ×{boost} (attivo 24 ore su 24); bonus badge incluso; boost ordinario non sommato al ×50. È una stima, non un guadagno garantito.",
         assistantABBalance: "Hai {balance} AB disponibili al momento (il gruzzolo che hai inserito nel pannello ✏️).",
         assistantLandsBreakdown: "Possiedi {total} terreni in totale: {common} Common, {rare} Rare, {epic} Epic, {legendary} Legendary.",
         assistantABSources: "Le fonti principali di AB extra sono: Arcade, i mini-giochi (Golf, Warship, Bowling, Racer, Fishing), la conversione dell'affitto, i sondaggi, e il Super Potenziamento durante gli eventi. Trovi tutti i dettagli nella card \"Come guadagnare più AB\".",
@@ -72,12 +85,32 @@ const translations = {
         suggestionIncome: "Quanto guadagno?",
         send: "Invia",
         srbBoxTitle: "Con il Super Potenziamento attivo (x50)",
-        srbBoxNote: "Stima supplementare, non inclusa nella rendita ufficiale sopra: attiva solo durante l'evento (~2,5 giorni/mese) e per la durata in cui riesci a mantenerlo attivo.",
+        srbBoxNote: "Stima supplementare giornaliera, non inclusa nella rendita sopra: vale solo durante l'evento. Durata e frequenza degli eventi non sono garantite, quindi l'app non stima un guadagno mensile.",
+        srbRangeNote: "L'intervallo riflette l'ordine di acquisizione sconosciuto dei terreni: l'app conserva le quantità per rarità, non la cronologia. La stima centrale ripartisce proporzionalmente le rarità tra i terreni entro e oltre la soglia; i valori estremi sono scenari teorici, non un intervallo statistico di confidenza né una garanzia del guadagno.",
+        srbRangeLine: "Intervallo teorico: {low}–{high} / giorno (la cifra sopra è la stima centrale)",
 
         settingsTitleEdit: "Modifica dati",
         settingsTitleOnboarding: "Benvenuto!",
         settingsIntro: "Inserisci il tuo nome e i tuoi dati di partenza. Resteranno salvati su questo dispositivo.",
         nameLabel: "Nome",
+        currencyLabel: "Valuta",
+        currencyOptionEUR: "Euro (€)",
+        currencyOptionUSD: "Dollaro USA ($)",
+        currencySettingNote: "La valuta è indipendente dalla lingua. I tuoi dati restano salvati in dollari e cambia solo come vengono mostrati.",
+        currencyEstimateNote: "Importi in euro calcolati con un cambio fisso e indicativo (1 USD = {rate} EUR), non aggiornato e non ufficiale.",
+        countrySuggestionRegion: "Suggerimento dal browser: {group}. Si basa sulla lingua/regione del browser, non sulla tua posizione.",
+        countrySuggestionLanguage: "Suggerimento debole dalla lingua del browser: {group}. Non indica il tuo Paese di residenza.",
+        countrySuggestionNone: "Non riesco a suggerire un gruppo: scegli il tuo Paese dall'elenco.",
+        countrySuggestionUnconfirmed: "Non è ancora confermato: finché non lo confermi, i calcoli usano questo valore provvisorio.",
+        countrySuggestionPending: "Da salvare con Salva.",
+        countrySuggestionConfirm: "Conferma suggerimento",
+        countryChoosePlaceholder: "— Scegli il tuo Paese —",
+        srbAssumptions: "Ipotesi della stima: rendita base con bonus badge × 50 per i primi 150.000 terreni (limite indicato dall'Help Center ufficiale); i terreni oltre il limite rendono con il boost ordinario del loro scaglione. Il boost ordinario non viene sommato al × 50 (cumulabilità non confermata da una fonte ufficiale verificata). Non è un guadagno garantito né un calcolo ufficiale.",
+        srbLimitNote: "Hai {total} terreni: il × 50 è applicato a {srb} terreni, il boost ordinario × {boost} a {rest} terreni.",
+        dailyEstimateWarning: "Le stime giornaliere, mensili e annuali assumono il boost ordinario attivo 24 ore su 24. Nel gioco ogni annuncio attiva il boost per 1 ora (fino a 6 annunci impilati), quindi la rendita reale può essere inferiore. Sono stime indicative, non guadagni garantiti.",
+        assistantNumberInvalid: "Non riesco a usare quel numero (\"{raw}\"): scrivilo come numero intero positivo, per esempio 1014 o 1.014.",
+        assistantNumberAmbiguous: "Il numero \"{raw}\" è ambiguo: intendi {value}? Riscrivilo senza separatori (es. {value}) per confermare.",
+        assistantWhatIfBoth: "Con {lands} terreni e {badges} badge il boost sarebbe x{boost} e il bonus passaporto +{percent}%: la rendita salirebbe a circa {daily}/giorno — oggi sei a {currentDaily}/giorno. È una stima: la rarità dei terreni non ancora posseduti è assegnata a caso.",
         countryLabel: "Paese",
         sectionLands: "Terreni",
         sectionGoal: "Il tuo obiettivo",
@@ -113,9 +146,9 @@ const translations = {
         abTipsDisclaimer: "Valori indicativi basati sull'esperienza della community, non dati ufficiali: possono variare.",
         abTipArcade: "Arcade: da 1 a 340 AB a partita, in base al livello e al gioco proposto. Se disponibile, la missione Arcade dà anche punti premio su una scala che va da 5-60 AB (gratis) a 25-260 AB (con Mission Pass).",
         abTipMinigames: "Mini-giochi disponibili: Atlas Golf, Atlas Warship, Atlas Bowling, Atlas Racer, Atlas Fishing — altra fonte di AB oltre all'Arcade.",
-        abTipRentConversion: "Bonus conversione affitto: circa 33 AB per ogni € convertito dall'affitto.",
+        abTipRentConversion: "Conversione affitto: 1 $ di rendita virtuale = 25 AB (tasso fisso, sempre in dollari). La valuta mostrata nell'app non cambia gli AB che ricevi.",
         abTipSurveyBoost: "Potenziamento sondaggi: aumenta gli AB guadagnati completando i sondaggi nella sezione Guadagna.",
-        abTipSuperRentBoost: "Super Potenziamento Affitto (SRB): durante l'evento (circa 2,5 giorni al mese) l'affitto si accumula fino a 50x più veloce — pianifica gli acquisti di terreni prima di questo evento per sfruttarlo al massimo.",
+        abTipSuperRentBoost: "Super Potenziamento Affitto (SRB): durante l'evento l'affitto si accumula fino a 50x più veloce (durata e frequenza non sono garantite) — pianifica gli acquisti di terreni prima di questo evento per sfruttarlo al massimo.",
 
         aboutTitle: "Cos'è AE Companion",
         aboutPositioning: "Atlas Earth Calculator, Portfolio Tracker & Strategy Companion",
@@ -154,7 +187,7 @@ const translations = {
         featureAdviceSub: "Sui tuoi dati",
         featureTipsTitle: "Tips AB",
         featureTipsSub: "Sempre aggiornati",
-        countryNoteTitle: "Calcoli basati sulle tabelle ufficiali Atlas Earth",
+        countryNoteTitle: "Calcoli basati su tabelle per Paese (indicative, non ancora verificate una per una)",
         countryNoteText: "Specifiche per ogni Paese: puoi cambiare il tuo da Modifica dati.",
 
         strategyEyebrowGoal: "Obiettivo",
@@ -360,7 +393,20 @@ const translations = {
         assistantIncomeSummary: "Right now you're earning about {daily} per day, {monthly} per month, {yearly} per year (boost included).",
         tipBadgeMaxAssistant: "You already have the maximum passport bonus (+{percent}%): your badge count is already optimal.",
         assistantBadgeProgress: "You need {remaining} more badges to go from +{current}% to +{percent}%: every extra badge permanently boosts your income.",
-        assistantSRB: "If you can keep the Super Rent Boost (x50) active for a full day, your income would roughly rise to about {value} per day — only during the event (~2.5 days per month).",
+        assistantSRB: "Rough estimate: during one day of Super Rent Boost (×50) your profile's income would be about {value} per day. It only applies while the event is active; duration and frequency are not guaranteed. Assumptions: badge bonus included, regular boost not added on top of ×50 (stacking is not officially confirmed). This is an estimate, not guaranteed earnings.",
+        assistantCurrencyNote: "Euro amounts: indicative conversion (1 USD = {rate} EUR, fixed unofficial rate), not the rent actually paid by the game.",
+        assistantSRBRange: "Central estimate for one day of Super Rent Boost (×50): {value} per day. Theoretical range: {low}–{high} per day. The range reflects the unknown order in which parcels were acquired (the app keeps quantities per rarity, not the history). The central estimate distributes rarities proportionally; the endpoints are theoretical scenarios, not guaranteed outcomes nor a statistical interval. Assumptions: you own {total} parcels, ×50 applies to the first {limit} and the other {rest} earn at the regular ×{boost} boost (active 24 hours a day); badge bonus included; regular boost not added on top of ×50. This is an estimate, not guaranteed earnings.",
+        assistantSRBSplit: "You own {total} parcels: ×50 applies to the first {limit}, the other {rest} earn at the regular ×{boost} boost.",
+        assistantEventAmbiguous: "It isn't clear which event you mean, so I won't estimate any amount. If you mean the Super Rent Boost (×50), ask me something like “What would I earn during SRB?” or “What would I earn with 200,000 parcels and 15 badges during SRB?”. If you mean another event or AB, please say so.",
+        assistantSRBNeedData: "To estimate the Super Rent Boost I need a number of parcels greater than zero, and your profile has none. I don't want to make up data: ask me something like “What would I earn with 200,000 parcels and 15 badges during SRB?” or enter your parcels in the Edit data panel.",
+        assistantSRBBadgesProfile: " (from your profile)",
+        assistantSRBRarityOdds: "Rarities distributed according to the assignment odds used by the app (common {common}%, rare {rare}%, epic {epic}%, legendary {legendary}%): this is a model assumption, not your real distribution.",
+        assistantSRBRarityScaled: "Rarities distributed in proportion to those in your profile (proportionality assumption).",
+        assistantSRBRarityExtended: "Your profile's parcels are kept; the {extra} additional ones are distributed according to the assignment odds used by the app (common {common}%, rare {rare}%, epic {epic}%, legendary {legendary}%): this is a model assumption, not the real distribution you would have.",
+        assistantSRBRaritySaved: "Rarities of the parcels in your profile.",
+        assistantSRBHypo: "Hypothetical scenario (your saved profile is not changed): {lands} parcels and {badges} badges{badgeSrc}. {rarity} Rough estimate for one day of Super Rent Boost (×50): about {value} per day. It only applies while the event is active; duration and frequency are not guaranteed. Assumptions: badge bonus included, regular boost not added on top of ×50 (stacking is not officially confirmed). This is an estimate, not guaranteed earnings.",
+        assistantSRBHypoSplit: "With {total} parcels, ×50 applies to the first {limit}; the other {rest} earn at the regular ×{boost} boost.",
+        assistantSRBHypoRange: "Hypothetical scenario (your saved profile is not changed): {lands} parcels and {badges} badges{badgeSrc}. {rarity} Central estimate for one day of Super Rent Boost (×50): {value} per day. Theoretical range: {low}–{high} per day. The range reflects the unknown order in which parcels were acquired; the central estimate distributes rarities proportionally and the endpoints are theoretical scenarios, not a statistical interval nor a guarantee. Assumptions: ×50 applies to the first {limit} parcels and the other {rest} earn at the regular ×{boost} boost (active 24 hours a day); badge bonus included; regular boost not added on top of ×50. This is an estimate, not guaranteed earnings.",
         assistantABBalance: "You currently have {balance} AB available (the savings you entered in the ✏️ panel).",
         assistantLandsBreakdown: "You own {total} lands in total: {common} Common, {rare} Rare, {epic} Epic, {legendary} Legendary.",
         assistantABSources: "The main AB sources are: Arcade, mini-games (Golf, Warship, Bowling, Racer, Fishing), rent conversion, surveys, and the Super Rent Boost during events. Check the \"How to earn more AB\" card for details.",
@@ -375,12 +421,32 @@ const translations = {
         suggestionIncome: "How much do I earn?",
         send: "Send",
         srbBoxTitle: "With Super Rent Boost active (x50)",
-        srbBoxNote: "Supplementary estimate, not included in the official income above: only active during the event (~2.5 days/month) and for as long as you can keep it active.",
+        srbBoxNote: "Supplementary daily estimate, not included in the income above: it only applies during the event. Event duration and frequency are not guaranteed, so the app does not estimate monthly earnings.",
+        srbRangeNote: "The range reflects the unknown order in which parcels were acquired: the app keeps quantities per rarity, not the history. The central estimate distributes rarities proportionally between the parcels within and beyond the limit; the endpoints are theoretical scenarios, not a statistical confidence interval and not a guarantee of earnings.",
+        srbRangeLine: "Theoretical range: {low}–{high} / day (the figure above is the central estimate)",
 
         settingsTitleEdit: "Edit data",
         settingsTitleOnboarding: "Welcome!",
         settingsIntro: "Enter your name and starting data. It will be saved on this device.",
         nameLabel: "Name",
+        currencyLabel: "Currency",
+        currencyOptionEUR: "Euro (€)",
+        currencyOptionUSD: "US dollar ($)",
+        currencySettingNote: "Currency is independent from language. Your data stays saved in dollars; only how it is displayed changes.",
+        currencyEstimateNote: "Euro amounts use a fixed, indicative exchange rate (1 USD = {rate} EUR), not updated and not official.",
+        countrySuggestionRegion: "Browser suggestion: {group}. It is based on your browser language/region, not on your location.",
+        countrySuggestionLanguage: "Weak suggestion from your browser language: {group}. It does not tell where you live.",
+        countrySuggestionNone: "I can't suggest a group: please choose your country from the list.",
+        countrySuggestionUnconfirmed: "Not confirmed yet: until you confirm it, calculations use this provisional value.",
+        countrySuggestionPending: "Will be saved when you press Save.",
+        countrySuggestionConfirm: "Confirm suggestion",
+        countryChoosePlaceholder: "— Choose your country —",
+        srbAssumptions: "Assumptions of this estimate: base rent with badge bonus × 50 for the first 150,000 parcels (limit stated by the official Help Center); parcels beyond the limit earn at the regular boost of their tier. The regular boost is not added on top of × 50 (whether the multipliers stack is not confirmed by a verified official source). It is not guaranteed income nor an official calculation.",
+        srbLimitNote: "You own {total} parcels: × 50 is applied to {srb} parcels and the regular × {boost} boost to {rest} parcels.",
+        dailyEstimateWarning: "Daily, monthly and yearly estimates assume the regular boost is active 24 hours a day. In the game each ad activates the boost for 1 hour (up to 6 ads stacked), so real income can be lower. These are indicative estimates, not guaranteed earnings.",
+        assistantNumberInvalid: "I can't use that number (\"{raw}\"): write it as a positive whole number, for example 1014 or 1,014.",
+        assistantNumberAmbiguous: "The number \"{raw}\" is ambiguous: do you mean {value}? Rewrite it without separators (e.g. {value}) to confirm.",
+        assistantWhatIfBoth: "With {lands} lands and {badges} badges your boost would be x{boost} and your passport bonus +{percent}%: income would rise to about {daily}/day — today you're at {currentDaily}/day. This is an estimate: the rarity of lands you don't own yet is randomly assigned.",
         countryLabel: "Country",
         sectionLands: "Lands",
         sectionGoal: "Your goal",
@@ -416,9 +482,9 @@ const translations = {
         abTipsDisclaimer: "Indicative values based on community experience, not official data: they may vary.",
         abTipArcade: "Arcade: 1 to 340 AB per game, depending on your level and the game offered. If available, the Arcade mission also gives reward points on a scale from 5-60 AB (free) to 25-260 AB (with Mission Pass).",
         abTipMinigames: "Available mini-games: Atlas Golf, Atlas Warship, Atlas Bowling, Atlas Racer, Atlas Fishing — another AB source besides Arcade.",
-        abTipRentConversion: "Rent conversion bonus: about 33 AB for every € converted from rent.",
+        abTipRentConversion: "Rent conversion: $1 of virtual rent = 25 AB (fixed rate, always in US dollars). The currency shown in the app does not change the AB you receive.",
         abTipSurveyBoost: "Survey boost: increases the AB earned by completing surveys in the Earn section.",
-        abTipSuperRentBoost: "Super Rent Boost (SRB): during the event (about 2.5 days per month) rent accrues up to 50x faster — plan your land purchases ahead of this event to make the most of it.",
+        abTipSuperRentBoost: "Super Rent Boost (SRB): during the event rent accrues up to 50x faster (duration and frequency are not guaranteed) — plan your land purchases ahead of this event to make the most of it.",
 
         aboutTitle: "What is AE Companion",
         aboutPositioning: "Atlas Earth Calculator, Portfolio Tracker & Strategy Companion",
@@ -457,7 +523,7 @@ const translations = {
         featureAdviceSub: "Based on your data",
         featureTipsTitle: "AB Tips",
         featureTipsSub: "Always up to date",
-        countryNoteTitle: "Calculations based on the official Atlas Earth tables",
+        countryNoteTitle: "Calculations based on per-country tables (indicative, not yet verified one by one)",
         countryNoteText: "Specific to each country: you can change yours in Edit data.",
 
         strategyEyebrowGoal: "Goal",
@@ -616,15 +682,21 @@ const translations = {
 
 let currentLang = "it";
 
+// Lingua iniziale (v0.9): lingua salvata valida; altrimenti quella decisa dalla migrazione
+// (prefs.js: utenti esistenti = quella che vedevano prima, nuovi utenti = inglese).
+// La lingua del browser NON decide piu' la lingua dei nuovi utenti e la valuta non c'entra.
 function detectLanguage() {
 
-    const saved = localStorage.getItem(I18N_KEY);
+    let saved = null;
+
+    try { saved = localStorage.getItem(I18N_KEY); } catch (e) { /* storage non disponibile */ }
 
     if (saved && translations[saved]) return saved;
 
-    const nav = (navigator.language || "en").toLowerCase();
+    if (typeof prefsMigrationResult !== "undefined" && prefsMigrationResult &&
+        translations[prefsMigrationResult.lang]) return prefsMigrationResult.lang;
 
-    return nav.startsWith("it") ? "it" : "en";
+    return "en";
 
 }
 
@@ -698,11 +770,13 @@ function setLanguage(lang) {
 
     currentLang = lang;
 
-    localStorage.setItem(I18N_KEY, lang);
+    try { localStorage.setItem(I18N_KEY, lang); } catch (e) { /* ignora */ }
 
     applyTranslations();
 
     if (typeof populateCountrySelect === "function") populateCountrySelect();
+
+    if (typeof populateCurrencySelect === "function") populateCurrencySelect();
 
     if (typeof renderDashboard === "function") renderDashboard();
 

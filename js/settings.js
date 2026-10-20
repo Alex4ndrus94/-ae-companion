@@ -22,7 +22,12 @@ function updateExplorerSettingsVisibility() {
 
 }
 
+let settingsOpenCurrency = null;
+
 function openSettings(isOnboarding) {
+
+    // Ogni apertura parte senza modifiche provvisorie (Annulla non salva nulla)
+    resetPendingCountryGroup();
 
     document.getElementById("name-input").value = player.profile.name;
     document.getElementById("common-input").value = player.lands.common;
@@ -44,10 +49,9 @@ function openSettings(isOnboarding) {
     // Obiettivo
     document.getElementById("goal-input").value = player.goal.type;
 
-    const lang = getCurrentLanguage();
-    const displayedTarget = lang === "it"
-        ? (player.goal.incomeTargetUSD * CONFIG.exchangeRate)
-        : player.goal.incomeTargetUSD;
+    // Valuta con cui il valore viene mostrato ora (serve al salvataggio se la valuta cambia nel pannello)
+    settingsOpenCurrency = getCurrency();
+    const displayedTarget = convertToDisplay(player.goal.incomeTargetUSD);
 
     document.getElementById("goal-income-target-input").value = displayedTarget.toFixed(2);
     document.getElementById("goal-income-boosted-input").checked = player.goal.incomeTargetBoosted;
@@ -56,6 +60,7 @@ function openSettings(isOnboarding) {
     onGoalTypeChange();
 
     populateCountrySelect();
+    populateCurrencySelect(true);
 
     const title = document.getElementById("settings-title");
     const cancelBtn = document.getElementById("settings-cancel");
@@ -75,7 +80,36 @@ function openSettings(isOnboarding) {
 
 }
 
+// Selettore valuta (indipendente dalla lingua). Nel pannello e' una scelta in bozza:
+// viene applicata solo con Salva.
+function populateCurrencySelect(resetToCurrent) {
+
+    const select = document.getElementById("currency-input");
+
+    if (!select) return;
+
+    const keep = (!resetToCurrent && select.value) || getCurrency();
+
+    select.innerHTML = "";
+
+    SUPPORTED_CURRENCIES.forEach(function (code) {
+
+        const option = document.createElement("option");
+        option.value = code;
+        option.textContent = t("currencyOption" + code);
+        if (code === keep) option.selected = true;
+        select.appendChild(option);
+
+    });
+
+    const note = document.getElementById("currency-note");
+    if (note) note.textContent = t("currencySettingNote");
+
+}
+
 function closeSettings() {
+
+    resetPendingCountryGroup();
 
     document.getElementById("settings-overlay").classList.remove("open");
 
@@ -113,17 +147,24 @@ function saveSettings() {
     // Obiettivo
     player.goal.type = document.getElementById("goal-input").value;
 
+    // Il valore digitato e' nella valuta che era mostrata quando il pannello e' stato aperto
     const enteredTarget = Number(document.getElementById("goal-income-target-input").value) || 0;
-    const lang = getCurrentLanguage();
 
-    player.goal.incomeTargetUSD = lang === "it"
-        ? enteredTarget / CONFIG.exchangeRate
-        : enteredTarget;
+    player.goal.incomeTargetUSD = convertFromDisplay(enteredTarget, settingsOpenCurrency || getCurrency());
 
     player.goal.incomeTargetBoosted = document.getElementById("goal-income-boosted-input").checked;
     player.goal.landsTarget = Number(document.getElementById("goal-lands-target-input").value) || 0;
 
     savePlayerData();
+
+    // Valuta e cluster: salvati solo ora, e solo se l'utente li ha scelti/confermati
+    const currencySelect = document.getElementById("currency-input");
+    if (currencySelect && isValidCurrency(currencySelect.value) && currencySelect.value !== getCurrency()) {
+        setCurrency(currencySelect.value);
+    }
+
+    applyPendingCountryGroup();
+
     renderDashboard();
     closeSettings();
 
