@@ -433,6 +433,18 @@
     font-style:italic;
 }
 
+.srb-info-note[hidden]{
+    display:none;
+}
+
+.srb-info-range{
+    color:var(--cyan-info);
+    font-style:normal;
+    font-weight:600;
+    font-size:.78rem;
+    margin-bottom:6px;
+}
+
 /* ==============================
    STRATEGIA
 ============================== */
