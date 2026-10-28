@@ -96,8 +96,9 @@ console.log("\n== E. Lingua e valuta sono indipendenti");
 
 console.log("\n== F. Valori numerici invariati (la formattazione non tocca conversione, formule, input)");
 {
-    const rate = runIn(mk("en", "USD"), "(CONFIG.exchangeRateInfo && CONFIG.exchangeRateInfo.usdToEur) || CONFIG.exchangeRate");
-    T.eq(rate, 0.86, "cambio fisso indicativo invariato: 1 USD = 0,86 EUR");
+    // v0.10.0: il tasso non e' piu' una costante in CONFIG; qui e' il tasso SIMULATO pre-caricato dalla sandbox (cache fresca)
+    const rate = runIn(mk("en", "USD"), "getFxRate('EUR')");
+    T.eq(rate, 0.86, "tasso simulato dalla sandbox: 1 USD = 0,86 EUR (valore invariato rispetto alle versioni precedenti)");
     const X = [0, 0.004, 1, 123.45, 1234.56, 54321.09, 987654.32];
     for (const [lang, cur] of COMBOS) {
         const h = mk(lang, cur);

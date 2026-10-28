@@ -51,7 +51,7 @@ for (const lang of ["it", "en"]) for (const cur of ["EUR", "USD"]) {
     T.eq([h.store.aeLang, h.store.aeCurrency], [other, otherCur], "B le due preferenze sono salvate separatamente");
 }
 h = load({ store: { aeLang: "en", aeCurrency: "USD", aePrefsMigration: "1" } });
-T.ok(runIn(h, "setCurrency('GBP')") === false && runIn(h, "getCurrency()") === "USD", "B valuta non supportata rifiutata");
+T.ok(runIn(h, "setCurrency('XXX')") === false && runIn(h, "getCurrency()") === "USD", "B valuta non supportata rifiutata");   // v0.10.0: GBP ora e' supportata; il test usa un codice davvero non supportato
 const fmt = (lang, cur) => { const x = load({ store: { aeLang: lang, aeCurrency: cur, aePrefsMigration: "1" } }); return runIn(x, "formatCurrency(12345.5)"); };
 T.eq([fmt("it", "EUR"), fmt("en", "USD")].map(s => s.replace(/\s/g, " ")), ["12.345,50 €", "$12,345.50"], "B formato IT+EUR e EN+USD identico a v0.8.1");
 T.ok(fmt("it", "USD").indexOf("12.345,50") !== -1 && fmt("it", "USD").indexOf("USD") !== -1 && fmt("en", "EUR") === "€12,345.50", "B IT+USD: importo in dollari con separatori italiani (12.345,50 USD); EN+EUR: €12,345.50");
