@@ -23,6 +23,11 @@ function updateExplorerSettingsVisibility() {
 }
 
 let settingsOpenCurrency = null;
+// v0.10.0: tasso (unita' per 1 USD) e testo con cui l'obiettivo e' stato MOSTRATO all'apertura del pannello.
+// L'inversione al salvataggio usa lo stesso tasso (anche se nel frattempo il cambio e' stato aggiornato) e,
+// se l'utente non tocca il campo, il valore USD salvato resta esattamente com'e'.
+let settingsOpenRate = NaN;
+let settingsOpenTargetText = "";
 
 function openSettings(isOnboarding) {
 
@@ -51,9 +56,14 @@ function openSettings(isOnboarding) {
 
     // Valuta con cui il valore viene mostrato ora (serve al salvataggio se la valuta cambia nel pannello)
     settingsOpenCurrency = getCurrency();
+    settingsOpenRate = getFxRate(settingsOpenCurrency);
     const displayedTarget = convertToDisplay(player.goal.incomeTargetUSD);
+    const targetDigits = getCurrencyDigits(settingsOpenCurrency);
+    const targetInput = document.getElementById("goal-income-target-input");
 
-    document.getElementById("goal-income-target-input").value = displayedTarget.toFixed(2);
+    targetInput.step = String(Math.pow(10, -targetDigits));
+    targetInput.value = isFinite(displayedTarget) ? displayedTarget.toFixed(targetDigits) : "";
+    settingsOpenTargetText = targetInput.value;
     document.getElementById("goal-income-boosted-input").checked = player.goal.incomeTargetBoosted;
     document.getElementById("goal-lands-target-input").value = player.goal.landsTarget;
 
@@ -96,7 +106,7 @@ function populateCurrencySelect(resetToCurrent) {
 
         const option = document.createElement("option");
         option.value = code;
-        option.textContent = t("currencyOption" + code);
+        option.textContent = getCurrencyOptionLabel(code);
         if (code === keep) option.selected = true;
         select.appendChild(option);
 
@@ -116,6 +126,30 @@ function closeSettings() {
 }
 
 function saveSettings() {
+
+    // Obiettivo di rendita: digitato nella valuta mostrata all'apertura del pannello. Se non e' stato modificato resta
+    // il valore USD salvato (nessun ricalcolo); se e' stato modificato si inverte con lo stesso tasso usato per mostrarlo.
+    const targetText = document.getElementById("goal-income-target-input").value;
+    let newTargetUSD = null;
+
+    if (targetText !== settingsOpenTargetText) {
+
+        const openCur = settingsOpenCurrency || getCurrency();
+        // v0.10.1: con valuta diversa da USD serve il tasso con cui il campo e' stato MOSTRATO all'apertura.
+        // Se allora non esisteva (NaN), un tasso arrivato dopo non viene usato: l'obiettivo modificato e' rifiutato.
+        const rateOk = openCur === "USD" || (typeof settingsOpenRate === "number" && isFinite(settingsOpenRate) && settingsOpenRate > 0);
+        const converted = rateOk ? convertFromDisplay(Number(targetText) || 0, openCur, settingsOpenRate) : NaN;
+
+        if (!isFinite(converted)) {
+            // nessun tasso valido all'apertura: non si salva nulla (ne' l'obiettivo ne' gli altri campi, che restano nel pannello)
+            const note = document.getElementById("currency-note");
+            if (note) note.textContent = t("fxTargetNeedsRate", { currency: openCur });
+            return;
+        }
+
+        newTargetUSD = converted;
+
+    }
 
     const name = document.getElementById("name-input").value.trim();
 
@@ -147,10 +181,7 @@ function saveSettings() {
     // Obiettivo
     player.goal.type = document.getElementById("goal-input").value;
 
-    // Il valore digitato e' nella valuta che era mostrata quando il pannello e' stato aperto
-    const enteredTarget = Number(document.getElementById("goal-income-target-input").value) || 0;
-
-    player.goal.incomeTargetUSD = convertFromDisplay(enteredTarget, settingsOpenCurrency || getCurrency());
+    if (newTargetUSD !== null) player.goal.incomeTargetUSD = newTargetUSD;
 
     player.goal.incomeTargetBoosted = document.getElementById("goal-income-boosted-input").checked;
     player.goal.landsTarget = Number(document.getElementById("goal-lands-target-input").value) || 0;

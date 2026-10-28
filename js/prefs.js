@@ -18,7 +18,7 @@ const PREFS_LANG_KEY = "aeLang";
 const PREFS_CURRENCY_KEY = "aeCurrency";
 const PREFS_DATA_KEY = "aeCompanionData";
 const PREFS_LANGS = ["it", "en"];
-const PREFS_CURRENCIES = ["EUR", "USD"];
+const PREFS_CURRENCIES = CONFIG.fx.currencies;   // v0.10.0: stesso elenco di js/money.js (config.js e' caricato prima)
 
 // Funzione pura: riceve lo stato letto da localStorage e restituisce cosa scrivere.
 // state = { lang, currency, data, migration, navLang }  (stringhe o null)

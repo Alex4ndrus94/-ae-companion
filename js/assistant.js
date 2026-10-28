@@ -548,13 +548,24 @@ function getSRBAssistantReply(q) {
 
     }
 
-    if (isCurrencyEstimated()) reply += " " + t("assistantCurrencyNote", { rate: getCurrencyRateLabel() });
+    if (isCurrencyEstimated()) reply += " " + getAssistantCurrencyNote();
 
     return reply;
 
 }
 
+// v0.10.0: se la risposta contiene importi e il cambio NON e' valido e aggiornato (non aggiornato / non disponibile /
+// valuta non fornita), l'avviso viene aggiunto a QUALSIASI risposta con importi, non solo a quelle SRB.
 function getAssistantReply(userText) {
+
+    const before = moneyFormatCounter;
+    const reply = getAssistantReplyCore(userText);
+
+    return appendAssistantCurrencyStatus(reply, moneyFormatCounter !== before);
+
+}
+
+function getAssistantReplyCore(userText) {
 
     const normalized = normalizeText(userText);
 

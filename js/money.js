@@ -4,12 +4,14 @@
 // Unita' interna canonica: USD (player.goal.incomeTargetUSD e tutti i calcoli di
 // rendita sono in USD e NON cambiano mai con lingua o valuta).
 // La valuta scelta e' una preferenza di VISUALIZZAZIONE, indipendente dalla lingua.
-// Il cambio USD -> EUR e' un valore fisso e INDICATIVO (vedi CONFIG.exchangeRateInfo):
-// non e' un tasso corrente ne' ufficiale e non viene aggiornato da nessun servizio remoto.
+// v0.10.0: il cambio USD -> valuta mostrata arriva da js/fx.js (API Frankfurter + cache locale).
+// Ogni importo viene convertito UNA volta, qui, al confine tra calcolo e visualizzazione
+// (convertToDisplay). Senza un tasso valido la conversione restituisce NaN e l'importo
+// viene mostrato come "\u2014": non si usa mai un tasso inventato ne' si mostra un importo non convertito.
 // ======================================
 
 const CURRENCY_KEY = "aeCurrency";
-const SUPPORTED_CURRENCIES = ["EUR", "USD"];
+const SUPPORTED_CURRENCIES = CONFIG.fx.currencies;
 
 function isValidCurrency(code) {
 
@@ -48,27 +50,73 @@ function setCurrency(code) {
 
     if (typeof renderDashboard === "function") renderDashboard();
 
+    // La nuova valuta puo' richiedere un tasso: lo si scarica (se serve) e la schermata si aggiorna da sola
+    if (typeof fxRefresh === "function") fxRefresh(true);
+
     return true;
 
 }
 
-// USD interni -> valuta mostrata
+// USD interni -> valuta mostrata. Con valuta USD restituisce il valore invariato.
+// Senza un tasso valido restituisce NaN (propaga fino a formatMoneyDigits, che mostra "\u2014").
 function convertToDisplay(usdValue) {
 
-    const rate = (CONFIG.exchangeRateInfo && CONFIG.exchangeRateInfo.usdToEur) || CONFIG.exchangeRate;
+    if (currentCurrency === "USD") return usdValue;
 
-    return currentCurrency === "EUR" ? usdValue * rate : usdValue;
+    return usdValue * getFxRate(currentCurrency);
 
 }
 
 // valuta mostrata (es. valore digitato dall'utente) -> USD interni
-// "currency" e' facoltativo: serve quando l'utente ha cambiato valuta mentre il pannello era aperto
-function convertFromDisplay(value, currency) {
+// "currency" e' facoltativo: serve quando l'utente ha cambiato valuta mentre il pannello era aperto.
+// "rate" e' facoltativo: tasso (unita' per 1 USD) con cui il valore e' stato MOSTRATO; garantisce che
+// l'inversione usi lo stesso tasso della visualizzazione anche se nel frattempo il tasso e' stato aggiornato.
+function convertFromDisplay(value, currency, rate) {
 
     const cur = currency || currentCurrency;
-    const rate = (CONFIG.exchangeRateInfo && CONFIG.exchangeRateInfo.usdToEur) || CONFIG.exchangeRate;
 
-    return cur === "EUR" ? value / rate : value;
+    if (cur === "USD") return value;
+
+    const r = (typeof rate === "number" && isFinite(rate) && rate > 0) ? rate : getFxRate(cur);
+
+    return value / r;
+
+}
+
+// Etichetta nel selettore: testo tradotto se esiste (EUR/USD), altrimenti nome da Intl.DisplayNames nella lingua corrente
+function getCurrencyOptionLabel(code) {
+
+    const key = "currencyOption" + code;
+    const txt = t(key);
+
+    if (txt !== key) return txt;
+
+    let name = code;
+
+    try {
+        if (typeof Intl.DisplayNames === "function") name = new Intl.DisplayNames([getDisplayLocale()], { type: "currency" }).of(code) || code;
+    } catch (e) { /* motore senza DisplayNames: si mostra il codice */ }
+
+    return name === code ? code : name + " (" + code + ")";
+
+}
+
+// Cifre decimali della valuta secondo ISO 4217 / Intl (JPY 0, EUR 2, KWD 3, ...)
+const currencyDigitsCache = {};
+
+function getCurrencyDigits(code) {
+
+    const c = code || currentCurrency;
+
+    if (!(c in currencyDigitsCache)) {
+        try {
+            currencyDigitsCache[c] = new Intl.NumberFormat("en", { style: "currency", currency: c }).resolvedOptions().maximumFractionDigits;
+        } catch (e) {
+            currencyDigitsCache[c] = 2;
+        }
+    }
+
+    return currencyDigitsCache[c];
 
 }
 
@@ -153,7 +201,15 @@ function repairFourDigitGrouping(nf, locale, value) {
 
 }
 
+// Conta gli importi formattati: l'assistente lo usa per sapere se una risposta contiene importi
+let moneyFormatCounter = 0;
+
 function formatMoneyDigits(value, digits) {
+
+    moneyFormatCounter++;
+
+    // Nessun tasso valido (valore NaN/Infinity): segnaposto esplicito, mai un importo non convertito
+    if (typeof value !== "number" || !isFinite(value)) return "\u2014";
 
     const locale = getDisplayLocale();
     const nf = buildMoneyFormatter(locale, currentCurrency, digits);
@@ -169,7 +225,7 @@ function formatMoneyDigits(value, digits) {
 // valore GIA' nella valuta mostrata
 function formatCurrency(value) {
 
-    return formatMoneyDigits(value, 2);
+    return formatMoneyDigits(value, getCurrencyDigits(currentCurrency));
 
 }
 
@@ -180,7 +236,7 @@ function formatCurrencyPrecise(value) {
 
 }
 
-// True quando la valuta mostrata richiede una conversione dal cambio fisso indicativo
+// True quando la valuta mostrata richiede una conversione dal tasso di cambio (tutto tranne USD)
 function isCurrencyEstimated() {
 
     return currentCurrency !== "USD";
@@ -189,33 +245,98 @@ function isCurrencyEstimated() {
 
 function getExchangeRateInfo() {
 
-    const info = CONFIG.exchangeRateInfo || {};
+    const s = getFxStatus(currentCurrency);
 
     return {
         from: "USD",
-        to: "EUR",
-        rate: info.usdToEur || CONFIG.exchangeRate,
-        isEstimate: true,
-        isLive: false,
-        source: info.source || "static"
+        to: currentCurrency,
+        rate: s.rate,
+        date: s.date,
+        futureDate: s.futureDate || null,
+        state: s.state,
+        isLive: s.state === "ok",
+        isStale: s.state === "stale",
+        isProvisional: s.state === "provisional",
+        refreshing: !!s.refreshing,
+        source: s.source || CONFIG.fx.sourceName
     };
 
 }
 
-// Tasso fisso indicativo scritto con il separatore decimale della lingua corrente
+// Tasso scritto con le cifre e il separatore della lingua corrente (fino a 6 cifre significative)
 function getCurrencyRateLabel() {
 
     const info = getExchangeRateInfo();
 
-    return String(info.rate).replace(".", getCurrentLanguage() === "it" ? "," : ".");
+    if (!isFinite(info.rate)) return "\u2014";
+
+    return new Intl.NumberFormat(getDisplayLocale(), { maximumSignificantDigits: 6, useGrouping: false }).format(info.rate);
 
 }
 
-// Nota trasparente mostrata quando la valuta e' convertita (nessun tasso "corrente")
+// Una data "YYYY-MM-DD" nella lingua corrente (e' un giorno di calendario: si formatta in UTC)
+function formatRateDate(dateStr) {
+
+    if (!dateStr) return "";
+
+    try {
+        return new Intl.DateTimeFormat(getDisplayLocale(), { dateStyle: "medium", timeZone: "UTC" }).format(new Date(dateStr + "T00:00:00Z"));
+    } catch (e) {
+        return dateStr;
+    }
+
+}
+
+function getCurrencyRateDateLabel() {
+
+    return formatRateDate(getExchangeRateInfo().date);
+
+}
+
+// Nota trasparente sul cambio: fonte, data e stato (aggiornato / non aggiornato / non disponibile / non supportato)
 function getCurrencyNoteText() {
 
     if (!isCurrencyEstimated()) return "";
 
-    return t("currencyEstimateNote", { rate: getCurrencyRateLabel() });
+    const info = getExchangeRateInfo();
+    const vars = { currency: currentCurrency, rate: getCurrencyRateLabel(), date: getCurrencyRateDateLabel(), source: info.source };
+
+    if (info.state === "unavailable" && info.futureDate) return t("fxNoteFutureDate", Object.assign({}, vars, { date: formatRateDate(info.futureDate) }));
+    if (info.state === "ok") return t("fxNoteOk", vars);
+    if (info.state === "stale") return t("fxNoteStale", vars);
+    if (info.state === "provisional") return t("fxNoteProvisional", vars);
+    if (info.state === "loading") return t("fxNoteLoading", vars);
+    if (info.state === "unsupported") return t("fxNoteUnsupported", vars);
+
+    return t("fxNoteUnavailable", vars);
+
+}
+
+// Avviso breve per le risposte dell'assistente quando gli importi sono convertiti
+function getAssistantCurrencyNote() {
+
+    const info = getExchangeRateInfo();
+    const vars = { currency: currentCurrency, rate: getCurrencyRateLabel(), date: getCurrencyRateDateLabel(), source: info.source };
+
+    if (info.state === "ok") return t("assistantCurrencyNote", vars);
+    if (info.state === "stale") return t("assistantCurrencyNoteStale", vars);
+    if (info.state === "provisional") return t("assistantCurrencyNoteProvisional", vars);
+
+    return t("assistantCurrencyNoteMissing", vars);
+
+}
+
+// Aggiunge l'avviso sul cambio a una risposta con importi quando il tasso non e' valido e aggiornato
+function appendAssistantCurrencyStatus(reply, hadAmounts) {
+
+    if (!hadAmounts || !isCurrencyEstimated()) return reply;
+
+    const state = getExchangeRateInfo().state;
+
+    if (state === "ok") return reply;
+
+    const note = getAssistantCurrencyNote();
+
+    return reply.indexOf(note) !== -1 ? reply : reply + " " + note;
 
 }

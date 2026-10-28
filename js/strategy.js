@@ -70,7 +70,9 @@ function formatStrategyAB(ab) {
 function formatStrategyMoney(usd) {
 
     const value = convertToDisplay(Number(usd) || 0);
-    const digits = (value === 0 || Math.abs(value) >= 0.01) ? 2 : 4;
+    // cifre della valuta (2 per EUR/USD: identico a prima; 0 per JPY; 3 per KWD); sotto la sua unita' minima +2 cifre
+    const base = getCurrencyDigits(getCurrency());
+    const digits = (value === 0 || Math.abs(value) >= Math.pow(10, -base)) ? base : base + 2;
 
     return formatMoneyDigits(value, digits);
 

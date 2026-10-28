@@ -196,4 +196,7 @@ applyTranslations();
 
 populateCurrencySelect(true);
 
+// v0.10.0: carica la cache dei cambi e, se serve (valuta diversa da USD e dato scaduto), li aggiorna in rete
+fxInit();
+
 renderDashboard();
